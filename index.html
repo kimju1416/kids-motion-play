@@ -91,6 +91,58 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
 #resultScr .rsub{font-size:19px;font-weight:800;color:#7a3d5e;margin-top:8px;}
 
 @media (prefers-reduced-motion:reduce){ .mascot,#cNum.pop{animation:none;} }
+
+/* ---------- 자세 분석 리포트 ---------- */
+#reportScr{display:none;position:absolute;inset:0;z-index:22;background:#FFF8E9;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#reportScr.show{display:block;}
+.rp-in{max-width:560px;margin:0 auto;padding:26px 18px 40px;}
+.rp-in h2{font-size:24px;font-weight:900;text-align:center;color:#7a3d5e;}
+.rp-date{text-align:center;font-size:11.5px;color:#a08560;margin:6px 0 18px;font-weight:700;}
+.score-wrap{display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 18px;}
+.score-ring{width:112px;height:112px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  background:conic-gradient(var(--c,#a3e635) calc(var(--p)*1%), rgba(148,163,184,.2) 0);
+  filter:drop-shadow(0 6px 10px rgba(120,90,40,.18));}
+.score-ring span{width:84px;height:84px;border-radius:50%;background:#FFF8E9;display:flex;align-items:center;justify-content:center;
+  font-size:36px;font-weight:900;color:#5c3a24;}
+.score-side{text-align:left;min-width:0;}
+.sc-band{font-size:16px;font-weight:900;}
+.sc-rel{font-size:11.5px;color:#a08560;margin-top:6px;line-height:1.55;font-weight:700;}
+.type-badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid #C7E8FF;
+  border-radius:99px;padding:9px 18px;font-size:14.5px;font-weight:900;color:#4a7a9a;margin:2px 0 12px;}
+.quality-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
+.q-chip{font-size:10.5px;font-weight:700;color:#7a5a3a;background:#fff;border:1px solid #FFDCA8;
+  border-radius:99px;padding:5px 11px;}
+.narrative{font-size:13px;color:#5c3a24;line-height:1.85;background:#fff;border-radius:14px;
+  padding:14px 16px;margin-bottom:16px;text-align:left;font-weight:600;border:2px solid #FFE8B8;}
+.rp-snaps{display:flex;gap:10px;margin-bottom:16px;}
+.rp-snaps figure{flex:1;min-width:0;}
+.rp-snaps img{width:100%;border-radius:14px;border:2px solid #FFE8B8;display:block;}
+.rp-snaps figcaption{font-size:11px;color:#a08560;text-align:center;margin-top:5px;font-weight:700;}
+.rp-summary{display:flex;gap:8px;justify-content:center;margin-bottom:18px;flex-wrap:wrap;}
+.sm-chip{border-radius:99px;padding:8px 16px;font-size:13px;font-weight:900;}
+.g0{background:#E8F7D6;color:#5a8a2a;border:1px solid #c3e8a0;}
+.g1{background:#FFF3C2;color:#a8780a;border:1px solid #ffe08a;}
+.g2{background:#FFDCE0;color:#c8506a;border:1px solid #ffb8c4;}
+.rp-sec{font-size:12px;font-weight:900;letter-spacing:2px;color:#a08560;margin:22px 2px 10px;}
+.m-card{background:#fff;border:2px solid #FFE8B8;border-radius:16px;padding:14px 15px;margin-bottom:10px;text-align:left;}
+.m-top{display:flex;align-items:center;gap:9px;}
+.m-top .ic{font-size:20px;}
+.m-top .nm{font-size:15px;font-weight:900;flex:1;color:#5c3a24;}
+.m-chip{border-radius:99px;padding:5px 12px;font-size:11.5px;font-weight:900;white-space:nowrap;}
+.m-val{font-size:13px;color:#7a5a3a;margin:8px 0 7px;font-weight:800;}
+.m-val b{color:#5c3a24;font-size:15px;}
+.m-gauge{height:7px;border-radius:99px;background:#FFF3D6;overflow:hidden;margin-bottom:8px;}
+.m-gauge i{display:block;height:100%;border-radius:99px;}
+.m-desc{font-size:12px;color:#a08560;line-height:1.65;font-weight:600;}
+.rx-card{background:#fff;border:2px solid #C7E8FF;border-radius:16px;padding:14px 15px;margin-bottom:10px;text-align:left;}
+.rx-card .rt{font-size:14.5px;font-weight:900;display:flex;align-items:center;gap:8px;color:#4a7a9a;}
+.rx-card .rh{font-size:12px;color:#7a5a3a;line-height:1.7;margin:7px 0;font-weight:600;}
+.rx-card .rd{font-size:12px;font-weight:800;color:#5a8a2a;}
+.rx-go{margin-top:9px;background:#eef8ff;border:2px solid #8FC4E8;color:#3a6a8a;
+  border-radius:10px;padding:9px 16px;font-size:12.5px;font-weight:800;min-height:38px;}
+.rp-warn{margin-top:18px;font-size:11px;color:#a08560;background:#fff;border:1px solid #FFE8B8;
+  border-radius:12px;padding:12px 14px;line-height:1.7;text-align:left;font-weight:600;}
+.rp-btns{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
 </style>
 </head>
 <body>
@@ -129,7 +181,9 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
         <button class="gcard" data-g="hammer" style="--bd:#FFE3C2;--sh:#E0AD70"><div class="gicon">🔨</div><div class="gname">콩콩 못박기</div><div class="gdesc">콩콩 두드려요</div></button>
         <button class="gcard" data-g="numquiz" style="--bd:#FFEFC2;--sh:#E0C86F"><div class="gicon">🔢</div><div class="gname">숫자 콕콕</div><div class="gdesc">10까지 세어봐요</div></button>
         <button class="gcard" data-g="engword" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🐶</div><div class="gname">영어 콕콕</div><div class="gdesc">그림 보고 골라요</div></button>
+        <button class="gcard" data-g="mosquito" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🦟</div><div class="gname">모기 잡기</div><div class="gdesc">짝! 박수로 잡아요</div></button>
         <button class="gcard wide" data-g="simon" style="--bd:#E5D4FF;--sh:#B79AE8;grid-column:1/-1"><div class="gicon">🧠</div><div class="gname">몸으로 따라해요</div><div class="gdesc">순서대로 동작을 기억해서 따라해봐요!</div></button>
+        <button class="gcard wide" data-g="posture" style="--bd:#C7E8FF;--sh:#8FC4E8;grid-column:1/-1"><div class="gicon">🧍</div><div class="gname">자세 분석</div><div class="gdesc">정면·측면을 스캔해서 자세 점수와 운동 처방을 알려줘요</div></button>
       </div>
       <div class="hub-foot">🔒 영상은 저장되지 않고 기기 안에서만 사용돼요<br>
         <a class="insta" href="https://www.instagram.com/kimju.zip" target="_blank" rel="noopener">
@@ -161,6 +215,9 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
       <button class="big-btn" id="resAgainBtn">또 할래요!</button>
     </div>
   </div>
+
+  <!-- 자세 분석 리포트 -->
+  <div id="reportScr"><div class="rp-in" id="reportBody"></div></div>
 </div>
 
 <script type="module">
@@ -171,7 +228,17 @@ const params=new URLSearchParams(location.search);
 const DEBUG=params.get('debug')==='1';
 
 /* ---------- 마스코트(곰돌이) ---------- */
-const BEAR='<g><ellipse cx="60" cy="72" rx="38" ry="34" fill="#D9A066"/><circle cx="30" cy="34" r="14" fill="#D9A066"/><circle cx="90" cy="34" r="14" fill="#D9A066"/><circle cx="30" cy="34" r="7" fill="#F2C88F"/><circle cx="90" cy="34" r="7" fill="#F2C88F"/><ellipse cx="60" cy="80" rx="20" ry="16" fill="#F2C88F"/><circle cx="46" cy="58" r="6" fill="#3d2b1f"/><circle cx="74" cy="58" r="6" fill="#3d2b1f"/><ellipse cx="60" cy="76" rx="7" ry="5" fill="#3d2b1f"/><path d="M50,90 Q60,98 70,90" stroke="#3d2b1f" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="70" r="8" fill="#F2AFC0"/><circle cx="90" cy="70" r="8" fill="#F2AFC0"/></g>';
+const BEAR='<g>'
+  +'<circle cx="24" cy="30" r="15" fill="#D9A066"/><circle cx="96" cy="30" r="15" fill="#D9A066"/>'
+  +'<circle cx="24" cy="30" r="7.5" fill="#F7DDBB"/><circle cx="96" cy="30" r="7.5" fill="#F7DDBB"/>'
+  +'<circle cx="60" cy="62" r="44" fill="#E4B27C"/>'
+  +'<ellipse cx="38" cy="72" rx="10" ry="7" fill="#F5A9C4" opacity="0.55"/><ellipse cx="82" cy="72" rx="10" ry="7" fill="#F5A9C4" opacity="0.55"/>'
+  +'<ellipse cx="60" cy="70" rx="22" ry="17" fill="#F7DDBB"/>'
+  +'<circle cx="47" cy="56" r="5.5" fill="#3d2b1f"/><circle cx="73" cy="56" r="5.5" fill="#3d2b1f"/>'
+  +'<circle cx="48.8" cy="54" r="1.7" fill="#fff"/><circle cx="74.8" cy="54" r="1.7" fill="#fff"/>'
+  +'<ellipse cx="60" cy="68" rx="6" ry="4.2" fill="#3d2b1f"/>'
+  +'<path d="M60,71.5 Q60,77 53,79 M60,71.5 Q60,77 67,79" stroke="#3d2b1f" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  +'</g>';
 $('introMascot').innerHTML=BEAR; $('resultMascot').innerHTML=BEAR;
 
 /* ---------- 음성 안내(TTS) ---------- */
@@ -317,7 +384,7 @@ function rrCtx(x,y,w,h,r){ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x,y,
 
 /* ---------- 라우팅 ---------- */
 let current=null, running=false, curKey=null;
-function show(id){ ['hubScr','introScr','resultScr'].forEach(s=>$(s).classList.toggle('show',s===id)); }
+function show(id){ ['hubScr','introScr','resultScr'].forEach(s=>$(s).classList.toggle('show',s===id)); $('reportScr').classList.remove('show'); }
 function hideAll(){ show(null); }
 function setHud(on,opt){
   opt=opt||{};
@@ -374,7 +441,7 @@ async function startActivity(){
   setHud(true,g.hud);
   current=g; g.start();
   if(current!==g) return;
-  await countdown(3);
+  if(g.key!=='posture') await countdown(3);
   if(current!==g) return;
   running=true; lastVideoTime=-1; loop();
 }
@@ -584,10 +651,22 @@ GAME.tissue=(()=>{
       if(remain<=0){ this.finish(); return; }
       let hands=[];
       if(lms){ drawPose(lms,'#E8A8C8'); hands=hands2(lms); drawHandGlow(hands,'#E8A8C8'); } else setState('몸이 보이게 서 주세요');
-      const bw=Math.min(map.W*0.42,230), bh=bw*0.55, bx=map.W/2, by=map.H*0.82, zr=Math.max(56,bw*0.4), zy=by-bh/2-24;
-      ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
-      rrCtx(bx-bw/2,by-bh/2,bw,bh,16); ctx.fill(); ctx.shadowBlur=0;
-      ctx.font=Math.max(30,bw*0.26)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('🧻',bx,by);
+      const bw=Math.min(map.W*0.46,240), bh=bw*0.6, bx=map.W/2, by=map.H*0.8, zr=Math.max(58,bw*0.42), zy=by-bh/2-30;
+      ctx.save();
+      // 각티슈 상자(직사각형 박스)
+      ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.2)';
+      ctx.fillStyle='#FF9DB0'; rrCtx(bx-bw/2,by-bh/2,bw,bh,14); ctx.fill(); ctx.shadowBlur=0;
+      ctx.fillStyle='#fff'; rrCtx(bx-bw*0.42,by-bh*0.28,bw*0.84,bh*0.2,8); ctx.fill();
+      ctx.font='900 '+Math.max(13,bw*0.09)+'px Pretendard'; ctx.fillStyle='#FF6F91'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('TISSUE',bx,by+bh*0.28);
+      // 위쪽 타원 슬릿
+      ctx.fillStyle='#3d2b1f'; ctx.beginPath(); ctx.ellipse(bx,by-bh/2,bw*0.24,bh*0.09,0,0,Math.PI*2); ctx.fill();
+      // 삐죽 나온 휴지(살랑살랑)
+      const fl=Math.sin(now/220)*7;
+      ctx.fillStyle='#fff'; ctx.strokeStyle='rgba(0,0,0,.06)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(bx-bw*0.16,by-bh/2+2);
+      ctx.quadraticCurveTo(bx+fl,by-bh/2-bh*0.34,bx+bw*0.16,by-bh/2+2);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
       ctx.restore();
       hands.forEach(h=>{
         if(now-G.lastPull<260) return;
@@ -698,15 +777,25 @@ GAME.numquiz=(()=>{
     frame(lms){
       let hands=[];
       if(lms){ drawPose(lms,'#E0C86F'); hands=hands2(lms); drawHandGlow(hands,'#E0C86F'); } else setState('몸이 보이게 서 주세요');
-      const cx=map.W/2, topY=map.H*0.32, r=Math.min(map.W,map.H)*0.115;
+      const cx=map.W/2, r=Math.min(map.W,map.H)*0.115;
       const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.66;
-      const panelW=Math.min(map.W*0.82,380), panelH=Math.max(90,map.H*0.16);
-      ctx.save(); ctx.fillStyle='rgba(255,255,255,.92)'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
-      rrCtx(cx-panelW/2,topY-panelH/2,panelW,panelH,26); ctx.fill(); ctx.shadowBlur=0;
-      ctx.font=Math.max(26,map.W/13)+'px Pretendard'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#5c3a24';
-      ctx.fillText('🍎'.repeat(G.q.a)+' + '+'🍊'.repeat(G.q.b),cx,topY-6);
-      ctx.font='900 '+Math.max(18,map.W/20)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('= ?',cx,topY+panelH*0.32); ctx.restore();
+      const panelW=Math.min(map.W*0.78,320), fruitSz=Math.min(30,panelW/5.6), rowGap=fruitSz*1.18;
+      const panelH=rowGap*2+fruitSz*2.3, topY=map.H*0.15;
+      ctx.save(); ctx.fillStyle='rgba(255,255,255,.94)'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
+      rrCtx(cx-panelW/2,topY,panelW,panelH,26); ctx.fill(); ctx.shadowBlur=0;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      function fruitRow(n,emoji,y){
+        const gap=fruitSz*1.05, totalW=(n-1)*gap;
+        ctx.font=fruitSz+'px sans-serif';
+        for(let i=0;i<n;i++) ctx.fillText(emoji,cx-totalW/2+i*gap,y);
+      }
+      fruitRow(G.q.a,'🍎',topY+fruitSz*0.9);
+      ctx.font='900 '+Math.round(fruitSz*0.7)+'px Pretendard'; ctx.fillStyle='#c96a3a';
+      ctx.fillText('+',cx,topY+rowGap+fruitSz*0.15);
+      fruitRow(G.q.b,'🍊',topY+rowGap+fruitSz*1.1);
+      ctx.font='900 '+Math.round(fruitSz*0.85)+'px Pretendard'; ctx.fillStyle='#c96a3a';
+      ctx.fillText('= ?',cx,topY+rowGap*2+fruitSz*0.5);
+      ctx.restore();
       [{x:Lx,v:G.q.ch[0]},{x:Rx,v:G.q.ch[1]}].forEach((c,i)=>{
         ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.18)';
         ctx.beginPath(); ctx.arc(c.x,chY,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
@@ -845,6 +934,309 @@ GAME.simon=(()=>{
       }
     },
     finish(){ showResult({num:G.seq.length-1,sub:'단계까지 기억했어요! 🧠',voice:(G.seq.length-1)+'단계까지 기억했어요! 천재예요!'}); }
+  };
+})();
+
+/* ---------- 🦟 모기 잡기(박수) ---------- */
+GAME.mosquito=(()=>{
+  const G={};
+  function spawn(){
+    G.mq={x:map.W*(0.25+Math.random()*0.5),y:map.H*(0.16+Math.random()*0.4),tx:map.W/2,ty:map.H*0.3,retarget:0,
+      spd:Math.min(map.W,map.H)*0.28};
+  }
+  return {
+    key:'mosquito', hud:{counter:true,timer:true,end:true},
+    intro:{title:'모기 잡기 🦟',desc:'앵앵~ 모기가 날아다녀요. <b>모기 근처에서 두 손을 짝!</b><br>박수로 잡아요. 25초 동안 몇 마리 잡을까요?'},
+    start(){ G.n=0; G.endAt=performance.now()+DUR*1000; G.pt=0; G.prevGap=null; G.lastClap=0; G.respawnAt=0; G.mq=null;
+      $('cNum').textContent='0'; $('cLbl').textContent='마리'; say('모기 근처에서 짝 박수를 쳐봐요!'); },
+    end(){ this.finish(); },
+    frame(lms){
+      const now=performance.now();
+      const remain=Math.max(0,(G.endAt-now)/1000);
+      $('timerVal').textContent=Math.ceil(remain);
+      if(remain<=0){ this.finish(); return; }
+      const dt=Math.min(50,now-(G.pt||now)); G.pt=now;
+      let hands=[];
+      if(lms){ drawPose(lms,'#93D693'); hands=hands2(lms); drawHandGlow(hands,'#93D693'); } else setState('몸이 보이게 서 주세요');
+      if(!G.mq&&now>=G.respawnAt) spawn();
+      if(G.mq){
+        const q=G.mq;
+        if(now>=q.retarget){ q.tx=map.W*(0.15+Math.random()*0.7); q.ty=map.H*(0.14+Math.random()*0.42); q.retarget=now+600+Math.random()*600; }
+        const dx=q.tx-q.x, dy=q.ty-q.y, dd=Math.hypot(dx,dy)||1;
+        q.x+=dx/dd*q.spd*dt/1000+Math.sin(now/110)*1.2; q.y+=dy/dd*q.spd*dt/1000+Math.cos(now/130)*1.2;
+        ctx.save(); ctx.translate(q.x,q.y); ctx.rotate(Math.sin(now/90)*0.2);
+        ctx.font=Math.max(46,Math.min(map.W,map.H)/8)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('🦟',0,0); ctx.restore();
+        if(hands.length===2){
+          const gap=Math.hypot(hands[0].x-hands[1].x,hands[0].y-hands[1].y);
+          const m2=Math.min(map.W,map.H);
+          if(G.prevGap!=null){
+            const closing=(G.prevGap-gap)/Math.max(16,dt)*1000;
+            if(gap<m2/5&&closing>m2*0.7&&now-G.lastClap>420){
+              G.lastClap=now;
+              const mx=(hands[0].x+hands[1].x)/2, my=(hands[0].y+hands[1].y)/2;
+              if(Math.hypot(mx-q.x,my-q.y)<m2/3.6){
+                G.n++; $('cNum').textContent=G.n;
+                const n=$('cNum'); n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
+                beep(880,0.12); buzz(35); setState(G.n+'마리 짝! 🦟'); G.mq=null; G.respawnAt=now+400;
+              }else{ beep(300,0.1); setState('아깝다! 모기 가까이에서 짝!'); }
+            }
+          }
+          G.prevGap=gap;
+        }else G.prevGap=null;
+      }
+    },
+    finish(){ showResult({num:G.n,sub:'마리 잡았어요! 🦟',voice:G.n+'마리 잡았어요! 손뼉 챔피언!'}); }
+  };
+})();
+
+/* ---------- 🧍 자세 분석(스쿼트코치 이식: 정면+측면 스캔→점수+처방) ---------- */
+GAME.posture=(()=>{
+  const G={};
+  const HOLD=4.0;
+  const D=180/Math.PI;
+  const IDX=[0,7,8,11,12,23,24,25,26,27,28];
+  function vpx(l){ return {x:l.x*map.vw,y:l.y*map.vh}; }
+  function lineDeg(a,b){ const A=vpx(a),B=vpx(b); return Math.atan2(B.y-A.y,B.x-A.x)*D; }
+  function tiltDeg(a,b){ const d=Math.abs(lineDeg(a,b))%180; return Math.min(d,180-d); }
+  function fromVertDeg(top,botm){ const T=vpx(top),B=vpx(botm); return Math.atan2(Math.abs(T.x-B.x),Math.max(1e-6,Math.abs(B.y-T.y)))*D; }
+  function avgFrames(buf){
+    const out={};
+    IDX.forEach(i=>{ let x=0,y=0,z=0,v=0; buf.forEach(f=>{ x+=f[i].x; y+=f[i].y; z+=(f[i].z||0); v+=visOf(f[i]); });
+      out[i]={x:x/buf.length,y:y/buf.length,z:z/buf.length,visibility:v/buf.length}; });
+    return out;
+  }
+  function stanceOf(lms){
+    const shW=Math.abs(lms[11].x-lms[12].x)*map.vw;
+    const torso=Math.abs((lms[11].y+lms[12].y)/2-(lms[23].y+lms[24].y)/2)*map.vh;
+    if(torso<1) return 'unknown';
+    const ratio=shW/torso;
+    if(ratio>0.55) return 'front'; if(ratio<0.32) return 'side'; return 'unknown';
+  }
+  function grade3(v,warn,bad){ return v<warn?0:(v<bad?1:2); }
+  const GTXT=['양호','주의','관리 필요'];
+  function computeFront(a){
+    const m=[];
+    const head=tiltDeg(a[7],a[8]); const headHi=(a[7].y<a[8].y)?'왼':'오른';
+    m.push({ic:'🙂',nm:'머리 기울기',val:head,unit:'°',g:grade3(head,3,6),max:10,
+      d:head<3?'머리가 수평으로 잘 서 있어요.':'머리가 '+headHi+'쪽으로 '+head.toFixed(1)+'° 기울어져 있어요.',rx:['neckSide']});
+    const midS={x:(a[11].x+a[12].x)/2,y:(a[11].y+a[12].y)/2};
+    const hshift=fromVertDeg(a[0],midS);
+    m.push({ic:'👤',nm:'머리 치우침',val:hshift,unit:'°',g:grade3(hshift,4,8),max:14,
+      d:hshift<4?'머리가 몸 중심 바로 위에 잘 놓여 있어요.':'머리가 몸 중심에서 옆으로 '+hshift.toFixed(1)+'° 치우쳐 있어요.',rx:['chinTuck','neckSide']});
+    const sh=tiltDeg(a[11],a[12]); const shHi=(a[11].y<a[12].y)?'왼':'오른';
+    m.push({ic:'🫲',nm:'어깨 수평',val:sh,unit:'°',g:grade3(sh,2.5,5),max:10,
+      d:sh<2.5?'양쪽 어깨 높이가 비슷해요.':shHi+'쪽 어깨가 '+sh.toFixed(1)+'° 높아요.',rx:['wallAngel','neckSide']});
+    const pv=tiltDeg(a[23],a[24]); const pvHi=(a[23].y<a[24].y)?'왼':'오른';
+    m.push({ic:'🩳',nm:'골반 수평',val:pv,unit:'°',g:grade3(pv,2.5,5),max:10,
+      d:pv<2.5?'골반이 수평으로 균형 잡혀 있어요.':pvHi+'쪽 골반이 '+pv.toFixed(1)+'° 높아요.',rx:['sidePlank','squatApp']});
+    const midSh={x:(a[11].x+a[12].x)/2,y:(a[11].y+a[12].y)/2};
+    const midAn={x:(a[27].x+a[28].x)/2,y:(a[27].y+a[28].y)/2};
+    const lean=fromVertDeg(midSh,midAn);
+    m.push({ic:'🧍',nm:'몸 중심선',val:lean,unit:'°',g:grade3(lean,2,4),max:8,
+      d:lean<2?'몸의 중심이 반듯하게 서 있어요.':'몸이 한쪽으로 '+lean.toFixed(1)+'° 기울어 서 있어요.',rx:['balance','sidePlank']});
+    return m;
+  }
+  function computeSide(a){
+    const m=[];
+    const L=visOf(a[7])+visOf(a[11])+visOf(a[23])>=visOf(a[8])+visOf(a[12])+visOf(a[24]);
+    const ear=L?a[7]:a[8], sh=L?a[11]:a[12], hip=L?a[23]:a[24], knee=L?a[25]:a[26], ank=L?a[27]:a[28];
+    const neck=fromVertDeg(ear,sh);
+    m.push({ic:'🐢',nm:'거북목 (머리 전방)',val:neck,unit:'°',g:grade3(neck,10,17),max:30,
+      d:neck<10?'귀가 어깨 위에 잘 놓여 있어요. 목 정렬 좋아요!':'귀가 어깨보다 '+neck.toFixed(1)+'° 앞으로 나와 있어요.',rx:['chinTuck','neckStretch']});
+    const back=fromVertDeg(sh,hip);
+    m.push({ic:'🧎',nm:'상체 기울기 (굽은 등)',val:back,unit:'°',g:grade3(back,4,8),max:16,
+      d:back<4?'등이 반듯하게 서 있어요.':'상체가 '+back.toFixed(1)+'° 앞으로 기울어 있어요.',rx:['chestOpen','wallAngel','jacksApp']});
+    const sway=fromVertDeg(hip,ank);
+    m.push({ic:'🍑',nm:'골반 전방 이동',val:sway,unit:'°',g:grade3(sway,4,8),max:14,
+      d:sway<4?'골반이 발목 위에 안정적으로 놓여 있어요.':'골반이 발목보다 '+sway.toFixed(1)+'° 앞뒤로 밀려 있어요.',rx:['wallStand','sidePlank']});
+    const kneeA=angle(hip,knee,ank);
+    m.push({ic:'🦵',nm:'무릎 펴짐',val:kneeA,unit:'°',fmt:v=>Math.round(v)+'',g:kneeA>=165?0:(kneeA>=150?1:2),max:180,gauge:Math.max(0,Math.min(1,(180-kneeA)/40)),
+      d:kneeA>=165?'서 있을 때 무릎이 자연스럽게 펴져 있어요.':'서 있을 때 무릎이 '+Math.round(180-kneeA)+'°쯤 굽어 있어요.',rx:['squatApp']});
+    const align=angle(sh,hip,ank);
+    m.push({ic:'📏',nm:'옆모습 일직선',val:180-align,unit:'°',fmt:v=>v.toFixed(1),g:align>=170?0:(align>=162?1:2),max:25,gauge:Math.max(0,Math.min(1,(180-align)/25)),
+      d:align>=170?'어깨-골반-발목이 일직선에 가까워요. 아주 좋아요!':'어깨-골반-발목 선이 '+(180-align).toFixed(1)+'° 꺾여 있어요.',rx:['wallStand','sidePlank']});
+    return m;
+  }
+  const RX={
+    chinTuck:{ic:'🐢',nm:'턱 당기기',how:'정면을 보고 턱을 뒤로 지그시 당겨 이중턱을 만들었다가 5초 유지 후 풀어요.',dose:'10회 × 3세트, 매일'},
+    neckStretch:{ic:'🙆',nm:'목 뒤 늘리기',how:'양손을 뒤통수에 얹고 턱을 가슴 쪽으로 지그시 당겨 목 뒤를 15초 늘려요.',dose:'15초 × 3회'},
+    neckSide:{ic:'🤷',nm:'목 옆 스트레칭',how:'오른손으로 머리 왼쪽을 잡고 오른쪽으로 지그시 당겨 15초. 반대쪽도 똑같이 해요.',dose:'양쪽 15초 × 3회'},
+    chestOpen:{ic:'🚪',nm:'가슴 열기 스트레칭',how:'문틀에 양팔을 대고 한 발 앞으로 내밀며 가슴을 쭉 펴요.',dose:'20초 × 3회'},
+    wallAngel:{ic:'👼',nm:'벽 천사',how:'벽에 등·머리를 붙이고 양팔을 W자로 만든 뒤 천천히 위로 올렸다 내려요.',dose:'10회 × 2세트'},
+    wallStand:{ic:'🧱',nm:'벽에 바르게 서기',how:'뒤통수·어깨·엉덩이·뒤꿈치를 벽에 붙이고 1분간 바른 자세를 기억해요.',dose:'1분 × 3회'},
+    sidePlank:{ic:'🛶',nm:'사이드 플랭크',how:'옆으로 누워 팔꿈치로 몸을 들어 어깨-골반-발이 일직선이 되게 버텨요.',dose:'양쪽 20초 × 2세트'},
+    balance:{ic:'🦩',nm:'한발 서기 밸런스',how:'한 발을 들고 30초 균형을 잡아요. 흔들리면 배에 힘!',dose:'양쪽 30초 × 2회'},
+    squatApp:{ic:'🐻',nm:'앉았다 일어나기 (AI 카운트)',how:'하체와 골반 주변 근육을 고르게 강화하는 기본 운동이에요.',dose:'15개 × 2세트',go:'squat'},
+    jacksApp:{ic:'🙌',nm:'만세 체조 (AI 카운트)',how:'어깨를 크게 움직여 굽은 어깨를 펴는 데 도움 되는 전신 운동이에요.',dose:'20개 × 2세트',go:'jacks'}
+  };
+  function snapshot(a,mode){
+    const c=document.createElement('canvas');
+    c.width=DEBUG?720:(video.videoWidth||720); c.height=DEBUG?1280:(video.videoHeight||1280);
+    const g=c.getContext('2d');
+    g.fillStyle='#FFF3D6'; g.fillRect(0,0,c.width,c.height);
+    if(!DEBUG){
+      if(facing==='user'){ g.save(); g.translate(c.width,0); g.scale(-1,1); g.drawImage(video,0,0,c.width,c.height); g.restore(); }
+      else g.drawImage(video,0,0,c.width,c.height);
+    }
+    const p=i=>{ let x=a[i].x*c.width; const y=a[i].y*c.height; if(facing==='user'&&!DEBUG) x=c.width-x; else if(DEBUG) x=a[i].x*c.width; return {x,y}; };
+    function seg(i,j,col,w){ const A=p(i),B=p(j); g.strokeStyle=col; g.lineWidth=w||5;
+      g.beginPath(); g.moveTo(A.x,A.y); g.lineTo(B.x,B.y); g.stroke(); }
+    function dot(i,col){ const A=p(i); g.fillStyle=col; g.beginPath(); g.arc(A.x,A.y,7,0,Math.PI*2); g.fill(); }
+    if(mode==='front'){ seg(7,8,'#FF9DB0',4); seg(11,12,'#FF6F91',6); seg(23,24,'#FF9DB0',5);
+      [7,8,11,12,23,24,25,26,27,28].forEach(i=>dot(i,'#FF6F91')); }
+    else{ const L=visOf(a[7])+visOf(a[11])>=visOf(a[8])+visOf(a[12]); const e=L?7:8,s=L?11:12,h=L?23:24,k=L?25:26,an=L?27:28;
+      seg(e,s,'#FF6F91',6); seg(s,h,'#FF9DB0',5); seg(h,k,'#FF9DB0',5); seg(k,an,'#FF9DB0',5);
+      [e,s,h,k,an].forEach(i=>dot(i,'#FF6F91')); }
+    return c.toDataURL('image/jpeg',0.82);
+  }
+  function calcScore(all){
+    let s=100;
+    all.forEach(x=>{ const heavy=/거북목|어깨 수평|골반 수평|상체 기울기/.test(x.nm);
+      if(x.g===1) s-=heavy?5:3; else if(x.g===2) s-=heavy?12:8; });
+    return Math.max(30,Math.round(s));
+  }
+  function findG(list,sub){ const m=list.find(x=>x.nm.includes(sub)); return m?m.g:0; }
+  function findVal(list,sub){ const m=list.find(x=>x.nm.includes(sub)); return m?m.val:0; }
+  const TYPES={
+    거북목:['거북목형','🐢','목이 어깨보다 앞으로 나온 경향이 두드러져요.'],
+    굽은등:['굽은등형','🧎','등이 앞으로 굽는 경향이 두드러져요.'],
+    스웨이백:['스웨이백형','🍑','골반이 발목보다 앞뒤로 밀린 경향이 두드러져요.'],
+    좌우비대칭:['좌우비대칭형','⚖️','어깨나 골반이 한쪽으로 기운 경향이 두드러져요.'],
+    체중쏠림:['체중쏠림형','🧍','몸의 중심이 한쪽으로 치우친 경향이 두드러져요.']
+  };
+  function classifyType(frontM,sideM){
+    const cand=[['거북목',findG(sideM,'거북목')],['굽은등',findG(sideM,'상체 기울기')],['스웨이백',findG(sideM,'골반 전방')],
+      ['좌우비대칭',Math.max(findG(frontM,'어깨 수평'),findG(frontM,'골반 수평'))],['체중쏠림',findG(frontM,'몸 중심선')]]
+      .filter(c=>c[1]>=1).sort((a,b)=>b[1]-a[1]);
+    if(!cand.length) return {tag:'균형 잡힌 자세',emoji:'🌿',desc:'전반적으로 균형 잡힌 좋은 자세예요.'};
+    if(cand.length===1){ const [tag,emoji,desc]=TYPES[cand[0][0]]; return {tag,emoji,desc}; }
+    return {tag:'복합형',emoji:'🧩',desc:'여러 부위에서 함께 신경 쓰면 좋을 지점들이 보여요.'};
+  }
+  function buildNarrative(frontM,sideM,type){
+    const bad=[...frontM,...sideM].filter(x=>x.g>0).sort((a,b)=>b.g-a.g);
+    if(!bad.length) return '측정된 지표가 모두 양호한 범위예요. 지금처럼 바른 자세를 잘 유지하고 있어요!';
+    const top=bad.slice(0,2).map(x=>x.nm.replace(/\s*\(.*?\)/,'')).join('와 ');
+    let s='이번 측정에서는 '+top+' 부분을 가장 신경 쓰면 좋겠어요. ';
+    if(type.tag!=='복합형'&&type.tag!=='균형 잡힌 자세') s+=type.tag+' 경향이 보이는데, ';
+    s+='아래 추천 운동을 하루 5분씩만 꾸준히 실천해도 눈에 띄게 좋아질 수 있어요!';
+    return s;
+  }
+  function loadHistory(){ try{ return JSON.parse(localStorage.getItem('kp_posture_hist')||'[]'); }catch(e){ return []; } }
+  function saveHistory(entry){ try{ const h=loadHistory(); h.push(entry); while(h.length>10) h.shift(); localStorage.setItem('kp_posture_hist',JSON.stringify(h)); }catch(e){} }
+  function trendText(prev,entry){
+    if(!prev) return '';
+    const ds=entry.score-prev.score;
+    return '지난 측정 대비 '+(ds>0?'+':'')+ds+'점';
+  }
+  function buildReport(){
+    G.step='done';
+    const all=[...G.frontM,...G.sideM];
+    const worst=Math.max(...all.map(x=>x.g));
+    const cnt=[0,0,0]; all.forEach(x=>cnt[x.g]++);
+    const rxKeys=[...new Set(all.filter(x=>x.g>0).flatMap(x=>x.rx))];
+    if(!rxKeys.length) rxKeys.push('squatApp','jacksApp');
+    G.score=calcScore(all);
+    G.band=G.score>=90?['A','훌륭해요!','#a3e635']:G.score>=80?['B','좋아요, 조금만 다듬어요','#22d3ee']:G.score>=70?['C','몇 가지 관리가 필요해요','#fbbf24']:['D','꾸준한 관리가 필요해요','#fb7185'];
+    G.type=classifyType(G.frontM,G.sideM);
+    G.narrative=buildNarrative(G.frontM,G.sideM,G.type);
+    const prevEntry=(()=>{ const h=loadHistory(); return h.length?h[h.length-1]:null; })();
+    const entry={ts:Date.now(),score:G.score};
+    saveHistory(entry);
+    const trendNote=trendText(prevEntry,entry);
+    const gcol=['#a3e635','#fbbf24','#fb7185'];
+    let h='<h2>🧍 자세 분석 리포트</h2><div class="rp-date">'+new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'})+' · AI 카메라 측정</div>';
+    h+='<div class="score-wrap"><div class="score-ring" style="--p:'+G.score+';--c:'+G.band[2]+'"><span>'+G.score+'</span></div>'
+      +'<div class="score-side"><div class="sc-band" style="color:'+G.band[2]+'">'+G.band[0]+' · '+G.band[1]+'</div>'
+      +'<div class="sc-rel">지표 '+all.length+'개 분석'+(trendNote?'<br>'+trendNote:'')+'</div></div></div>';
+    h+='<div style="text-align:center"><span class="type-badge">'+G.type.emoji+' 자세 유형 · '+G.type.tag+'</span></div>';
+    h+='<div class="narrative">📝 <b>종합 소견</b><br>'+G.narrative+'</div>';
+    h+='<div class="rp-snaps"><figure><img src="'+G.snapF+'" alt="정면"><figcaption>정면 측정</figcaption></figure>';
+    h+='<figure><img src="'+G.snapS+'" alt="측면"><figcaption>측면 측정</figcaption></figure></div>';
+    h+='<div class="rp-summary"><span class="sm-chip g'+worst+'">종합: '+(worst===0?'🟢 아주 좋아요!':worst===1?'🟡 몇 가지만 신경 써요':'🔴 꾸준한 관리가 필요해요')+'</span>';
+    h+='<span class="sm-chip g0">양호 '+cnt[0]+'</span>'+(cnt[1]?'<span class="sm-chip g1">주의 '+cnt[1]+'</span>':'')+(cnt[2]?'<span class="sm-chip g2">관리 '+cnt[2]+'</span>':'')+'</div>';
+    function cards(list,title){
+      let s='<div class="rp-sec">'+title+'</div>';
+      list.forEach(x=>{
+        const pct=Math.max(4,Math.min(100,(x.gauge!=null?x.gauge:(x.val/x.max))*100));
+        const vs=x.fmt?x.fmt(x.val):x.val.toFixed(1)+x.unit;
+        s+='<div class="m-card"><div class="m-top"><span class="ic">'+x.ic+'</span><span class="nm">'+x.nm+'</span>'
+          +'<span class="m-chip g'+x.g+'">'+GTXT[x.g]+'</span></div>'
+          +'<div class="m-val">측정값 <b>'+vs+(x.fmt&&x.unit?x.unit:'')+'</b></div>'
+          +'<div class="m-gauge"><i style="width:'+pct+'%;background:'+gcol[x.g]+'"></i></div>'
+          +'<div class="m-desc">'+x.d+'</div></div>';
+      });
+      return s;
+    }
+    h+=cards(G.frontM,'정면 분석'); h+=cards(G.sideM,'측면 분석');
+    h+='<div class="rp-sec">맞춤 운동 처방 ('+rxKeys.length+'가지)</div>';
+    rxKeys.forEach(k=>{
+      const r=RX[k];
+      h+='<div class="rx-card"><div class="rt"><span>'+r.ic+'</span>'+r.nm+'</div><div class="rh">'+r.how+'</div><div class="rd">📌 '+r.dose+'</div>'
+        +(r.go?'<button class="rx-go" data-go="'+r.go+'">▶ 지금 바로 하기</button>':'')+'</div>';
+    });
+    h+='<div class="rp-warn">⚠️ 이 결과는 카메라 기반 <b>참고용 자세 스크리닝</b>이며 의학적 진단이 아니에요. 통증이 있으면 보건 선생님과 상담하세요.</div>';
+    h+='<div class="rp-btns"><button class="ghost-btn" id="rpMenu">🏠 놀이터로</button><button class="big-btn" id="rpAgain">다시 측정!</button></div>';
+    $('reportBody').innerHTML=h;
+    $('rpMenu').onclick=()=>{ $('reportScr').classList.remove('show'); goHub(); };
+    $('rpAgain').onclick=()=>{ $('reportScr').classList.remove('show'); openIntro('posture'); };
+    document.querySelectorAll('.rx-go').forEach(b=>b.onclick=()=>{ $('reportScr').classList.remove('show'); openIntro(b.dataset.go); });
+    running=false; current=null; setHud(false);
+    $('reportScr').classList.add('show'); $('reportScr').scrollTop=0;
+    cheer(); say(G.score+'점이에요! '+G.band[1]);
+  }
+  return {
+    key:'posture', hud:{timer:true},
+    intro:{title:'자세 분석 🧍',desc:'<b>① 정면 4초</b> + <b>② 측면 4초</b> 가만히 서 있으면<br>AI가 자세를 분석해서 점수와 운동을 알려줘요.<br>발끝까지 전신이 보이게 서 주세요.'},
+    start(){ G.step='front'; G.buf=[]; G.stableAt=null; G.lastMid=null;
+      G.frontM=null; G.sideM=null; G.snapF=null; G.snapS=null; G.procUntil=0;
+      $('timerVal').textContent='0%'; },
+    end(){},
+    frame(lms){
+      if(G.step==='done') return;
+      const now=performance.now();
+      if(G.step==='frontProc'||G.step==='sideProc'){
+        if(lms) drawPose(lms,'#C7E8FF');
+        ctx.save();
+        const cx2=map.W/2, cy2=map.H*0.4, R=Math.min(map.W,map.H)/5;
+        ctx.setLineDash([16,12]); ctx.lineDashOffset=-(now/6)%56;
+        ctx.strokeStyle='#8FC4E8'; ctx.lineWidth=5; ctx.beginPath(); ctx.arc(cx2,cy2,R,0,Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle='#4a7a9a'; ctx.font='800 '+Math.max(15,map.W/20)+'px Pretendard'; ctx.textAlign='center';
+        const dots='·'.repeat(1+Math.floor(now/380)%3);
+        ctx.fillText(G.step==='frontProc'?'정면 분석 중'+dots:'AI가 열심히 분석 중'+dots,cx2,cy2+R+50);
+        ctx.restore();
+        $('timerVal').textContent='···';
+        if(now>=G.procUntil){
+          if(G.step==='frontProc'){ G.step='side'; G.buf=[]; G.stableAt=null; G.lastMid=null; beep(660,0.12); setState('좋아요! 이제 옆으로 돌아봐요','#4a7a9a'); }
+          else buildReport();
+        }
+        return;
+      }
+      if(!lms){ G.buf=[]; G.stableAt=null; setState('전신이 보이게 서 주세요'); $('timerVal').textContent='0%'; return; }
+      const core=[11,12,23,24,25,26]; let sum=0; core.forEach(i=>sum+=visOf(lms[i]));
+      const ready=sum/core.length>=0.5&&visOf(lms[27])+visOf(lms[28])>0.5;
+      drawPose(lms,G.step==='front'?'#8FC4E8':'#B79AE8');
+      if(!ready){ G.buf=[]; G.stableAt=null; setState('발끝까지 보이게 뒤로 물러나요'); $('timerVal').textContent='0%'; return; }
+      const stance=stanceOf(lms); const want=G.step;
+      if(stance!==want){ G.buf=[]; G.stableAt=null; $('timerVal').textContent='0%';
+        setState(want==='front'?'카메라를 정면으로 바라봐요':'옆으로 돌아서봐요'); return; }
+      const mid={x:(lms[23].x+lms[24].x)/2,y:(lms[23].y+lms[24].y)/2};
+      if(G.lastMid){ const mv=Math.hypot(mid.x-G.lastMid.x,(mid.y-G.lastMid.y))*map.vh; if(mv>7){ G.stableAt=null; G.buf=[]; } }
+      G.lastMid=mid;
+      if(!G.stableAt) G.stableAt=now;
+      G.buf.push(IDX.reduce((o,i)=>(o[i]={x:lms[i].x,y:lms[i].y,z:(lms[i].z||0),visibility:visOf(lms[i])},o),{}));
+      if(G.buf.length>140) G.buf.shift();
+      const held=(now-G.stableAt)/1000;
+      const pct=Math.min(100,Math.round(held/HOLD*100));
+      $('timerVal').textContent=pct+'%';
+      setState(want==='front'?'가만히… 정면 분석 중':'가만히… 측면 분석 중');
+      if(held>=HOLD&&G.buf.length>=20){
+        const a=avgFrames(G.buf.slice(-60));
+        if(want==='front'){ G.frontM=computeFront(a); G.snapF=snapshot(a,'front'); G.step='frontProc'; G.procUntil=now+1500; beep(880,0.2); setState('정면 완료!'); }
+        else{ G.sideM=computeSide(a); G.snapS=snapshot(a,'side'); G.step='sideProc'; G.procUntil=now+2000; beep(1040,0.25); setState('측면 완료! 분석 중…'); }
+      }
+    }
   };
 })();
 
