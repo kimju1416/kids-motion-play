@@ -47,7 +47,20 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
 .gcard .gicon{font-size:52px;line-height:1;filter:drop-shadow(0 6px 6px rgba(0,0,0,.12));}
 .gcard .gname{font-size:17px;font-weight:900;margin-top:8px;color:#5c3a24;}
 .gcard .gdesc{font-size:11.5px;color:#a08560;margin-top:4px;font-weight:700;}
+.gcard .gbest{display:inline-block;margin-top:8px;font-size:10.5px;font-weight:900;color:#fff;background:linear-gradient(160deg,#FF9DB0,#FF6F91);
+  border-radius:99px;padding:3px 10px;box-shadow:0 2px 0 #E0506F;}
+#challengeCard{background:linear-gradient(160deg,#FFF0E0,#FFE0EC);}
 .hub-foot{text-align:center;margin-top:26px;font-size:11px;color:#b09570;line-height:1.8;}
+
+/* ---------- 챌린지 휴식 화면 ---------- */
+#chRestScr{display:none;position:absolute;inset:0;z-index:21;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:22px;background:linear-gradient(160deg,#FFF3B0 0%,#FFD6E8 45%,#BEE3F8 100%);overflow-y:auto;}
+#chRestScr.show{display:flex;}
+.ch-prog{font-size:15px;font-weight:900;color:#7a3d5e;background:#fff;border-radius:99px;padding:8px 18px;box-shadow:0 4px 0 #FFDCA8;}
+.ch-next{margin:22px 0;}
+.ch-next .ic{font-size:56px;display:block;filter:drop-shadow(0 6px 6px rgba(0,0,0,.12));}
+.ch-next .tt{font-size:20px;font-weight:900;color:#7a3d5e;margin-top:8px;}
+#chRestNum{font-size:min(20vw,84px);font-weight:900;color:#FF6F91;text-shadow:3px 3px 0 #fff;line-height:1;margin:8px 0 18px;}
 .hub-foot .insta{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:#c96a9a;text-decoration:none;font-weight:800;
   background:#fff;border-radius:99px;padding:8px 16px;border:2px solid #FFD6E8;}
 
@@ -172,6 +185,7 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
       <div class="hub-title">🐻 어린이 모션 놀이터</div>
       <div class="hub-sub">카메라 앞에 서서 몸으로 놀아요!<br>어른과 함께 2~3걸음 뒤로 물러나 주세요 🙆</div>
       <div class="game-grid">
+        <button class="gcard wide" id="challengeCard" style="--bd:#FF9DB0;--sh:#E8798F;grid-column:1/-1"><div class="gicon">🏅</div><div class="gname">오늘의 전체 도전</div><div class="gdesc">14가지 놀이를 순서대로 쭉 이어서 해봐요! (약 15~20분)</div></button>
         <button class="gcard" data-g="squat" style="--bd:#C7E8FF;--sh:#8FC4E8"><div class="gicon">🐻</div><div class="gname">앉았다 일어나기</div><div class="gdesc">쑥 앉았다 쑤욱!</div></button>
         <button class="gcard" data-g="jacks" style="--bd:#FFD1DC;--sh:#F0A8B8"><div class="gicon">🦋</div><div class="gname">훨훨 날아요</div><div class="gdesc">날개짓하면 하늘로!</div></button>
         <button class="gcard" data-g="mole" style="--bd:#FFE39A;--sh:#E0BE5E"><div class="gicon">🐹</div><div class="gname">두더지 콩</div><div class="gdesc">빼꼼! 손으로 콩</div></button>
@@ -182,10 +196,10 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
         <button class="gcard" data-g="numquiz" style="--bd:#FFEFC2;--sh:#E0C86F"><div class="gicon">🔢</div><div class="gname">숫자 콕콕</div><div class="gdesc">10까지 세어봐요</div></button>
         <button class="gcard" data-g="engword" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🐶</div><div class="gname">영어 콕콕</div><div class="gdesc">그림 보고 골라요</div></button>
         <button class="gcard" data-g="mosquito" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🦟</div><div class="gname">모기 잡기</div><div class="gdesc">짝! 박수로 잡아요</div></button>
-        <button class="gcard" data-g="flex" style="--bd:#E5D4FF;--sh:#B79AE8"><div class="gicon">🙇</div><div class="gname">땅 짚기 유연성</div><div class="gdesc">얼마나 유연한지 재봐요</div></button>
         <button class="gcard" data-g="balance" style="--bd:#FFE9C2;--sh:#E0B25E"><div class="gicon">🦩</div><div class="gname">한발 균형</div><div class="gdesc">한 발로 오래 서봐요</div></button>
         <button class="gcard" data-g="rhythm" style="--bd:#FFD9D9;--sh:#F0A8B8"><div class="gicon">🎵</div><div class="gname">리듬 콕콕</div><div class="gdesc">내려오는 과일을 박자에 맞춰 콕!</div></button>
-        <button class="gcard wide" data-g="posture" style="--bd:#C7E8FF;--sh:#8FC4E8;grid-column:1/-1"><div class="gicon">🧍</div><div class="gname">자세 분석</div><div class="gdesc">정면·측면을 스캔해서 자세 점수와 운동 처방을 알려줘요</div></button>
+        <button class="gcard" data-g="flex" style="--bd:#E5D4FF;--sh:#B79AE8"><div class="gicon">🙇</div><div class="gname">땅 짚기 유연성</div><div class="gdesc">얼마나 유연한지 재봐요</div></button>
+        <button class="gcard" data-g="posture" style="--bd:#C7E8FF;--sh:#8FC4E8"><div class="gicon">🧍</div><div class="gname">자세 분석</div><div class="gdesc">점수와 운동 처방을 알려줘요</div></button>
       </div>
       <div class="hub-foot">🔒 영상은 저장되지 않고 기기 안에서만 사용돼요<br>
         <a class="insta" href="https://www.instagram.com/kimju.zip" target="_blank" rel="noopener">
@@ -218,7 +232,21 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
     </div>
   </div>
 
-  <!-- 자세 분석 리포트 -->
+  <!-- 챌린지 휴식 -->
+  <div id="chRestScr">
+    <div class="ch-prog" id="chProgress">챌린지 0 / 14 완료</div>
+    <div class="ch-next">
+      <span class="ic" id="chNextIcon">🎮</span>
+      <div class="tt">다음: <span id="chNextTitle"></span></div>
+    </div>
+    <div id="chRestNum">15</div>
+    <div class="btn-row">
+      <button class="ghost-btn" id="chAbort">그만하고 놀이터로</button>
+      <button class="big-btn" id="chSkipRest">바로 다음 활동!</button>
+    </div>
+  </div>
+
+  <!-- 자세 분석 리포트 / 챌린지 결과 -->
   <div id="reportScr"><div class="rp-in" id="reportBody"></div></div>
 </div>
 
@@ -384,9 +412,38 @@ function randPos(r,avoid){
 function rrCtx(x,y,w,h,r){ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x,y,w,h,r); else ctx.rect(x,y,w,h); }
 function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
 
+/* ---------- 개인 최고기록(localStorage) ---------- */
+const BEST_CFG={
+  squat:{unit:'개',dir:'max'}, jacks:{unit:'%',dir:'max'}, mole:{unit:'마리',dir:'max'},
+  sequence:{unit:'세트',dir:'max'}, tissue:{unit:'장',dir:'max'}, wipe:{unit:'초',dir:'min',decimals:1},
+  hammer:{unit:'개',dir:'max'}, numquiz:{unit:'문제',dir:'max'}, engword:{unit:'문제',dir:'max'},
+  mosquito:{unit:'마리',dir:'max'}, flex:{unit:'%',dir:'max'}, balance:{unit:'초',dir:'max',decimals:1},
+  rhythm:{unit:'번',dir:'max'}
+};
+function bestKey(k){ return 'kp_best_'+k; }
+function getBest(k){ try{ const v=localStorage.getItem(bestKey(k)); return v==null?null:parseFloat(v); }catch(e){ return null; } }
+function recordBest(k,val){
+  const cfg=BEST_CFG[k]; if(!cfg||val==null||isNaN(val)) return false;
+  const cur=getBest(k);
+  const better=cur==null||(cfg.dir==='min'?val<cur:val>cur);
+  if(better){ try{ localStorage.setItem(bestKey(k),String(val)); }catch(e){} }
+  return better;
+}
+function renderHubBests(){
+  document.querySelectorAll('.gcard[data-g]').forEach(btn=>{
+    const k=btn.dataset.g, cfg=BEST_CFG[k]; if(!cfg) return;
+    let el=btn.querySelector('.gbest');
+    const v=getBest(k);
+    if(v==null){ if(el) el.remove(); return; }
+    if(!el){ el=document.createElement('div'); el.className='gbest'; btn.appendChild(el); }
+    const shown=cfg.decimals?v.toFixed(cfg.decimals):Math.round(v);
+    el.textContent='🏆 최고 '+shown+cfg.unit;
+  });
+}
+
 /* ---------- 라우팅 ---------- */
 let current=null, running=false, curKey=null;
-function show(id){ ['hubScr','introScr','resultScr'].forEach(s=>$(s).classList.toggle('show',s===id)); $('reportScr').classList.remove('show'); }
+function show(id){ ['hubScr','introScr','resultScr'].forEach(s=>$(s).classList.toggle('show',s===id)); $('reportScr').classList.remove('show'); $('chRestScr').classList.remove('show'); }
 function hideAll(){ show(null); }
 function setHud(on,opt){
   opt=opt||{};
@@ -449,13 +506,29 @@ async function startActivity(){
 }
 function showResult(o){
   running=false; setHud(false); current=null;
+  if(CH){
+    const card=document.querySelector('.gcard[data-g="'+curKey+'"]');
+    CH.results.push({
+      icon:card?card.querySelector('.gicon').textContent:'🎮',
+      label:card?card.querySelector('.gname').textContent:curKey,
+      num:o.num,
+      sub:o.sub?String(o.sub).replace(/<[^>]*>/g,''):''
+    });
+    CH.idx++;
+    startChallengeRest();
+    return;
+  }
   $('resNum').textContent=o.num;
   $('resSub').innerHTML=o.sub||'';
   show('resultScr');
   cheer(); buzz([0,70,50,70]);
   say(o.voice||'참 잘했어요!');
 }
-function goHub(){ running=false; current=null; setHud(false); ctx.clearRect(0,0,map.W,map.H); show('hubScr'); }
+function goHub(){
+  running=false; current=null; setHud(false); ctx.clearRect(0,0,map.W,map.H);
+  if(CH){ clearInterval(CH.timer); CH=null; }
+  show('hubScr'); renderHubBests();
+}
 $('homeBtn').onclick=goHub;
 $('introBack').onclick=goHub;
 $('introStart').onclick=startActivity;
@@ -464,7 +537,64 @@ $('resAgainBtn').onclick=()=>{ openIntro(curKey); startActivity(); };
 $('endBtn').onclick=()=>{ if(current&&current.end) current.end(); };
 $('flipBtn').onclick=()=>{ facing=(facing==='user')?'environment':'user'; stopCam(); startCam(); };
 $('viewBtn').onclick=()=>{ viewPref=(viewPref==='contain')?'cover':'contain'; try{ localStorage.setItem('kp_view',viewPref); }catch(e){} updateMap(); };
-document.querySelectorAll('.gcard').forEach(b=>b.addEventListener('click',()=>{ initAudio(); openIntro(b.dataset.g); }));
+document.querySelectorAll('.gcard[data-g]').forEach(b=>b.addEventListener('click',()=>{ initAudio(); openIntro(b.dataset.g); }));
+renderHubBests();
+
+/* ---------- 챌린지: 14개 활동 순서대로 완주 ---------- */
+const CH_ORDER=['squat','jacks','mole','sequence','tissue','wipe','hammer','numquiz','engword','mosquito','balance','rhythm','flex','posture'];
+const CH_REST=15;
+let CH=null;
+function startChallenge(){
+  CH={idx:0,results:[],timer:null};
+  hideAll();
+  runChallengeActivity();
+}
+function runChallengeActivity(){
+  const key=CH_ORDER[CH.idx];
+  openIntro(key);
+  startActivity();
+}
+function startChallengeRest(){
+  clearInterval(CH.timer);
+  hideAll();
+  const nextKey=CH_ORDER[CH.idx];
+  const card=document.querySelector('.gcard[data-g="'+nextKey+'"]');
+  $('chProgress').textContent='챌린지 '+CH.idx+' / '+CH_ORDER.length+' 완료';
+  $('chNextIcon').textContent=card?card.querySelector('.gicon').textContent:'🎮';
+  $('chNextTitle').textContent=card?card.querySelector('.gname').textContent:nextKey;
+  let remain=CH_REST;
+  $('chRestNum').textContent=remain;
+  $('chRestScr').classList.add('show'); $('chRestScr').scrollTop=0;
+  say('다음 활동으로 넘어가요!');
+  CH.timer=setInterval(()=>{
+    remain--;
+    if(remain<=0){ clearInterval(CH.timer); advanceChallenge(); }
+    else $('chRestNum').textContent=remain;
+  },1000);
+}
+function advanceChallenge(){
+  clearInterval(CH.timer);
+  $('chRestScr').classList.remove('show');
+  runChallengeActivity();
+}
+function finishChallenge(){
+  const results=CH.results; CH=null;
+  let h='<h2>🏅 오늘의 전체 도전 결과</h2><div class="rp-date">'+new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'})+' · 14가지 모두 완주!</div>';
+  h+='<div class="rp-summary"><span class="sm-chip g0">🎉 전체 도전 완주!</span></div>';
+  results.forEach(r=>{
+    h+='<div class="m-card"><div class="m-top"><span class="ic">'+r.icon+'</span><span class="nm">'+r.label+'</span></div>'
+      +'<div class="m-val">'+(r.num!=null?r.num:'-')+(r.sub?' · '+r.sub:'')+'</div></div>';
+  });
+  h+='<div class="rp-btns"><button class="big-btn" id="chFinDone">🏠 놀이터로</button></div>';
+  $('reportBody').innerHTML=h;
+  $('chFinDone').onclick=()=>{ $('reportScr').classList.remove('show'); goHub(); };
+  hideAll();
+  $('reportScr').classList.add('show'); $('reportScr').scrollTop=0;
+  cheer(); buzz([0,80,50,80]); say('축하해요! 오늘의 도전을 모두 마쳤어요!');
+}
+$('challengeCard').addEventListener('click',()=>{ initAudio(); startChallenge(); });
+$('chSkipRest').onclick=advanceChallenge;
+$('chAbort').onclick=()=>{ clearInterval(CH&&CH.timer); CH=null; $('chRestScr').classList.remove('show'); goHub(); };
 
 /* ============================================================
    게임 정의 (스쿼트코치 검증 로직 이식 + 유아용 UI/난이도)
@@ -480,7 +610,8 @@ function makeCounter(cfg){
     start(){ S.reps=0; S.lastRepAt=0; S.lostFrames=0; cfg.reset(S); $('cNum').textContent='0'; $('cLbl').textContent='번'; },
     end(){
       if(S.reps<=0){ showResult({num:0,sub:'다음에 또 도전해봐요! '+cfg.emoji,voice:'다음에 또 도전해봐요!'}); return; }
-      showResult({num:S.reps,sub:'번 했어요! '+cfg.emoji,voice:S.reps+'번 했어요! 정말 잘했어요!'});
+      const isNew=recordBest(cfg.key,S.reps);
+      showResult({num:S.reps,sub:'번 했어요! '+cfg.emoji+(isNew?' 🏆 신기록!':''),voice:S.reps+'번 했어요! 정말 잘했어요!'+(isNew?' 신기록이에요!':'')});
     },
     frame(lms){
       if(!lms){ S.lostFrames++; setState('전신이 보이게 서 주세요 🙂'); return; }
@@ -609,7 +740,8 @@ GAME.jacks=(()=>{
     },
     finish(){
       const b=Math.round(G.best*100);
-      showResult({num:b+'%',sub:'높이까지 날았어요! 🦋'+(G.touchedCloud?' 구름 터치 성공!':''),voice:b+'퍼센트 높이까지 날았어요! 정말 멋져요!'});
+      const isNew=recordBest('jacks',b);
+      showResult({num:b+'%',sub:'높이까지 날았어요! 🦋'+(G.touchedCloud?' 구름 터치 성공!':'')+(isNew?' 🏆 신기록!':''),voice:b+'퍼센트 높이까지 날았어요! 정말 멋져요!'});
     }
   };
 })();
@@ -652,7 +784,7 @@ GAME.mole=(()=>{
         }
       }
     },
-    finish(){ showResult({num:G.score,sub:'마리 잡았어요! 🐹',voice:G.score+'마리 잡았어요! 정말 빨라요!'}); }
+    finish(){ const isNew=recordBest('mole',G.score); showResult({num:G.score,sub:'마리 잡았어요! 🐹'+(isNew?' 🏆 신기록!':''),voice:G.score+'마리 잡았어요! 정말 빨라요!'}); }
   };
 })();
 
@@ -727,7 +859,7 @@ GAME.sequence=(()=>{
       });
       if(done) this._newSet();
     },
-    finish(){ showResult({num:G.sets,sub:'세트 완성했어요! 🔢',voice:G.sets+'세트 완성했어요! 대단해요!'}); }
+    finish(){ const isNew=recordBest('sequence',G.sets); showResult({num:G.sets,sub:'세트 완성했어요! 🔢'+(isNew?' 🏆 신기록!':''),voice:G.sets+'세트 완성했어요! 대단해요!'}); }
   };
 })();
 
@@ -793,7 +925,7 @@ GAME.tissue=(()=>{
         }
       });
     },
-    finish(){ showResult({num:G.n,sub:'장 뽑았어요! 🧻',voice:G.n+'장 뽑았어요! 정말 빨라요!'}); }
+    finish(){ const isNew=recordBest('tissue',G.n); showResult({num:G.n,sub:'장 뽑았어요! 🧻'+(isNew?' 🏆 신기록!':''),voice:G.n+'장 뽑았어요! 정말 빨라요!'}); }
   };
 })();
 
@@ -853,7 +985,7 @@ GAME.wipe=(()=>{
     finish(dnf){
       if(G.done) return; G.done=true;
       const sec=(performance.now()-G.t0)/1000;
-      if(!dnf) showResult({num:sec.toFixed(1),sub:'초에 3판 다 지웠어요! 🧽',voice:'와 정말 빨라요! 칠판이 반짝반짝해요!'});
+      if(!dnf){ const isNew=recordBest('wipe',sec); showResult({num:sec.toFixed(1),sub:'초에 3판 다 지웠어요! 🧽'+(isNew?' 🏆 신기록!':''),voice:'와 정말 빨라요! 칠판이 반짝반짝해요!'}); }
       else{
         const pct=G.total?Math.round(G.cleanN/G.total*100):0;
         showResult({num:G.round,sub:'판째 도전 중이었어요',voice:G.round+'판째까지 지웠어요! 다음에 또 해봐요!'});
@@ -973,7 +1105,7 @@ GAME.hammer=(()=>{
         });
       });
     },
-    finish(){ showResult({num:G.n,sub:'개 못을 박았어요! 🔨',voice:G.n+'개 만들었어요! 목수님 최고!'}); }
+    finish(){ const isNew=recordBest('hammer',G.n); showResult({num:G.n,sub:'개 못을 박았어요! 🔨'+(isNew?' 🏆 신기록!':''),voice:G.n+'개 만들었어요! 목수님 최고!'}); }
   };
 })();
 
@@ -1069,7 +1201,7 @@ GAME.numquiz=(()=>{
         return true;
       });
     },
-    finish(){ showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🔢',voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! 최고예요!'}); }
+    finish(){ const isNew=recordBest('numquiz',G.ok); showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🔢'+(isNew?' 🏆 신기록!':''),voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! 최고예요!'}); }
   };
 })();
 
@@ -1146,7 +1278,7 @@ GAME.engword=(()=>{
         return true;
       });
     },
-    finish(){ showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🐶',voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! Excellent!'}); }
+    finish(){ const isNew=recordBest('engword',G.ok); showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🐶'+(isNew?' 🏆 신기록!':''),voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! Excellent!'}); }
   };
 })();
 
@@ -1204,7 +1336,7 @@ GAME.mosquito=(()=>{
         }else G.prevGap=null;
       }
     },
-    finish(){ showResult({num:G.n,sub:'마리 잡았어요! 🦟',voice:G.n+'마리 잡았어요! 손뼉 챔피언!'}); }
+    finish(){ const isNew=recordBest('mosquito',G.n); showResult({num:G.n,sub:'마리 잡았어요! 🦟'+(isNew?' 🏆 신기록!':''),voice:G.n+'마리 잡았어요! 손뼉 챔피언!'}); }
   };
 })();
 
@@ -1239,8 +1371,9 @@ GAME.flex=(()=>{
     },
     finish(){
       const b=Math.min(100,Math.round(G.best));
+      const isNew=recordBest('flex',b);
       const grade=b>=85?'최고 유연왕! 🌟':b>=60?'아주 유연해요! 🙇':b>=35?'유연성 보통이에요 😊':'조금씩 늘려가요! 💪';
-      showResult({num:b+'%',sub:grade,voice:'유연성 '+b+'퍼센트! '+grade});
+      showResult({num:b+'%',sub:grade+(isNew?' 🏆 신기록!':''),voice:'유연성 '+b+'퍼센트! '+grade});
     }
   };
 })();
@@ -1277,7 +1410,7 @@ GAME.balance=(()=>{
         $('cNum').textContent=G.best.toFixed(1);
       }
     },
-    finish(){ showResult({num:G.best.toFixed(1),sub:'초 버텼어요! 🦩',voice:G.best.toFixed(1)+'초나 버텼어요! 균형왕이에요!'}); }
+    finish(){ const isNew=recordBest('balance',G.best); showResult({num:G.best.toFixed(1),sub:'초 버텼어요! 🦩'+(isNew?' 🏆 신기록!':''),voice:G.best.toFixed(1)+'초나 버텼어요! 균형왕이에요!'}); }
   };
 })();
 
@@ -1401,7 +1534,7 @@ GAME.rhythm=(()=>{
         return true;
       });
     },
-    finish(){ showResult({num:G.hits,sub:'번 콕! 최고 콤보 '+G.bestCombo+'! 🎵',voice:G.hits+'번 콕 눌렀어요! 리듬왕이에요!'}); }
+    finish(){ const isNew=recordBest('rhythm',G.hits); showResult({num:G.hits,sub:'번 콕! 최고 콤보 '+G.bestCombo+'! 🎵'+(isNew?' 🏆 신기록!':''),voice:G.hits+'번 콕 눌렀어요! 리듬왕이에요!'}); }
   };
 })();
 
@@ -1593,7 +1726,13 @@ GAME.posture=(()=>{
     h+='<div class="rp-warn">⚠️ 이 결과는 카메라 기반 <b>참고용 자세 스크리닝</b>이며 의학적 진단이 아니에요. 통증이 있으면 보건 선생님과 상담하세요.</div>';
     h+='<div class="rp-btns"><button class="ghost-btn" id="rpMenu">🏠 놀이터로</button><button class="big-btn" id="rpAgain">다시 측정!</button></div>';
     $('reportBody').innerHTML=h;
-    $('rpMenu').onclick=()=>{ $('reportScr').classList.remove('show'); goHub(); };
+    if(CH){
+      const card=document.querySelector('.gcard[data-g="posture"]');
+      CH.results.push({icon:card?card.querySelector('.gicon').textContent:'🧍',label:'자세 분석',num:G.score+'점',sub:G.band[0]+'등급'});
+      $('rpMenu').onclick=()=>{ $('reportScr').classList.remove('show'); finishChallenge(); };
+    }else{
+      $('rpMenu').onclick=()=>{ $('reportScr').classList.remove('show'); goHub(); };
+    }
     $('rpAgain').onclick=()=>{ $('reportScr').classList.remove('show'); openIntro('posture'); };
     document.querySelectorAll('.rx-go').forEach(b=>b.onclick=()=>{ $('reportScr').classList.remove('show'); openIntro(b.dataset.go); });
     running=false; current=null; setHud(false);
