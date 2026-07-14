@@ -173,16 +173,16 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
       <div class="hub-sub">카메라 앞에 서서 몸으로 놀아요!<br>어른과 함께 2~3걸음 뒤로 물러나 주세요 🙆</div>
       <div class="game-grid">
         <button class="gcard" data-g="squat" style="--bd:#C7E8FF;--sh:#8FC4E8"><div class="gicon">🐻</div><div class="gname">앉았다 일어나기</div><div class="gdesc">쑥 앉았다 쑤욱!</div></button>
-        <button class="gcard" data-g="jacks" style="--bd:#FFD1DC;--sh:#F0A8B8"><div class="gicon">🙌</div><div class="gname">만세 체조</div><div class="gdesc">팔 벌려 번쩍!</div></button>
+        <button class="gcard" data-g="jacks" style="--bd:#FFD1DC;--sh:#F0A8B8"><div class="gicon">🦋</div><div class="gname">훨훨 날아요</div><div class="gdesc">날개짓하면 하늘로!</div></button>
         <button class="gcard" data-g="mole" style="--bd:#FFE39A;--sh:#E0BE5E"><div class="gicon">🐹</div><div class="gname">두더지 콩</div><div class="gdesc">빼꼼! 손으로 콩</div></button>
-        <button class="gcard" data-g="sequence" style="--bd:#FFD9D9;--sh:#E89A9A"><div class="gicon">🔢</div><div class="gname">순서대로 콕</div><div class="gdesc">1→2→3→4 순서로 콕!</div></button>
+        <button class="gcard" data-g="sequence" style="--bd:#FFD9D9;--sh:#E89A9A"><div class="gicon">🔢</div><div class="gname">순서대로 콕</div><div class="gdesc">1→2→3→4→5 순서로 콕!</div></button>
         <button class="gcard" data-g="tissue" style="--bd:#FFE0F0;--sh:#E8A8C8"><div class="gicon">🧻</div><div class="gname">휴지 뽑기</div><div class="gdesc">위로 휙휙!</div></button>
         <button class="gcard" data-g="wipe" style="--bd:#CFEFEF;--sh:#8FCFCF"><div class="gicon">🧽</div><div class="gname">칠판 지우기</div><div class="gdesc">쓱쓱 깨끗하게</div></button>
         <button class="gcard" data-g="hammer" style="--bd:#FFE3C2;--sh:#E0AD70"><div class="gicon">🔨</div><div class="gname">콩콩 못박기</div><div class="gdesc">콩콩 두드려요</div></button>
         <button class="gcard" data-g="numquiz" style="--bd:#FFEFC2;--sh:#E0C86F"><div class="gicon">🔢</div><div class="gname">숫자 콕콕</div><div class="gdesc">10까지 세어봐요</div></button>
         <button class="gcard" data-g="engword" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🐶</div><div class="gname">영어 콕콕</div><div class="gdesc">그림 보고 골라요</div></button>
         <button class="gcard" data-g="mosquito" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🦟</div><div class="gname">모기 잡기</div><div class="gdesc">짝! 박수로 잡아요</div></button>
-        <button class="gcard" data-g="flex" style="--bd:#E5D4FF;--sh:#B79AE8"><div class="gicon">🙇</div><div class="gname">땅 짚기</div><div class="gdesc">손이 땅에 닿게 쭈욱!</div></button>
+        <button class="gcard" data-g="flex" style="--bd:#E5D4FF;--sh:#B79AE8"><div class="gicon">🙇</div><div class="gname">땅 짚기 유연성</div><div class="gdesc">얼마나 유연한지 재봐요</div></button>
         <button class="gcard" data-g="balance" style="--bd:#FFE9C2;--sh:#E0B25E"><div class="gicon">🦩</div><div class="gname">한발 균형</div><div class="gdesc">한 발로 오래 서봐요</div></button>
         <button class="gcard" data-g="rhythm" style="--bd:#FFD9D9;--sh:#F0A8B8"><div class="gicon">🎵</div><div class="gname">리듬 콕콕</div><div class="gdesc">내려오는 과일을 박자에 맞춰 콕!</div></button>
         <button class="gcard wide" data-g="posture" style="--bd:#C7E8FF;--sh:#8FC4E8;grid-column:1/-1"><div class="gicon">🧍</div><div class="gname">자세 분석</div><div class="gdesc">정면·측면을 스캔해서 자세 점수와 운동 처방을 알려줘요</div></button>
@@ -238,8 +238,7 @@ const BEAR='<g>'
   +'<ellipse cx="60" cy="70" rx="22" ry="17" fill="#F7DDBB"/>'
   +'<circle cx="47" cy="56" r="5.5" fill="#3d2b1f"/><circle cx="73" cy="56" r="5.5" fill="#3d2b1f"/>'
   +'<circle cx="48.8" cy="54" r="1.7" fill="#fff"/><circle cx="74.8" cy="54" r="1.7" fill="#fff"/>'
-  +'<ellipse cx="60" cy="68" rx="6" ry="4.2" fill="#3d2b1f"/>'
-  +'<path d="M60,71.5 Q60,77 53,79 M60,71.5 Q60,77 67,79" stroke="#3d2b1f" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+  +'<path d="M60,68 Q60,74 53,76 M60,68 Q60,74 67,76" stroke="#3d2b1f" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
   +'</g>';
 $('introMascot').innerHTML=BEAR; $('resultMascot').innerHTML=BEAR;
 
@@ -473,7 +472,7 @@ document.querySelectorAll('.gcard').forEach(b=>b.addEventListener('click',()=>{ 
 const GAME={};
 const DUR=25; // 초 — 유아 집중시간 고려, 짧게
 
-/* ---------- 공통 카운터형(앉았다일어나기·만세체조) ---------- */
+/* ---------- 공통 카운터형(앉았다일어나기 등) ---------- */
 function makeCounter(cfg){
   const S={reps:0,lastRepAt:0,lostFrames:0};
   return {
@@ -539,24 +538,80 @@ GAME.squat=(()=>{
   return c;
 })();
 
-/* ---------- 🙌 만세 체조 ---------- */
+/* ---------- 🦋 훨훨 날아요(날개짓 고도 게임) ---------- */
 GAME.jacks=(()=>{
-  const st={pose:'down'};
-  const c=makeCounter({
-    key:'jacks',color:'#FF9DB0',emoji:'🙌',debounce:450,
-    reset(){ st.pose='down'; },
-    judge(S,lms){
-      if(visOf(lms[15])<0.35||visOf(lms[16])<0.35){ setState('양손이 잘 보이게 해줘요'); return; }
-      const headY=Math.min(visOf(lms[7])>0.3?lms[7].y:1, visOf(lms[8])>0.3?lms[8].y:1, lms[0]?lms[0].y:1);
-      const up=lms[15].y<headY&&lms[16].y<headY;
-      const down=lms[15].y>lms[11].y&&lms[16].y>lms[12].y;
-      if(st.pose==='down'&&up){ st.pose='up'; }
-      else if(st.pose==='up'&&down){ st.pose='down'; c._rep(S.reps+1+'번 만세! 🙌'); }
-      else if(!up&&!down) setState('팔을 위로 번쩍 들어봐요');
+  const G={};
+  const CLOUDS=[{x:0.18,y:0.10,s:1},{x:0.55,y:0.06,s:1.3},{x:0.82,y:0.13,s:0.85}];
+  function drawCloud(cx,cy,s){
+    ctx.save(); ctx.fillStyle='rgba(255,255,255,.9)';
+    [[0,0,22],[16,-6,17],[-16,-4,16],[30,2,13],[-28,3,12]].forEach(p=>{
+      ctx.beginPath(); ctx.arc(cx+p[0]*s,cy+p[1]*s,p[2]*s,0,Math.PI*2); ctx.fill();
+    });
+    ctx.restore();
+  }
+  function drawFlyer(cx,cy,wingK){
+    ctx.save(); ctx.translate(cx,cy);
+    const flap=Math.sin(wingK)*0.9;
+    // 날개(양쪽)
+    ctx.fillStyle='#FFE39A';
+    ctx.save(); ctx.rotate(-0.3-flap*0.5);
+    ctx.beginPath(); ctx.ellipse(-30,0,26,13,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.rotate(0.3+flap*0.5);
+    ctx.beginPath(); ctx.ellipse(30,0,26,13,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+    // 몸통(곰돌이 얼굴)
+    ctx.fillStyle='#E4B27C'; ctx.beginPath(); ctx.arc(0,0,26,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#F5A9C4'; ctx.globalAlpha=0.55;
+    ctx.beginPath(); ctx.ellipse(-9,7,5,3.5,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(9,7,5,3.5,0,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=1;
+    ctx.fillStyle='#3d2b1f';
+    ctx.beginPath(); ctx.arc(-8,-3,2.6,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(8,-3,2.6,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#3d2b1f'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(0,4); ctx.quadraticCurveTo(0,8,-5,9); ctx.moveTo(0,4); ctx.quadraticCurveTo(0,8,5,9); ctx.stroke();
+    ctx.restore();
+  }
+  return {
+    key:'jacks', hud:{counter:true,end:true},
+    intro:{title:'훨훨 날아요 🦋',desc:'양팔을 <b>날개처럼 빠르게 파닥파닥!</b> 흔들면 하늘로 날아올라요.<br>천천히 하면 스르륵 내려와요. 구름까지 닿아볼까요?'},
+    start(){
+      G.alt=0; G.vAlt=0; G.flapEMA=0; G.prevWristY=null; G.prevT=performance.now(); G.best=0; G.touchedCloud=false; G.wingK=0;
+      $('cNum').textContent='0%'; $('cLbl').textContent='높이'; say('팔을 날개처럼 빠르게 파닥거려봐요!');
+    },
+    end(){ this.finish(); },
+    frame(lms){
+      const now=performance.now();
+      const dt=Math.min(0.05,Math.max(0.001,(now-G.prevT)/1000)); G.prevT=now;
+      // 배경 하늘 + 구름
+      ctx.save();
+      CLOUDS.forEach(c=>drawCloud(map.W*c.x,map.H*c.y,c.s*Math.min(map.W,map.H)/300));
+      ctx.restore();
+      if(!lms){ setState('전신이 보이게 서 주세요'); return; }
+      drawPose(lms,'#FF9DB0');
+      if(visOf(lms[15])<0.3||visOf(lms[16])<0.3){ setState('양팔이 잘 보이게 해줘요'); return; }
+      const wristY=(lms[15].y+lms[16].y)/2;
+      const flapSpeed=G.prevWristY==null?0:Math.abs(wristY-G.prevWristY)/dt;
+      G.prevWristY=wristY;
+      G.flapEMA=G.flapEMA*0.72+flapSpeed*0.28;
+      const LIFT_T=0.9, GRAV=1.15, LIFTK=0.8;
+      if(G.flapEMA>LIFT_T) G.vAlt+=(G.flapEMA-LIFT_T)*LIFTK*dt; else G.vAlt-=GRAV*dt;
+      G.vAlt=Math.max(-0.9,Math.min(0.9,G.vAlt*0.90));
+      G.alt=Math.max(0,Math.min(1,G.alt+G.vAlt*dt));
+      if(G.alt>G.best) G.best=G.alt;
+      G.wingK+=dt*(6+G.flapEMA*10);
+      const pctNow=Math.round(G.alt*100);
+      $('cNum').textContent=pctNow+'%';
+      const groundY=map.H*0.72, topY=map.H*0.18;
+      const cy=groundY-G.alt*(groundY-topY), cx=map.W/2;
+      drawFlyer(cx,cy,G.wingK);
+      if(G.alt>0.92&&!G.touchedCloud){ G.touchedCloud=true; beep(880,0.2); buzz([0,50,40,50]); setState('구름에 닿았어요! 🎉'); }
+      else setState(G.flapEMA>LIFT_T?'훨훨 날아올라요! 🦋':'날개를 더 빠르게 파닥여봐요');
+    },
+    finish(){
+      const b=Math.round(G.best*100);
+      showResult({num:b+'%',sub:'높이까지 날았어요! 🦋'+(G.touchedCloud?' 구름 터치 성공!':''),voice:b+'퍼센트 높이까지 날았어요! 정말 멋져요!'});
     }
-  });
-  c.intro={title:'만세 체조 🙌',desc:'양팔을 <b>번쩍 만세!</b>하고 다시 내려요.<br>몇 번이나 할 수 있을까요?'};
-  return c;
+  };
 })();
 
 /* ---------- 🐹 두더지 콩(느긋한 버전) ---------- */
@@ -604,17 +659,34 @@ GAME.mole=(()=>{
 /* ---------- 🔢 순서대로 콕 (넘버 헌터) ---------- */
 GAME.sequence=(()=>{
   const G={};
-  const N=4;
-  const COLS={1:'#FF9DB0',2:'#8FC4E8',3:'#E0C86F',4:'#93D693'};
+  const N=5;
+  const COLS={1:'#FF9DB0',2:'#8FC4E8',3:'#E0C86F',4:'#93D693',5:'#B79AE8'};
   function layout(){
-    const r=Math.max(46,Math.min(map.W,map.H)/8);
+    const r=Math.max(38,Math.min(map.W,map.H)/9.5);
+    const minD=r*2.3;
+    const x0=r+18, x1=map.W-r-18, y0=map.H*0.14+r, y1=map.H*0.70-r;
     const pts=[];
-    for(let i=0;i<N;i++){ const p=randPos(r,pts.map(q=>({x:q.x,y:q.y,d:r*2.6}))); pts.push({x:p.x,y:p.y,r,n:i+1,done:false,lock:true}); }
+    for(let i=0;i<N;i++){
+      let placed=null;
+      for(let t=0;t<300;t++){
+        const x=x0+Math.random()*Math.max(1,x1-x0);
+        const y=y0+Math.random()*Math.max(1,y1-y0);
+        if(pts.every(q=>Math.hypot(q.x-x,q.y-y)>=minD)){ placed={x,y}; break; }
+      }
+      if(!placed){
+        // 무작위 배치 실패 시 격자로 폴백해 겹침을 원천 차단
+        const cols=3, rows=Math.ceil(N/cols);
+        const cellW=(x1-x0)/cols, cellH=(y1-y0)/rows;
+        const cIdx=i%cols, rIdx=Math.floor(i/cols);
+        placed={x:x0+cellW*(cIdx+0.5), y:y0+cellH*(rIdx+0.5)};
+      }
+      pts.push({x:placed.x,y:placed.y,r,n:i+1,done:false,lock:true});
+    }
     return pts;
   }
   return {
     key:'sequence', hud:{counter:true,timer:true,end:true},
-    intro:{title:'순서대로 콕 🔢',desc:'숫자 원 4개를 <b>1→2→3→4 순서대로</b> 손으로 콕!<br>25초 동안 몇 세트나 완성할까요?'},
+    intro:{title:'순서대로 콕 🔢',desc:'숫자 원 5개를 <b>1→2→3→4→5 순서대로</b> 손으로 콕!<br>25초 동안 몇 세트나 완성할까요?'},
     start(){ G.sets=0; G.endAt=performance.now()+DUR*1000; this._newSet();
       $('cNum').textContent='0'; $('cLbl').textContent='세트'; say('숫자 순서대로 손으로 콕콕 눌러봐요!'); },
     end(){ this.finish(); },
@@ -917,14 +989,14 @@ GAME.numquiz=(()=>{
     G.q={a,b,ans,ch:[leftOk?ans:wrong,leftOk?wrong:ans],ok:leftOk?0:1,lock:true};
   }
   function burst(x,y,col){
-    const out=[]; for(let i=0;i<16;i++){ const a=Math.random()*6.28;
-      out.push({x,y,vx:Math.cos(a)*(120+Math.random()*180),vy:Math.sin(a)*(120+Math.random()*180)-60,t:performance.now(),col}); }
+    const out=[]; for(let i=0;i<26;i++){ const a=Math.random()*6.28;
+      out.push({x,y,vx:Math.cos(a)*(140+Math.random()*220),vy:Math.sin(a)*(140+Math.random()*220)-70,t:performance.now(),col}); }
     return out;
   }
   return {
     key:'numquiz', hud:{counter:true,end:true},
     intro:{title:'숫자 콕콕 🔢',desc:'그림 개수를 세어보고 <b>맞는 숫자를 손으로 콕!</b><br>10까지의 숫자만 나와요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; G.fx=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
+    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
@@ -933,8 +1005,14 @@ GAME.numquiz=(()=>{
       const r=Math.min(map.W,map.H)*0.115;
       const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.24;
       const cx=map.W/2;
-      const panelW=Math.min(map.W*0.7,280), fruitSz=Math.min(26,panelW/5.6), rowGap=fruitSz*1.2;
-      const panelH=rowGap*2+fruitSz*1.1, topY=chY+r+26;
+      // 커서 기반 행 배치: 각 행이 확정된 높이만큼 공간을 차지해 절대 겹치지 않음
+      const panelW=Math.min(map.W*0.7,280), fruitSz=Math.min(26,panelW/5.6);
+      const rowFruitH=fruitSz*1.25, rowSymH=Math.round(fruitSz*0.85), rowGapPx=8, padV=14;
+      const panelH=padV*2+rowFruitH*2+rowSymH*2+rowGapPx*3;
+      const topY=chY+r+26;
+      let cursorY=topY+padV;
+      function nextRow(h){ const c=cursorY+h/2; cursorY+=h+rowGapPx; return c; }
+      const yA=nextRow(rowFruitH), yPlus=nextRow(rowSymH), yB=nextRow(rowFruitH), yEq=nextRow(rowSymH);
       ctx.save(); ctx.fillStyle='rgba(255,255,255,.94)'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
       rrCtx(cx-panelW/2,topY,panelW,panelH,22); ctx.fill(); ctx.shadowBlur=0;
       ctx.textAlign='center'; ctx.textBaseline='middle';
@@ -943,31 +1021,43 @@ GAME.numquiz=(()=>{
         ctx.font=fruitSz+'px sans-serif';
         for(let i=0;i<n;i++) ctx.fillText(emoji,cx-totalW/2+i*gap,y);
       }
-      fruitRow(G.q.a,'🍎',topY+fruitSz*0.75);
+      fruitRow(G.q.a,'🍎',yA);
       ctx.font='900 '+Math.round(fruitSz*0.7)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('+',cx,topY+rowGap+fruitSz*0.05);
-      fruitRow(G.q.b,'🍊',topY+rowGap+fruitSz*0.85);
+      ctx.fillText('+',cx,yPlus);
+      fruitRow(G.q.b,'🍊',yB);
       ctx.font='900 '+Math.round(fruitSz*0.85)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('= ?',cx,topY+rowGap*2+fruitSz*0.35);
+      ctx.fillText('= ?',cx,yEq);
       ctx.restore();
       [{x:Lx,v:G.q.ch[0]},{x:Rx,v:G.q.ch[1]}].forEach((c,i)=>{
         const isCorrectPick=G.q.done&&i===G.q.ok;
-        const pop=isCorrectPick?1+Math.sin(Math.min(1,(now-G.q.doneAt)/220)*Math.PI)*0.18:1;
+        const pop=isCorrectPick?1+Math.sin(Math.min(1,(now-G.q.doneAt)/260)*Math.PI)*0.28:1;
         ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.18)';
         ctx.beginPath(); ctx.arc(c.x,chY,r*pop,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
         ctx.lineWidth=5; ctx.strokeStyle=isCorrectPick?'#93D693':'#FFE39A'; ctx.stroke();
         ctx.font='900 '+Math.max(30,r*0.9*pop)+'px Pretendard'; ctx.fillStyle='#7a3d5e'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(String(c.v),c.x,chY+2); ctx.restore();
+        if(isCorrectPick&&now-G.q.doneAt<500){
+          ctx.save(); ctx.globalAlpha=1-(now-G.q.doneAt)/500;
+          ctx.font='900 '+Math.round(r*0.7)+'px Pretendard'; ctx.fillStyle='#FF9DB0'; ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText('참 잘했어요! ⭐',c.x,chY-r-30); ctx.restore();
+        }
         if(hands.length&&!G.q.done){
           if(G.q.lock){ if(!anyNear(hands,Lx,chY,r+16)&&!anyNear(hands,Rx,chY,r+16)) G.q.lock=false; return; }
           if(anySegHit(hands,c.x,chY,r+16)){
             G.q.done=true; G.q.doneAt=now;
-            if(i===G.q.ok){ G.ok++; beep(880,0.15); setState('정답! 참 잘했어요! 🎉'); G.fx.push(...burst(c.x,chY,'#93D693')); }
+            if(i===G.q.ok){ G.ok++; cheer(); setState('정답! 참 잘했어요! 🎉'); G.fx.push(...burst(c.x,chY,'#93D693')); G.rings.push({x:c.x,y:chY,t:now}); }
             else{ beep(300,0.18); setState('괜찮아요, 다시 세어볼까요? 😊'); }
             G.round++; $('cNum').textContent=G.round+'/'+ROUNDS;
             setTimeout(()=>{ if(G.round>=ROUNDS) this.finish(); else gen(); },900);
           }
         }
+      });
+      G.rings=G.rings.filter(rg=>{
+        const age=now-rg.t; if(age>500) return false;
+        const k=age/500;
+        ctx.save(); ctx.globalAlpha=1-k; ctx.strokeStyle='#93D693'; ctx.lineWidth=4;
+        ctx.beginPath(); ctx.arc(rg.x,rg.y,r+10+k*46,0,Math.PI*2); ctx.stroke(); ctx.restore();
+        return true;
       });
       G.fx=G.fx.filter(p=>{
         const age=now-p.t; if(age>650) return false;
@@ -998,14 +1088,14 @@ GAME.engword=(()=>{
     say('Which one is '+target.w+'?');
   }
   function burst(x,y,col){
-    const out=[]; for(let i=0;i<16;i++){ const a=Math.random()*6.28;
-      out.push({x,y,vx:Math.cos(a)*(120+Math.random()*180),vy:Math.sin(a)*(120+Math.random()*180)-60,t:performance.now(),col}); }
+    const out=[]; for(let i=0;i<26;i++){ const a=Math.random()*6.28;
+      out.push({x,y,vx:Math.cos(a)*(140+Math.random()*220),vy:Math.sin(a)*(140+Math.random()*220)-70,t:performance.now(),col}); }
     return out;
   }
   return {
     key:'engword', hud:{counter:true,end:true},
     intro:{title:'영어 콕콕 🐶',desc:'그림을 보고 <b>맞는 영어 단어를 손으로 콕!</b><br>소리도 함께 들려줘요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; G.fx=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
+    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
@@ -1017,22 +1107,34 @@ GAME.engword=(()=>{
       ctx.font=Math.max(54,map.W/6)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(G.q.emoji,cx,topY);
       [{x:Lx,v:G.q.ch[0]},{x:Rx,v:G.q.ch[1]}].forEach((c,i)=>{
         const isCorrectPick=G.q.done&&i===G.q.ok;
-        const pop=isCorrectPick?1+Math.sin(Math.min(1,(now-G.q.doneAt)/220)*Math.PI)*0.18:1;
+        const pop=isCorrectPick?1+Math.sin(Math.min(1,(now-G.q.doneAt)/260)*Math.PI)*0.28:1;
         ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.18)';
         ctx.beginPath(); ctx.arc(c.x,chY,r*pop,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
         ctx.lineWidth=5; ctx.strokeStyle=isCorrectPick?'#93D693':'#D6F5D6'; ctx.stroke();
         ctx.font='900 '+Math.max(15,r*0.32*pop)+'px Pretendard'; ctx.fillStyle='#3d6b3d'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(c.v,c.x,chY+2); ctx.restore();
+        if(isCorrectPick&&now-G.q.doneAt<500){
+          ctx.save(); ctx.globalAlpha=1-(now-G.q.doneAt)/500;
+          ctx.font='900 '+Math.round(r*0.6)+'px Pretendard'; ctx.fillStyle='#FF9DB0'; ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText('Good job! ⭐',c.x,chY-r-30); ctx.restore();
+        }
         if(hands.length&&!G.q.done){
           if(G.q.lock){ if(!anyNear(hands,Lx,chY,r+16)&&!anyNear(hands,Rx,chY,r+16)) G.q.lock=false; return; }
           if(anySegHit(hands,c.x,chY,r+16)){
             G.q.done=true; G.q.doneAt=now;
-            if(i===G.q.ok){ G.ok++; beep(880,0.15); setState('정답이에요! Good job! 🎉'); G.fx.push(...burst(c.x,chY,'#93D693')); }
+            if(i===G.q.ok){ G.ok++; cheer(); setState('정답이에요! Good job! 🎉'); G.fx.push(...burst(c.x,chY,'#93D693')); G.rings.push({x:c.x,y:chY,t:now}); }
             else{ beep(300,0.18); setState('아쉬워요, 다음에 또 해봐요! 😊'); }
             G.round++; $('cNum').textContent=G.round+'/'+ROUNDS;
             setTimeout(()=>{ if(G.round>=ROUNDS) this.finish(); else gen(); },1100);
           }
         }
+      });
+      G.rings=G.rings.filter(rg=>{
+        const age=now-rg.t; if(age>500) return false;
+        const k=age/500;
+        ctx.save(); ctx.globalAlpha=1-k; ctx.strokeStyle='#93D693'; ctx.lineWidth=4;
+        ctx.beginPath(); ctx.arc(rg.x,rg.y,r+10+k*46,0,Math.PI*2); ctx.stroke(); ctx.restore();
+        return true;
       });
       G.fx=G.fx.filter(p=>{
         const age=now-p.t; if(age>650) return false;
@@ -1108,26 +1210,39 @@ GAME.mosquito=(()=>{
 
 /* ---------- 🙇 땅 짚기(유연성 체크) ---------- */
 GAME.flex=(()=>{
-  const st={phase:'up'};
-  const c=makeCounter({
-    key:'flex',color:'#B79AE8',emoji:'🙇',debounce:650,
-    reset(){ st.phase='up'; },
-    judge(S,lms){
-      if(visOf(lms[15])<0.3||visOf(lms[16])<0.3){ setState('두 손이 잘 보이게 해줘요'); return; }
-      const shY=(lms[11].y+lms[12].y)/2;
-      const hipY=(visOf(lms[23])>0.3&&visOf(lms[24])>0.3)?(lms[23].y+lms[24].y)/2:shY+0.2;
-      const ankleY=(visOf(lms[27])>0.3&&visOf(lms[28])>0.3)?(lms[27].y+lms[28].y)/2:hipY+0.35;
-      const wristY=Math.min(lms[15].y,lms[16].y);
-      if(st.phase==='up'){
-        if(wristY>ankleY-0.08){ st.phase='down'; setState('좋아요! 이제 쭉 펴고 일어나요 🙇'); }
-        else setState('허리를 숙여 손으로 땅을 짚어봐요');
-      }else{
-        if(wristY<hipY-0.03){ c._rep(); st.phase='up'; }
-      }
+  const G={};
+  function reachPct(lms){
+    if(visOf(lms[15])<0.3||visOf(lms[16])<0.3||visOf(lms[23])<0.3||visOf(lms[24])<0.3) return null;
+    const hipY=(lms[23].y+lms[24].y)/2;
+    const ankleY=(visOf(lms[27])>0.3&&visOf(lms[28])>0.3)?(lms[27].y+lms[28].y)/2:hipY+0.35;
+    const wristY=Math.max(lms[15].y,lms[16].y); // 더 아래로 내려간 손 기준(최대 신장)
+    const legLen=Math.max(0.08,ankleY-hipY);
+    return Math.max(0,Math.min(115,(wristY-hipY)/legLen*100));
+  }
+  return {
+    key:'flex', hud:{counter:true,end:true},
+    intro:{title:'땅 짚기 유연성 🙇',desc:'허리를 <b>쭈욱 숙여 손을 최대한 아래로</b> 뻗어봐요!<br>얼마나 유연한지 재볼까요?'},
+    start(){ G.best=0; $('cNum').textContent='0%'; $('cLbl').textContent='유연성'; say('허리를 숙여서 손을 최대한 아래로 뻗어봐요!'); },
+    end(){ this.finish(); },
+    frame(lms){
+      if(!lms){ setState('전신이 보이게 서 주세요'); return; }
+      drawPose(lms,'#B79AE8');
+      const pct=reachPct(lms);
+      if(pct==null){ setState('두 손과 엉덩이가 잘 보이게 서봐요'); return; }
+      const shown=Math.min(100,Math.round(pct));
+      if(pct>G.best){
+        G.best=pct;
+        const n=$('cNum'); n.textContent=shown+'%'; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
+        beep(560+pct*3,0.08,0.18);
+      }else $('cNum').textContent=Math.min(100,Math.round(G.best))+'%';
+      setState(pct>70?'와 정말 유연해요! 🙇':pct>35?'좋아요! 조금만 더 뻗어봐요!':'허리를 숙여 손을 아래로 뻗어봐요');
+    },
+    finish(){
+      const b=Math.min(100,Math.round(G.best));
+      const grade=b>=85?'최고 유연왕! 🌟':b>=60?'아주 유연해요! 🙇':b>=35?'유연성 보통이에요 😊':'조금씩 늘려가요! 💪';
+      showResult({num:b+'%',sub:grade,voice:'유연성 '+b+'퍼센트! '+grade});
     }
-  });
-  c.intro={title:'땅 짚기 🙇',desc:'허리를 <b>쭈욱 숙여 손으로 땅을 짚고</b> 다시 일어나요!<br>몸이 유연해지는 운동이에요.'};
-  return c;
+  };
 })();
 
 /* ---------- 🦩 한발 균형 잡기 ---------- */
@@ -1170,27 +1285,41 @@ GAME.balance=(()=>{
 GAME.rhythm=(()=>{
   const G={};
   const BPM=100, BEAT=60/BPM, LEAD=BEAT*4; // 4박자 앞서 스폰(넉넉한 낙하 시간)
+  const ROUND_DUR=50; // 음악을 충분히 즐기도록 다른 게임보다 길게
   const LANES=[
     {emoji:'🍎',col:'#FF9DB0',freq:523.25},
     {emoji:'🍊',col:'#E0C86F',freq:587.33},
     {emoji:'🫐',col:'#8FC4E8',freq:659.25},
     {emoji:'🍇',col:'#93D693',freq:783.99}
   ];
-  const PATTERN=[0,1,2,3,1,2,0,3,2,1,3,0]; // 반복 리프(12스텝)
+  const PATTERN=[0,1,2,3,1,2,0,3,2,1,3,0,1,3,0,2]; // 반복 리프(16스텝, 조금 더 다채롭게)
   const HITWIN=0.26; // 판정 허용(초)
   function laneX(i){ return map.W*( (i+0.5)/4 ); }
   function hitY(){ return map.H*0.62; }
   function topY(){ return map.H*0.14; }
   function tone(freq){
     if(!actx) return;
-    const o=actx.createOscillator(), g=actx.createGain();
-    o.type='sine'; o.frequency.value=freq;
+    const o=actx.createOscillator(), o2=actx.createOscillator(), g=actx.createGain(), g2=actx.createGain();
+    o.type='triangle'; o.frequency.value=freq;
+    o2.type='sine'; o2.frequency.value=freq*2; g2.gain.value=0.1;
+    o2.connect(g2); g2.connect(g);
     g.gain.value=0; o.connect(g); g.connect(actx.destination);
     const t=actx.currentTime;
-    g.gain.linearRampToValueAtTime(0.28,t+0.015);
-    g.gain.exponentialRampToValueAtTime(0.001,t+0.35);
-    o.start(t); o.stop(t+0.38);
+    g.gain.linearRampToValueAtTime(0.34,t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+    o.start(t); o.stop(t+0.42); o2.start(t); o2.stop(t+0.42);
   }
+  function kick(){
+    if(!actx) return;
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.type='sine'; g.gain.value=0; o.connect(g); g.connect(actx.destination);
+    const t=actx.currentTime;
+    o.frequency.setValueAtTime(160,t); o.frequency.exponentialRampToValueAtTime(52,t+0.12);
+    g.gain.linearRampToValueAtTime(0.38,t+0.008); g.gain.exponentialRampToValueAtTime(0.001,t+0.17);
+    o.start(t); o.stop(t+0.18);
+  }
+  function hihat(){ beep(2200,0.03,0.07); }
+  function sparkle(){ [0,1,2,3].forEach(i=>setTimeout(()=>beep(880+i*140,0.09,0.17),i*55)); }
   function burst(x,y,col){
     const out=[]; for(let i=0;i<14;i++){ const a=Math.random()*6.28;
       out.push({x,y,vx:Math.cos(a)*(110+Math.random()*160),vy:Math.sin(a)*(110+Math.random()*160)-40,t:performance.now(),col}); }
@@ -1198,9 +1327,9 @@ GAME.rhythm=(()=>{
   }
   return {
     key:'rhythm', hud:{counter:true,timer:true,end:true},
-    intro:{title:'리듬 콕콕 🎵',desc:'위에서 내려오는 과일이 <b>판 위에 닿을 때</b> 손으로 콕!<br>박자에 맞춰 누르면 예쁜 음악이 울려요.'},
+    intro:{title:'리듬 콕콕 🎵',desc:'위에서 내려오는 과일이 <b>판 위에 닿을 때</b> 손으로 콕!<br>박자에 맞춰 누르면 신나는 음악이 울려요.'},
     start(){
-      G.t0=performance.now(); G.endAt=G.t0+DUR*1000; G.hits=0; G.combo=0; G.bestCombo=0; G.blocks=[]; G.nextStep=0; G.nextBeatAt=G.t0+BEAT*1000; G.lastTick=0;
+      G.t0=performance.now(); G.endAt=G.t0+ROUND_DUR*1000; G.hits=0; G.combo=0; G.bestCombo=0; G.blocks=[]; G.nextStep=0; G.nextBeatAt=G.t0+BEAT*1000; G.lastTick=0;
       $('cNum').textContent='0'; $('cLbl').textContent='번'; say('과일이 판에 닿으면 손으로 콕 눌러봐요!');
     },
     end(){ this.finish(); },
@@ -1215,8 +1344,8 @@ GAME.rhythm=(()=>{
         G.blocks.push({lane,spawnAt:G.nextBeatAt-LEAD*1000,hitAt:G.nextBeatAt,hit:false});
         G.nextStep++; G.nextBeatAt+=BEAT*1000;
       }
-      // 은은한 메트로놈 틱(박자 감 잡기용)
-      if(now-G.lastTick>=BEAT*1000-8){ G.lastTick=now; beep(300,0.03,0.05); }
+      // 킥+하이햇 메트로놈(4박마다 킥으로 그루브 강조)
+      if(now-G.lastTick>=BEAT*1000-8){ G.lastTick=now; if(G.nextStep%4===0) kick(); else hihat(); }
       let hands=[];
       if(lms){ drawPose(lms,'#8FC4E8'); hands=hands2(lms); } else setState('몸이 보이게 서 주세요');
       // 레인 구획 + 하단 판정 패드
@@ -1250,6 +1379,7 @@ GAME.rhythm=(()=>{
               b.hit=true; G.hits++; G.combo++; if(G.combo>G.bestCombo) G.bestCombo=G.combo;
               const n=$('cNum'); n.textContent=G.hits; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
               tone(L.freq); buzz(25);
+              if(G.combo>0&&G.combo%8===0) sparkle();
               G.blocks.push({fx:true,parts:burst(laneX(b.lane),hitY(),L.col),t:now});
               setState(G.combo>=4?G.combo+'콤보! 🎶':'딱! 좋아요 🎵');
             }
@@ -1353,7 +1483,7 @@ GAME.posture=(()=>{
     sidePlank:{ic:'🛶',nm:'사이드 플랭크',how:'옆으로 누워 팔꿈치로 몸을 들어 어깨-골반-발이 일직선이 되게 버텨요.',dose:'양쪽 20초 × 2세트'},
     balance:{ic:'🦩',nm:'한발 서기 밸런스',how:'한 발을 들고 30초 균형을 잡아요. 흔들리면 배에 힘!',dose:'양쪽 30초 × 2회'},
     squatApp:{ic:'🐻',nm:'앉았다 일어나기 (AI 카운트)',how:'하체와 골반 주변 근육을 고르게 강화하는 기본 운동이에요.',dose:'15개 × 2세트',go:'squat'},
-    jacksApp:{ic:'🙌',nm:'만세 체조 (AI 카운트)',how:'어깨를 크게 움직여 굽은 어깨를 펴는 데 도움 되는 전신 운동이에요.',dose:'20개 × 2세트',go:'jacks'}
+    jacksApp:{ic:'🦋',nm:'훨훨 날아요 (AI 게임)',how:'양팔을 날개처럼 빠르게 움직여 어깨를 크게 쓰는 전신 운동이에요.',dose:'1분 × 2회',go:'jacks'}
   };
   function snapshot(a,mode){
     const c=document.createElement('canvas');
