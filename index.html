@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>꼬마 모션 놀이터</title>
+<title>어린이 모션 놀이터</title>
 <meta name="theme-color" content="#FFF3B0">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
@@ -68,14 +68,14 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
   border:2px solid #fff;display:none;}
 #depthWrap.show{display:block;}
 #depthBar{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#FF9DB0,#a3e635);transition:width .08s linear;}
-#bigCounter{position:absolute;top:calc(env(safe-area-inset-top) + 14px);left:50%;transform:translateX(-50%);z-index:6;display:none;
+#bigCounter{position:absolute;top:calc(env(safe-area-inset-top) + 66px);left:50%;transform:translateX(-50%);z-index:6;display:none;
   background:rgba(255,255,255,.92);border-radius:26px;padding:8px 26px;box-shadow:0 6px 0 #FFDCA8;text-align:center;}
 #bigCounter.show{display:block;}
 #cNum{font-size:40px;font-weight:900;color:#FF6F91;line-height:1;font-variant-numeric:tabular-nums;}
 #cNum.pop{animation:pop .3s cubic-bezier(.2,1.7,.4,1);}
 @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.28);}100%{transform:scale(1);}}
 #cLbl{font-size:10.5px;font-weight:800;color:#c98a3a;letter-spacing:1.5px;margin-top:1px;}
-#timerChip{position:absolute;top:calc(env(safe-area-inset-top) + 14px);right:14px;z-index:6;display:none;text-align:center;
+#timerChip{position:absolute;top:calc(env(safe-area-inset-top) + 66px);right:14px;z-index:6;display:none;text-align:center;
   background:rgba(255,255,255,.92);border-radius:20px;padding:7px 16px;box-shadow:0 5px 0 #FFDCA8;}
 #timerChip.show{display:block;}
 #timerVal{font-size:26px;font-weight:900;color:#7a3d5e;font-variant-numeric:tabular-nums;}
@@ -169,20 +169,21 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
   <!-- 허브 -->
   <div id="hubScr" class="screen show">
     <div class="hub-in">
-      <div class="hub-title">🐻 꼬마 모션 놀이터</div>
+      <div class="hub-title">🐻 어린이 모션 놀이터</div>
       <div class="hub-sub">카메라 앞에 서서 몸으로 놀아요!<br>어른과 함께 2~3걸음 뒤로 물러나 주세요 🙆</div>
       <div class="game-grid">
         <button class="gcard" data-g="squat" style="--bd:#C7E8FF;--sh:#8FC4E8"><div class="gicon">🐻</div><div class="gname">앉았다 일어나기</div><div class="gdesc">쑥 앉았다 쑤욱!</div></button>
         <button class="gcard" data-g="jacks" style="--bd:#FFD1DC;--sh:#F0A8B8"><div class="gicon">🙌</div><div class="gname">만세 체조</div><div class="gdesc">팔 벌려 번쩍!</div></button>
         <button class="gcard" data-g="mole" style="--bd:#FFE39A;--sh:#E0BE5E"><div class="gicon">🐹</div><div class="gname">두더지 콩</div><div class="gdesc">빼꼼! 손으로 콩</div></button>
-        <button class="gcard" data-g="reaction" style="--bd:#FFD9D9;--sh:#E89A9A"><div class="gicon">✨</div><div class="gname">반짝 터치</div><div class="gdesc">반짝이면 손으로 콕</div></button>
+        <button class="gcard" data-g="sequence" style="--bd:#FFD9D9;--sh:#E89A9A"><div class="gicon">🔢</div><div class="gname">순서대로 콕</div><div class="gdesc">1→2→3→4 순서로 콕!</div></button>
         <button class="gcard" data-g="tissue" style="--bd:#FFE0F0;--sh:#E8A8C8"><div class="gicon">🧻</div><div class="gname">휴지 뽑기</div><div class="gdesc">위로 휙휙!</div></button>
         <button class="gcard" data-g="wipe" style="--bd:#CFEFEF;--sh:#8FCFCF"><div class="gicon">🧽</div><div class="gname">칠판 지우기</div><div class="gdesc">쓱쓱 깨끗하게</div></button>
         <button class="gcard" data-g="hammer" style="--bd:#FFE3C2;--sh:#E0AD70"><div class="gicon">🔨</div><div class="gname">콩콩 못박기</div><div class="gdesc">콩콩 두드려요</div></button>
         <button class="gcard" data-g="numquiz" style="--bd:#FFEFC2;--sh:#E0C86F"><div class="gicon">🔢</div><div class="gname">숫자 콕콕</div><div class="gdesc">10까지 세어봐요</div></button>
         <button class="gcard" data-g="engword" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🐶</div><div class="gname">영어 콕콕</div><div class="gdesc">그림 보고 골라요</div></button>
         <button class="gcard" data-g="mosquito" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🦟</div><div class="gname">모기 잡기</div><div class="gdesc">짝! 박수로 잡아요</div></button>
-        <button class="gcard wide" data-g="simon" style="--bd:#E5D4FF;--sh:#B79AE8;grid-column:1/-1"><div class="gicon">🧠</div><div class="gname">몸으로 따라해요</div><div class="gdesc">순서대로 동작을 기억해서 따라해봐요!</div></button>
+        <button class="gcard" data-g="flex" style="--bd:#E5D4FF;--sh:#B79AE8"><div class="gicon">🙇</div><div class="gname">땅 짚기</div><div class="gdesc">손이 땅에 닿게 쭈욱!</div></button>
+        <button class="gcard" data-g="balance" style="--bd:#FFE9C2;--sh:#E0B25E"><div class="gicon">🦩</div><div class="gname">한발 균형</div><div class="gdesc">한 발로 오래 서봐요</div></button>
         <button class="gcard wide" data-g="posture" style="--bd:#C7E8FF;--sh:#8FC4E8;grid-column:1/-1"><div class="gicon">🧍</div><div class="gname">자세 분석</div><div class="gdesc">정면·측면을 스캔해서 자세 점수와 운동 처방을 알려줘요</div></button>
       </div>
       <div class="hub-foot">🔒 영상은 저장되지 않고 기기 안에서만 사용돼요<br>
@@ -476,7 +477,10 @@ function makeCounter(cfg){
   return {
     key:cfg.key, hud:{counter:true,end:true,depth:!!cfg.depth},
     start(){ S.reps=0; S.lastRepAt=0; S.lostFrames=0; cfg.reset(S); $('cNum').textContent='0'; $('cLbl').textContent='번'; },
-    end(){ showResult({num:S.reps,sub:'번 했어요! '+cfg.emoji,voice:S.reps+'번 했어요! 정말 잘했어요!'}); },
+    end(){
+      if(S.reps<=0){ showResult({num:0,sub:'다음에 또 도전해봐요! '+cfg.emoji,voice:'다음에 또 도전해봐요!'}); return; }
+      showResult({num:S.reps,sub:'번 했어요! '+cfg.emoji,voice:S.reps+'번 했어요! 정말 잘했어요!'});
+    },
     frame(lms){
       if(!lms){ S.lostFrames++; setState('전신이 보이게 서 주세요 🙂'); return; }
       const core=[11,12,23,24]; let sum=0; core.forEach(i=>sum+=visOf(lms[i]));
@@ -595,43 +599,61 @@ GAME.mole=(()=>{
   };
 })();
 
-/* ---------- ✨ 반짝 터치(느긋한 반응속도) ---------- */
-GAME.reaction=(()=>{
+/* ---------- 🔢 순서대로 콕 (넘버 헌터) ---------- */
+GAME.sequence=(()=>{
   const G={};
+  const N=4;
+  const COLS={1:'#FF9DB0',2:'#8FC4E8',3:'#E0C86F',4:'#93D693'};
+  function layout(){
+    const r=Math.max(46,Math.min(map.W,map.H)/8);
+    const pts=[];
+    for(let i=0;i<N;i++){ const p=randPos(r,pts.map(q=>({x:q.x,y:q.y,d:r*2.6}))); pts.push({x:p.x,y:p.y,r,n:i+1,done:false,lock:true}); }
+    return pts;
+  }
   return {
-    key:'reaction', hud:{counter:true,timer:true,end:true},
-    intro:{title:'반짝 터치 ✨',desc:'별이 <b>반짝!</b> 나타나면 손으로 콕 터치해요.<br>25초 동안 몇 개나 터치할까요?'},
-    start(){ G.score=0; G.state='wait'; G.nextAt=performance.now()+700; G.target=null; G.endAt=performance.now()+DUR*1000;
-      $('cNum').textContent='0'; $('cLbl').textContent='개'; say('반짝이면 손으로 콕 터치해봐요!'); },
+    key:'sequence', hud:{counter:true,timer:true,end:true},
+    intro:{title:'순서대로 콕 🔢',desc:'숫자 원 4개를 <b>1→2→3→4 순서대로</b> 손으로 콕!<br>25초 동안 몇 세트나 완성할까요?'},
+    start(){ G.sets=0; G.endAt=performance.now()+DUR*1000; this._newSet();
+      $('cNum').textContent='0'; $('cLbl').textContent='세트'; say('숫자 순서대로 손으로 콕콕 눌러봐요!'); },
     end(){ this.finish(); },
+    _newSet(){ G.targets=layout(); G.next=1; },
     frame(lms){
       const now=performance.now();
       const remain=Math.max(0,(G.endAt-now)/1000);
       $('timerVal').textContent=Math.ceil(remain);
       if(remain<=0){ this.finish(); return; }
       let hands=[];
-      if(lms){ drawPose(lms,'#E89A9A'); hands=hands2(lms); drawHandGlow(hands,'#E89A9A'); } else setState('몸이 보이게 서 주세요');
-      if(G.state==='wait'){
-        if(now>=G.nextAt){
-          const r=Math.max(58,Math.min(map.W,map.H)/6.5);
-          const avoid=hands.map(h=>({x:h.x,y:h.y,d:Math.min(map.W,map.H)*0.28}));
-          const p=randPos(r,avoid);
-          G.target={x:p.x,y:p.y,r,shown:now};
-          G.state='go'; beep(1040,0.08,0.3);
+      if(lms){ drawPose(lms,'#8FC4E8'); hands=hands2(lms); drawHandGlow(hands,'#8FC4E8'); } else setState('몸이 보이게 서 주세요');
+      let done=false;
+      G.targets.forEach(t=>{
+        if(t.done||done) return;
+        ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
+        ctx.beginPath(); ctx.arc(t.x,t.y,t.r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+        ctx.lineWidth=5; ctx.strokeStyle=t.n===G.next?COLS[t.n]:'#e5d8c8'; ctx.stroke();
+        ctx.font='900 '+Math.round(t.r*0.9)+'px Pretendard'; ctx.fillStyle=t.n===G.next?'#5c3a24':'#c9b89a'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(String(t.n),t.x,t.y+2);
+        if(t.n===G.next){ const k=1+Math.sin(now/160)*0.08; ctx.beginPath(); ctx.arc(t.x,t.y,t.r*k+9,0,Math.PI*2); ctx.strokeStyle=COLS[t.n]; ctx.lineWidth=3; ctx.stroke(); }
+        ctx.restore();
+        if(hands.length){
+          const near=anyNear(hands,t.x,t.y,t.r+16);
+          if(t.lock){ if(!near) t.lock=false; return; }
+          if(anySegHit(hands,t.x,t.y,t.r+16)){
+            if(t.n===G.next){
+              t.done=true; G.next++;
+              beep(520+t.n*110,0.1); buzz(30);
+              if(G.next>N){
+                G.sets++; $('cNum').textContent=G.sets;
+                const nn=$('cNum'); nn.classList.remove('pop'); void nn.offsetWidth; nn.classList.add('pop');
+                setState(G.sets+'세트 완성! 🎉'); beep(880,0.16); buzz([0,50,40,50]);
+                done=true;
+              }else setState(t.n+'번! 다음은 '+G.next+'번');
+            }else{ setState(G.next+'번 먼저 눌러요!'); beep(220,0.12); t.lock=true; }
+          }
         }
-      }else if(G.state==='go'&&G.target){
-        const t=G.target;
-        if(now-t.shown>3600){ G.state='wait'; G.nextAt=now+300; G.target=null; return; }
-        ctx.font=Math.max(56,t.r*1.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('✨',t.x,t.y);
-        if(hands.length&&anySegHit(hands,t.x,t.y,t.r+16)){
-          G.score++; $('cNum').textContent=G.score;
-          const n=$('cNum'); n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
-          beep(880,0.12); buzz(35); setState(G.score+'개 반짝! ✨');
-          G.state='wait'; G.nextAt=now+400+Math.random()*700; G.target=null;
-        }
-      }
+      });
+      if(done) this._newSet();
     },
-    finish(){ showResult({num:G.score,sub:'개 터치했어요! ✨',voice:G.score+'개 터치했어요! 최고예요!'}); }
+    finish(){ showResult({num:G.sets,sub:'세트 완성했어요! 🔢',voice:G.sets+'세트 완성했어요! 대단해요!'}); }
   };
 })();
 
@@ -641,7 +663,7 @@ GAME.tissue=(()=>{
   return {
     key:'tissue', hud:{counter:true,timer:true,end:true},
     intro:{title:'휴지 뽑기 🧻',desc:'휴지 상자 위에서 <b>손을 위로 휙!</b> 올려봐요.<br>25초 동안 몇 장 뽑을 수 있을까요?'},
-    start(){ G.n=0; G.endAt=performance.now()+DUR*1000; G.lastPull=0;
+    start(){ G.n=0; G.endAt=performance.now()+DUR*1000; G.lastPull=0; G.parts=[]; G.pt=0;
       $('cNum').textContent='0'; $('cLbl').textContent='장'; say('휴지 상자 위에서 손을 위로 쭉 올려봐요!'); },
     end(){ this.finish(); },
     frame(lms){
@@ -649,9 +671,27 @@ GAME.tissue=(()=>{
       const remain=Math.max(0,(G.endAt-now)/1000);
       $('timerVal').textContent=Math.ceil(remain);
       if(remain<=0){ this.finish(); return; }
+      const dt=Math.min(50,now-(G.pt||now)); G.pt=now;
       let hands=[];
       if(lms){ drawPose(lms,'#E8A8C8'); hands=hands2(lms); drawHandGlow(hands,'#E8A8C8'); } else setState('몸이 보이게 서 주세요');
-      const bw=Math.min(map.W*0.46,240), bh=bw*0.6, bx=map.W/2, by=map.H*0.8, zr=Math.max(58,bw*0.42), zy=by-bh/2-30;
+      // 날아가는 휴지 파티클
+      G.parts=G.parts.filter(p=>{
+        p.vy+=460*dt/1000; p.vy*=0.996; p.vx*=0.986;
+        p.x+=p.vx*dt/1000+Math.sin((now-p.t)/170)*1.4;
+        p.y+=p.vy*dt/1000; p.rot+=p.vr*dt/1000;
+        const age=now-p.t;
+        if(age>3200||p.y>map.H+90) return false;
+        const al=age>2300?1-(age-2300)/900:1;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+        ctx.globalAlpha=0.92*al;
+        ctx.fillStyle='#fff'; ctx.shadowBlur=8; ctx.shadowColor='rgba(255,255,255,.55)';
+        rrCtx(-22,-28,44,56,8); ctx.fill();
+        ctx.shadowBlur=0; ctx.globalAlpha=0.4*al; ctx.strokeStyle='#e8b8c8'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(-14,-11); ctx.lineTo(14,-8); ctx.stroke();
+        ctx.restore();
+        return true;
+      });
+      const bw=Math.min(map.W*0.46,240), bh=bw*0.6, bx=map.W/2, by=map.H-bh/2-96, zr=Math.max(58,bw*0.42), zy=by-bh/2-30;
       ctx.save();
       // 각티슈 상자(직사각형 박스)
       ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.2)';
@@ -673,6 +713,8 @@ GAME.tissue=(()=>{
         if(h.vy<-460&&segHit(h,bx,zy,zr)){
           G.lastPull=now; G.n++;
           const n=$('cNum'); n.textContent=G.n; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
+          G.parts.push({x:bx,y:zy,vx:h.vx*0.4,vy:Math.max(-900,h.vy*0.4),rot:0,vr:(Math.random()-0.5)*6,t:now});
+          if(G.parts.length>28) G.parts.shift();
           beep(760,0.1); buzz(30); setState(G.n+'장 뽑았어요! 🧻');
         }
       });
@@ -681,57 +723,137 @@ GAME.tissue=(()=>{
   };
 })();
 
-/* ---------- 🧽 칠판 지우기(1판) ---------- */
+/* ---------- 🧽 칠판 지우기(3판) ---------- */
 GAME.wipe=(()=>{
   const G={};
-  const COLS=5, ROWS=4;
+  const CELL=42, ROUNDS=3;
+  function scribble(g,W,H){
+    const M={x:W*0.07,y:H*0.10,w:W*0.86,h:H*0.66};
+    const cols=['rgba(255,255,255,.85)','rgba(253,224,71,.8)','rgba(244,114,182,.75)','rgba(147,197,253,.8)'];
+    g.lineCap='round';
+    for(let i=0;i<26;i++){
+      g.strokeStyle=cols[i%cols.length];
+      g.lineWidth=6+Math.random()*9;
+      g.beginPath();
+      let x=M.x+Math.random()*M.w, y=M.y+Math.random()*M.h;
+      g.moveTo(x,y);
+      const segs=3+(Math.random()*4|0);
+      for(let s2=0;s2<segs;s2++){
+        const nx=Math.max(M.x,Math.min(M.x+M.w,x+(Math.random()-0.5)*W*0.45));
+        const ny=Math.max(M.y,Math.min(M.y+M.h,y+(Math.random()-0.5)*H*0.3));
+        g.quadraticCurveTo((x+nx)/2+(Math.random()-0.5)*60,(y+ny)/2+(Math.random()-0.5)*60,nx,ny);
+        x=nx; y=ny;
+      }
+      g.stroke();
+    }
+    for(let i=0;i<8;i++){
+      g.strokeStyle=cols[(Math.random()*cols.length)|0];
+      g.lineWidth=5+Math.random()*6;
+      g.beginPath();
+      g.ellipse(M.x+Math.random()*M.w,M.y+Math.random()*M.h,20+Math.random()*46,14+Math.random()*30,Math.random()*3,0,Math.PI*2);
+      g.stroke();
+    }
+    return M;
+  }
   return {
-    key:'wipe', hud:{counter:true,end:true},
-    intro:{title:'칠판 지우기 🧽',desc:'낙서로 가득한 칠판을 <b>손으로 쓱쓱 문질러</b> 지워봐요.<br>다 지우면 성공!'},
+    key:'wipe', hud:{counter:true,timer:true,end:true},
+    intro:{title:'칠판 지우기 🧽',desc:'앗, 칠판이 낙서로 가득!<br><b>손바닥을 크게 휘저어</b> 낙서를 싹싹 지워요.<br>3판 연속 도전!'},
+    _newBoard(){
+      G.bc=document.createElement('canvas'); G.bc.width=map.W; G.bc.height=map.H;
+      G.bg=G.bc.getContext('2d');
+      const M=scribble(G.bg,map.W,map.H);
+      G.cells=[];
+      const cols=Math.ceil(map.W/CELL), rows=Math.ceil(map.H/CELL);
+      for(let r2=0;r2<rows;r2++) for(let c2=0;c2<cols;c2++){
+        const cx2=c2*CELL+CELL/2, cy2=r2*CELL+CELL/2;
+        if(cx2>M.x&&cx2<M.x+M.w&&cy2>M.y&&cy2<M.y+M.h) G.cells.push({x:cx2,y:cy2,clean:false});
+      }
+      G.total=G.cells.length; G.cleanN=0;
+      $('cLbl').textContent='R'+G.round+'/'+ROUNDS; $('cNum').textContent='0%';
+    },
     start(){
-      G.cells=[]; for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) G.cells.push({r,c,clean:false});
-      G.t0=performance.now(); G.done=false;
-      $('cNum').textContent='0%'; $('cLbl').textContent='지움'; say('칠판을 쓱쓱 문질러 지워봐요!');
+      G.t0=performance.now(); G.done=false; G.round=1; G.betweenUntil=0;
+      this._newBoard(); say('칠판을 손으로 쓱쓱 문질러 지워봐요!');
     },
     end(){ this.finish(true); },
-    frame(lms){
-      if(G.done) return;
-      if(!lms){ setState('몸이 보이게 서 주세요'); return; }
-      drawPose(lms,'#8FCFCF');
-      const pad=map.W*0.08, top=map.H*0.2, w=map.W-pad*2, h=map.H*0.48;
-      const cw=w/COLS, ch=h/ROWS;
-      ctx.save(); ctx.fillStyle='rgba(90,150,150,.55)'; ctx.fillRect(pad,top,w,h);
-      G.cells.forEach(c=>{ if(!c.clean){ ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fillRect(pad+c.c*cw+1,top+c.r*ch+1,cw-2,ch-2); } });
-      ctx.strokeStyle='#fff'; ctx.lineWidth=6; ctx.strokeRect(pad,top,w,h); ctx.restore();
-      const hands=hands2(lms);
-      if(lms) drawHandGlow(hands,'#8FCFCF');
-      hands.forEach(hd=>{ G.cells.forEach(c=>{
-        if(c.clean) return;
-        const cx2=pad+c.c*cw+cw/2, cy2=top+c.r*ch+ch/2;
-        if(Math.hypot(hd.x-cx2,hd.y-cy2)<Math.max(cw,ch)*0.85) c.clean=true;
-      }); });
-      const cleanN=G.cells.filter(c=>c.clean).length, pct=Math.round(cleanN/G.cells.length*100);
-      $('cNum').textContent=pct+'%';
-      if(pct>=100) this.finish(false);
-    },
     finish(dnf){
       if(G.done) return; G.done=true;
-      const cleanN=G.cells.filter(c=>c.clean).length, pct=Math.round(cleanN/G.cells.length*100);
-      showResult({num:pct+'%',sub:'칠판을 닦았어요! 🧽',voice:pct+'퍼센트 닦았어요! 반짝반짝 깨끗해요!'});
+      const sec=(performance.now()-G.t0)/1000;
+      if(!dnf) showResult({num:sec.toFixed(1),sub:'초에 3판 다 지웠어요! 🧽',voice:'와 정말 빨라요! 칠판이 반짝반짝해요!'});
+      else{
+        const pct=G.total?Math.round(G.cleanN/G.total*100):0;
+        showResult({num:G.round,sub:'판째 도전 중이었어요',voice:G.round+'판째까지 지웠어요! 다음에 또 해봐요!'});
+      }
+    },
+    frame(lms){
+      const now=performance.now();
+      if(G.done) return;
+      $('timerVal').textContent=((now-G.t0)/1000).toFixed(1);
+      if(G.betweenUntil>now){
+        if(lms) drawPose(lms,'#8FCFCF');
+        ctx.fillStyle='rgba(60,110,110,.42)'; ctx.fillRect(0,0,map.W,map.H);
+        ctx.save(); ctx.font='900 '+Math.max(22,map.W/12)+'px Pretendard'; ctx.textAlign='center';
+        ctx.fillStyle='#fff'; ctx.shadowBlur=16; ctx.shadowColor='#8FCFCF';
+        ctx.fillText(G.round+'번째 칠판!',map.W/2,map.H*0.42);
+        ctx.font='700 '+Math.max(14,map.W/26)+'px Pretendard';
+        ctx.fillText('또 낙서가?! 준비…',map.W/2,map.H*0.42+Math.max(30,map.W/12));
+        ctx.restore();
+        return;
+      }
+      let hands=[];
+      if(lms){ drawPose(lms,'#8FCFCF'); hands=hands2(lms); } else setState('몸이 보이게 서 주세요');
+      const R=Math.max(44,Math.min(map.W,map.H)/8);
+      if(hands.length){
+        if(hands.some(h=>Math.hypot(h.x-h.px,h.y-h.py)>26)&&now-(G.lastWipe||0)>240){ G.lastWipe=now; beep(340,0.06,0.12); }
+        G.bg.save(); G.bg.globalCompositeOperation='destination-out'; G.bg.fillStyle='#000';
+        hands.forEach(h=>{
+          const steps=Math.max(1,Math.ceil(Math.hypot(h.x-h.px,h.y-h.py)/(R*0.5)));
+          for(let s2=0;s2<=steps;s2++){
+            const x=h.px+(h.x-h.px)*s2/steps, y=h.py+(h.y-h.py)*s2/steps;
+            G.bg.beginPath(); G.bg.arc(x,y,R,0,Math.PI*2); G.bg.fill();
+            G.cells.forEach(cell=>{ if(!cell.clean&&Math.hypot(cell.x-x,cell.y-y)<R){ cell.clean=true; G.cleanN++; } });
+          }
+        });
+        G.bg.restore();
+      }
+      ctx.fillStyle='rgba(60,110,110,.42)'; ctx.fillRect(0,0,map.W,map.H);
+      ctx.drawImage(G.bc,0,0);
+      hands.forEach(h=>{
+        ctx.save(); ctx.translate(h.x,h.y); ctx.rotate(-0.35);
+        ctx.shadowBlur=12; ctx.shadowColor='rgba(255,255,255,.5)';
+        ctx.fillStyle='#d9c9a3'; rrCtx(-R*0.55,-R*0.32,R*1.1,R*0.64,10); ctx.fill();
+        ctx.fillStyle='#5a4632'; rrCtx(-R*0.55,-R*0.32,R*1.1,R*0.2,8); ctx.fill();
+        ctx.restore();
+      });
+      const pct=G.total?Math.round(G.cleanN/G.total*100):0;
+      $('cNum').textContent=pct+'%';
+      if(pct>=97){
+        if(G.round>=ROUNDS){ beep(880,0.2); buzz([0,60,50,60]); this.finish(false); return; }
+        G.round++; beep(620,0.14); buzz([0,50,40,50]);
+        setState('클리어! '+G.round+'번째 칠판 등장!');
+        this._newBoard(); G.betweenUntil=now+1200; return;
+      }
+      setState('R'+G.round+'/'+ROUNDS+' — '+(pct<5?'낙서를 손으로 문질러 지워요!':(pct<60?'싹싹 문질러요! '+pct+'%':'거의 다 됐어요!')));
     }
   };
 })();
 
-/* ---------- 🔨 콩콩 못박기(2번 치면 완성) ---------- */
+/* ---------- 🔨 콩콩 못박기 ---------- */
 GAME.hammer=(()=>{
   const G={};
-  const HITS=2;
-  function newNail(){ G.nail={x:map.W*(0.35+Math.random()*0.3),y:map.H*0.5,hits:0,last:0}; }
+  const HITS=3;
+  function newNail(avoid){
+    const r=Math.max(30,Math.min(map.W,map.H)/11);
+    const p=randPos(r*1.3,avoid);
+    return {x:p.x,y:Math.min(Math.max(p.y,map.H*0.28),map.H*0.62),r,depth:0,last:0,sparks:[]};
+  }
   return {
     key:'hammer', hud:{counter:true,timer:true,end:true},
-    intro:{title:'콩콩 못박기 🔨',desc:'못 위에서 손을 <b>위에서 아래로 콩콩!</b> 내리쳐요.<br>두 번 치면 하나 완성! 몇 개나 박을까요?'},
-    start(){ G.n=0; G.endAt=performance.now()+DUR*1000; newNail();
-      $('cNum').textContent='0'; $('cLbl').textContent='개'; say('못 위에서 손을 콩콩 내리쳐봐요!'); },
+    intro:{title:'콩콩 못박기 🔨',desc:'못 머리 위로 손을 <b>위에서 아래로 콩콩!</b> 내리쳐요.<br>세 번 치면 완성! 몇 개나 박을까요?'},
+    start(){ G.n=0; G.endAt=performance.now()+DUR*1000;
+      const a=newNail(null);
+      G.nails=[a,newNail([{x:a.x,y:a.y,d:a.r*3.4}])];
+      $('cNum').textContent='0'; $('cLbl').textContent='개'; say('못 머리 위에서 손을 콩콩 내리쳐봐요!'); },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
@@ -740,19 +862,42 @@ GAME.hammer=(()=>{
       if(remain<=0){ this.finish(); return; }
       let hands=[];
       if(lms){ drawPose(lms,'#E0AD70'); hands=hands2(lms); drawHandGlow(hands,'#E0AD70'); } else setState('몸이 보이게 서 주세요');
-      const n=G.nail;
-      ctx.font=Math.max(40,map.W/8)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText('🔩',n.x,n.y+n.hits*8);
-      if(hands.length&&now-n.last>280){
-        if(hands.some(h=>h.vy>520&&segHit(h,n.x,n.y,Math.max(70,map.W*0.14)))){
-          n.last=now; n.hits++; beep(500+n.hits*80,0.1); buzz(30);
-          if(n.hits>=HITS){
-            G.n++; $('cNum').textContent=G.n;
-            const el=$('cNum'); el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
-            setState(G.n+'개 완성! 🔨'); newNail();
-          }else setState('콩! '+n.hits+'/'+HITS);
+      G.nails.forEach(nl=>{
+        const L=nl.r*2.1, sink=nl.depth/HITS;
+        const headY=nl.y-L*(1-sink);
+        ctx.fillStyle='#c98a4a'; rrCtx(nl.x-nl.r*1.5,nl.y,nl.r*3,nl.r*0.85,8); ctx.fill();
+        ctx.fillStyle='#a56a30'; rrCtx(nl.x-nl.r*1.5,nl.y,nl.r*3,9,8); ctx.fill();
+        ctx.strokeStyle='#cbd5e1'; ctx.lineWidth=7; ctx.shadowBlur=6; ctx.shadowColor='#94a3b8';
+        ctx.beginPath(); ctx.moveTo(nl.x,headY); ctx.lineTo(nl.x,nl.y+5); ctx.stroke(); ctx.shadowBlur=0;
+        ctx.fillStyle='#e2e8f0';
+        ctx.beginPath(); ctx.ellipse(nl.x,headY,nl.r*0.58,nl.r*0.22,0,0,Math.PI*2); ctx.fill();
+        ctx.save(); ctx.setLineDash([7,7]); ctx.strokeStyle='rgba(224,173,112,.5)'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.arc(nl.x,headY,nl.r*0.9+14,0,Math.PI*2); ctx.stroke(); ctx.restore();
+        for(let i=0;i<HITS;i++){ ctx.beginPath(); ctx.arc(nl.x-16+i*16,nl.y+nl.r*1.3,4.5,0,Math.PI*2);
+          ctx.fillStyle=i<nl.depth?'#93D693':'rgba(148,163,184,.4)'; ctx.fill(); }
+        if(hands.length&&now-nl.last>270){
+          if(hands.some(h=>h.vy>600&&segHit(h,nl.x,headY,nl.r*0.9+16))){
+            nl.last=now; nl.depth++;
+            nl.sparks=Array.from({length:7},()=>({a:Math.random()*6.28,v:130+Math.random()*260,t:now}));
+            beep(420,0.08); buzz(38);
+            if(nl.depth>=HITS){
+              G.n++;
+              const el=$('cNum'); el.textContent=G.n; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+              setState('뚝딱! 완성! 🔨'); beep(760,0.16);
+              const others=G.nails.filter(o=>o!==nl).map(o=>({x:o.x,y:o.y,d:o.r*3.4}));
+              Object.assign(nl,newNail(others));
+            }else setState(['땅!','땅땅!'][nl.depth-1]||'땅!');
+          }
         }
-      }
+        nl.sparks=nl.sparks.filter(s=>{
+          const age=now-s.t; if(age>320) return false;
+          const d=s.v*age/1000, al=1-age/320;
+          ctx.strokeStyle='rgba(253,224,71,'+al+')'; ctx.lineWidth=3;
+          ctx.beginPath(); ctx.moveTo(nl.x+Math.cos(s.a)*d*0.4,headY+Math.sin(s.a)*d*0.4);
+          ctx.lineTo(nl.x+Math.cos(s.a)*d,headY+Math.sin(s.a)*d); ctx.stroke();
+          return true;
+        });
+      });
     },
     finish(){ showResult({num:G.n,sub:'개 못을 박았어요! 🔨',voice:G.n+'개 만들었어요! 목수님 최고!'}); }
   };
@@ -769,50 +914,67 @@ GAME.numquiz=(()=>{
     const leftOk=Math.random()<0.5;
     G.q={a,b,ans,ch:[leftOk?ans:wrong,leftOk?wrong:ans],ok:leftOk?0:1,lock:true};
   }
+  function burst(x,y,col){
+    const out=[]; for(let i=0;i<16;i++){ const a=Math.random()*6.28;
+      out.push({x,y,vx:Math.cos(a)*(120+Math.random()*180),vy:Math.sin(a)*(120+Math.random()*180)-60,t:performance.now(),col}); }
+    return out;
+  }
   return {
     key:'numquiz', hud:{counter:true,end:true},
     intro:{title:'숫자 콕콕 🔢',desc:'그림 개수를 세어보고 <b>맞는 숫자를 손으로 콕!</b><br>10까지의 숫자만 나와요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
+    start(){ G.round=0; G.ok=0; G.fx=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
     end(){ this.finish(); },
     frame(lms){
+      const now=performance.now();
       let hands=[];
       if(lms){ drawPose(lms,'#E0C86F'); hands=hands2(lms); drawHandGlow(hands,'#E0C86F'); } else setState('몸이 보이게 서 주세요');
-      const cx=map.W/2, r=Math.min(map.W,map.H)*0.115;
-      const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.66;
-      const panelW=Math.min(map.W*0.78,320), fruitSz=Math.min(30,panelW/5.6), rowGap=fruitSz*1.18;
-      const panelH=rowGap*2+fruitSz*2.3, topY=map.H*0.15;
+      const r=Math.min(map.W,map.H)*0.115;
+      const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.24;
+      const cx=map.W/2;
+      const panelW=Math.min(map.W*0.7,280), fruitSz=Math.min(26,panelW/5.6), rowGap=fruitSz*1.2;
+      const panelH=rowGap*2+fruitSz*1.1, topY=chY+r+26;
       ctx.save(); ctx.fillStyle='rgba(255,255,255,.94)'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
-      rrCtx(cx-panelW/2,topY,panelW,panelH,26); ctx.fill(); ctx.shadowBlur=0;
+      rrCtx(cx-panelW/2,topY,panelW,panelH,22); ctx.fill(); ctx.shadowBlur=0;
       ctx.textAlign='center'; ctx.textBaseline='middle';
       function fruitRow(n,emoji,y){
         const gap=fruitSz*1.05, totalW=(n-1)*gap;
         ctx.font=fruitSz+'px sans-serif';
         for(let i=0;i<n;i++) ctx.fillText(emoji,cx-totalW/2+i*gap,y);
       }
-      fruitRow(G.q.a,'🍎',topY+fruitSz*0.9);
+      fruitRow(G.q.a,'🍎',topY+fruitSz*0.75);
       ctx.font='900 '+Math.round(fruitSz*0.7)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('+',cx,topY+rowGap+fruitSz*0.15);
-      fruitRow(G.q.b,'🍊',topY+rowGap+fruitSz*1.1);
+      ctx.fillText('+',cx,topY+rowGap+fruitSz*0.05);
+      fruitRow(G.q.b,'🍊',topY+rowGap+fruitSz*0.85);
       ctx.font='900 '+Math.round(fruitSz*0.85)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('= ?',cx,topY+rowGap*2+fruitSz*0.5);
+      ctx.fillText('= ?',cx,topY+rowGap*2+fruitSz*0.35);
       ctx.restore();
       [{x:Lx,v:G.q.ch[0]},{x:Rx,v:G.q.ch[1]}].forEach((c,i)=>{
+        const isCorrectPick=G.q.done&&i===G.q.ok;
+        const pop=isCorrectPick?1+Math.sin(Math.min(1,(now-G.q.doneAt)/220)*Math.PI)*0.18:1;
         ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.18)';
-        ctx.beginPath(); ctx.arc(c.x,chY,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
-        ctx.lineWidth=5; ctx.strokeStyle='#FFE39A'; ctx.stroke();
-        ctx.font='900 '+Math.max(30,r*0.9)+'px Pretendard'; ctx.fillStyle='#7a3d5e'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.beginPath(); ctx.arc(c.x,chY,r*pop,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+        ctx.lineWidth=5; ctx.strokeStyle=isCorrectPick?'#93D693':'#FFE39A'; ctx.stroke();
+        ctx.font='900 '+Math.max(30,r*0.9*pop)+'px Pretendard'; ctx.fillStyle='#7a3d5e'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(String(c.v),c.x,chY+2); ctx.restore();
         if(hands.length&&!G.q.done){
-          const near=anyNear(hands,c.x,chY,r+16);
           if(G.q.lock){ if(!anyNear(hands,Lx,chY,r+16)&&!anyNear(hands,Rx,chY,r+16)) G.q.lock=false; return; }
           if(anySegHit(hands,c.x,chY,r+16)){
-            G.q.done=true;
-            if(i===G.q.ok){ G.ok++; beep(880,0.15); setState('정답! 참 잘했어요! 🎉'); }
+            G.q.done=true; G.q.doneAt=now;
+            if(i===G.q.ok){ G.ok++; beep(880,0.15); setState('정답! 참 잘했어요! 🎉'); G.fx.push(...burst(c.x,chY,'#93D693')); }
             else{ beep(300,0.18); setState('괜찮아요, 다시 세어볼까요? 😊'); }
             G.round++; $('cNum').textContent=G.round+'/'+ROUNDS;
             setTimeout(()=>{ if(G.round>=ROUNDS) this.finish(); else gen(); },900);
           }
         }
+      });
+      G.fx=G.fx.filter(p=>{
+        const age=now-p.t; if(age>650) return false;
+        const dt2=16/1000;
+        p.x+=p.vx*dt2; p.y+=p.vy*dt2; p.vy+=600*dt2;
+        const al=1-age/650;
+        ctx.save(); ctx.globalAlpha=al; ctx.fillStyle=p.col;
+        ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2); ctx.fill(); ctx.restore();
+        return true;
       });
     },
     finish(){ showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🔢',voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! 최고예요!'}); }
@@ -833,107 +995,54 @@ GAME.engword=(()=>{
     G.q={emoji:target.e,ch:[leftOk?target.w:wrong.w,leftOk?wrong.w:target.w],ok:leftOk?0:1,lock:true};
     say('Which one is '+target.w+'?');
   }
+  function burst(x,y,col){
+    const out=[]; for(let i=0;i<16;i++){ const a=Math.random()*6.28;
+      out.push({x,y,vx:Math.cos(a)*(120+Math.random()*180),vy:Math.sin(a)*(120+Math.random()*180)-60,t:performance.now(),col}); }
+    return out;
+  }
   return {
     key:'engword', hud:{counter:true,end:true},
     intro:{title:'영어 콕콕 🐶',desc:'그림을 보고 <b>맞는 영어 단어를 손으로 콕!</b><br>소리도 함께 들려줘요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
+    start(){ G.round=0; G.ok=0; G.fx=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
     end(){ this.finish(); },
     frame(lms){
+      const now=performance.now();
       let hands=[];
       if(lms){ drawPose(lms,'#93D693'); hands=hands2(lms); drawHandGlow(hands,'#93D693'); } else setState('몸이 보이게 서 주세요');
-      const cx=map.W/2, topY=map.H*0.3, r=Math.min(map.W,map.H)*0.115;
+      const cx=map.W/2, r=Math.min(map.W,map.H)*0.115;
+      const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.24;
+      const topY=chY+r+72;
       ctx.font=Math.max(54,map.W/6)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(G.q.emoji,cx,topY);
-      const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.66;
       [{x:Lx,v:G.q.ch[0]},{x:Rx,v:G.q.ch[1]}].forEach((c,i)=>{
+        const isCorrectPick=G.q.done&&i===G.q.ok;
+        const pop=isCorrectPick?1+Math.sin(Math.min(1,(now-G.q.doneAt)/220)*Math.PI)*0.18:1;
         ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.18)';
-        ctx.beginPath(); ctx.arc(c.x,chY,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
-        ctx.lineWidth=5; ctx.strokeStyle='#D6F5D6'; ctx.stroke();
-        ctx.font='900 '+Math.max(15,r*0.32)+'px Pretendard'; ctx.fillStyle='#3d6b3d'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.beginPath(); ctx.arc(c.x,chY,r*pop,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+        ctx.lineWidth=5; ctx.strokeStyle=isCorrectPick?'#93D693':'#D6F5D6'; ctx.stroke();
+        ctx.font='900 '+Math.max(15,r*0.32*pop)+'px Pretendard'; ctx.fillStyle='#3d6b3d'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(c.v,c.x,chY+2); ctx.restore();
         if(hands.length&&!G.q.done){
-          const near=anyNear(hands,c.x,chY,r+16);
           if(G.q.lock){ if(!anyNear(hands,Lx,chY,r+16)&&!anyNear(hands,Rx,chY,r+16)) G.q.lock=false; return; }
           if(anySegHit(hands,c.x,chY,r+16)){
-            G.q.done=true;
-            if(i===G.q.ok){ G.ok++; beep(880,0.15); setState('정답이에요! Good job! 🎉'); }
+            G.q.done=true; G.q.doneAt=now;
+            if(i===G.q.ok){ G.ok++; beep(880,0.15); setState('정답이에요! Good job! 🎉'); G.fx.push(...burst(c.x,chY,'#93D693')); }
             else{ beep(300,0.18); setState('아쉬워요, 다음에 또 해봐요! 😊'); }
             G.round++; $('cNum').textContent=G.round+'/'+ROUNDS;
             setTimeout(()=>{ if(G.round>=ROUNDS) this.finish(); else gen(); },1100);
           }
         }
       });
+      G.fx=G.fx.filter(p=>{
+        const age=now-p.t; if(age>650) return false;
+        const dt2=16/1000;
+        p.x+=p.vx*dt2; p.y+=p.vy*dt2; p.vy+=600*dt2;
+        const al=1-age/650;
+        ctx.save(); ctx.globalAlpha=al; ctx.fillStyle=p.col;
+        ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2); ctx.fill(); ctx.restore();
+        return true;
+      });
     },
     finish(){ showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🐶',voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! Excellent!'}); }
-  };
-})();
-
-/* ---------- 🧠 몸으로 따라해요(바디 사이먼) ---------- */
-GAME.simon=(()=>{
-  const G={};
-  const POSES=[{k:'up',ic:'🙌',label:'만세!'},{k:'squat',ic:'🧎',label:'쪼그려 앉기!'},{k:'out',ic:'🤸',label:'옆으로 벌리기!'}];
-  function poseOf(lms){
-    if(!lms) return null;
-    if(visOf(lms[15])<0.3||visOf(lms[16])<0.3||visOf(lms[23])<0.3||visOf(lms[24])<0.3) return null;
-    const headY=Math.min(visOf(lms[7])>0.3?lms[7].y:1,visOf(lms[8])>0.3?lms[8].y:1,lms[0]?lms[0].y:1);
-    const shY=(lms[11].y+lms[12].y)/2, hipY=(lms[23].y+lms[24].y)/2;
-    const shW=Math.abs(lms[11].x-lms[12].x)||0.2;
-    if(lms[15].y<headY&&lms[16].y<headY) return 'up';
-    if(visOf(lms[25])>0.3&&hipY-lms[25].y<0.06&&Math.abs(hipY-shY)<0.3) return 'squat';
-    const wSpread=Math.abs(lms[15].x-lms[16].x);
-    if(Math.abs(lms[15].y-shY)<0.13&&Math.abs(lms[16].y-shY)<0.13&&wSpread>shW*1.8) return 'out';
-    return null;
-  }
-  async function playback(){
-    G.phase='watch';
-    for(let i=0;i<G.seq.length;i++){
-      const p=POSES.find(p=>p.k===G.seq[i]);
-      G.showIdx=i; setState(p.label+' '+p.ic); beep(600+i*40,0.12);
-      await new Promise(r=>setTimeout(r,800));
-      G.showIdx=-1;
-      await new Promise(r=>setTimeout(r,300));
-    }
-    G.phase='play'; G.playIdx=0; G.holdAcc=0;
-    setState('이제 따라해봐요! '+POSES.find(p=>p.k===G.seq[0]).label);
-  }
-  return {
-    key:'simon', hud:{counter:true,end:true},
-    intro:{title:'몸으로 따라해요 🧠',desc:'곰돌이가 보여주는 동작 순서를 잘 보고,<br><b>그대로 따라해봐요!</b> 맞힐 때마다 순서가 하나씩 늘어나요.'},
-    start(){
-      G.seq=[POSES[(Math.random()*POSES.length)|0].k]; G.showIdx=-1; G.phase='intro';
-      $('cNum').textContent='1'; $('cLbl').textContent='단계'; say('동작을 잘 보고 따라해봐요!');
-      setTimeout(()=>playback(),600);
-    },
-    end(){ this.finish(); },
-    frame(lms){
-      if(lms) drawPose(lms,'#B79AE8');
-      if(G.phase==='watch'||G.phase==='intro'){
-        if(G.showIdx>=0){
-          const p=POSES.find(p=>p.k===G.seq[G.showIdx]);
-          ctx.font=Math.max(70,map.W/4.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-          ctx.fillText(p.ic,map.W/2,map.H*0.4);
-        }
-        return;
-      }
-      if(G.phase==='play'){
-        const want=G.seq[G.playIdx];
-        const got=poseOf(lms);
-        if(got===want){
-          G.holdAcc+=16;
-          if(G.holdAcc>420){
-            G.playIdx++; beep(700+G.playIdx*40,0.12); buzz(30);
-            if(G.playIdx>=G.seq.length){
-              $('cNum').textContent=(G.seq.length+1)+'단계';
-              const n=$('cNum'); n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
-              if(G.seq.length>=8){ this.finish(); return; }
-              G.seq.push(POSES[(Math.random()*POSES.length)|0].k);
-              setState('정답! 다음 단계로 늘어나요 🎉');
-              G.phase='wait'; setTimeout(()=>playback(),1100);
-            }else{ setState('좋아요! 다음: '+POSES.find(p=>p.k===G.seq[G.playIdx]).label); G.holdAcc=0; }
-          }
-        }else{ G.holdAcc=Math.max(0,G.holdAcc-10); setState(POSES.find(p=>p.k===want).label+' 동작을 해봐요'); }
-      }
-    },
-    finish(){ showResult({num:G.seq.length-1,sub:'단계까지 기억했어요! 🧠',voice:(G.seq.length-1)+'단계까지 기억했어요! 천재예요!'}); }
   };
 })();
 
@@ -964,9 +1073,14 @@ GAME.mosquito=(()=>{
         if(now>=q.retarget){ q.tx=map.W*(0.15+Math.random()*0.7); q.ty=map.H*(0.14+Math.random()*0.42); q.retarget=now+600+Math.random()*600; }
         const dx=q.tx-q.x, dy=q.ty-q.y, dd=Math.hypot(dx,dy)||1;
         q.x+=dx/dd*q.spd*dt/1000+Math.sin(now/110)*1.2; q.y+=dy/dd*q.spd*dt/1000+Math.cos(now/130)*1.2;
-        ctx.save(); ctx.translate(q.x,q.y); ctx.rotate(Math.sin(now/90)*0.2);
-        ctx.font=Math.max(46,Math.min(map.W,map.H)/8)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-        ctx.fillText('🦟',0,0); ctx.restore();
+        ctx.save(); ctx.translate(q.x,q.y);
+        const halo=1+Math.sin(now/160)*0.12;
+        ctx.beginPath(); ctx.arc(0,0,Math.max(56,Math.min(map.W,map.H)/6.2)*halo,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,255,255,.85)'; ctx.shadowBlur=18; ctx.shadowColor='rgba(147,214,147,.9)'; ctx.fill(); ctx.shadowBlur=0;
+        ctx.strokeStyle='#5fa85f'; ctx.lineWidth=3; ctx.stroke();
+        ctx.rotate(Math.sin(now/90)*0.2);
+        ctx.font=Math.max(70,Math.min(map.W,map.H)/4.6)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('🦟',0,2); ctx.restore();
         if(hands.length===2){
           const gap=Math.hypot(hands[0].x-hands[1].x,hands[0].y-hands[1].y);
           const m2=Math.min(map.W,map.H);
@@ -987,6 +1101,66 @@ GAME.mosquito=(()=>{
       }
     },
     finish(){ showResult({num:G.n,sub:'마리 잡았어요! 🦟',voice:G.n+'마리 잡았어요! 손뼉 챔피언!'}); }
+  };
+})();
+
+/* ---------- 🙇 땅 짚기(유연성 체크) ---------- */
+GAME.flex=(()=>{
+  const st={phase:'up'};
+  const c=makeCounter({
+    key:'flex',color:'#B79AE8',emoji:'🙇',debounce:650,
+    reset(){ st.phase='up'; },
+    judge(S,lms){
+      if(visOf(lms[15])<0.3||visOf(lms[16])<0.3){ setState('두 손이 잘 보이게 해줘요'); return; }
+      const shY=(lms[11].y+lms[12].y)/2;
+      const hipY=(visOf(lms[23])>0.3&&visOf(lms[24])>0.3)?(lms[23].y+lms[24].y)/2:shY+0.2;
+      const ankleY=(visOf(lms[27])>0.3&&visOf(lms[28])>0.3)?(lms[27].y+lms[28].y)/2:hipY+0.35;
+      const wristY=Math.min(lms[15].y,lms[16].y);
+      if(st.phase==='up'){
+        if(wristY>ankleY-0.08){ st.phase='down'; setState('좋아요! 이제 쭉 펴고 일어나요 🙇'); }
+        else setState('허리를 숙여 손으로 땅을 짚어봐요');
+      }else{
+        if(wristY<hipY-0.03){ c._rep(); st.phase='up'; }
+      }
+    }
+  });
+  c.intro={title:'땅 짚기 🙇',desc:'허리를 <b>쭈욱 숙여 손으로 땅을 짚고</b> 다시 일어나요!<br>몸이 유연해지는 운동이에요.'};
+  return c;
+})();
+
+/* ---------- 🦩 한발 균형 잡기 ---------- */
+GAME.balance=(()=>{
+  const G={};
+  function ankleAsym(lms){
+    if(visOf(lms[27])<0.3||visOf(lms[28])<0.3||visOf(lms[23])<0.3||visOf(lms[24])<0.3) return null;
+    const hipW=Math.abs(lms[23].x-lms[24].x)||0.2;
+    return Math.abs(lms[27].y-lms[28].y)/hipW;
+  }
+  return {
+    key:'balance', hud:{counter:true,end:true},
+    intro:{title:'한발 균형 🦩',desc:'한쪽 발을 <b>번쩍 들고 최대한 오래</b> 버텨봐요!<br>기록이 늘어날수록 짱짱! 그만할 땐 "그만할래요"를 눌러요.'},
+    start(){ G.best=0; G.holdStart=null; $('cNum').textContent='0.0'; $('cLbl').textContent='초'; say('한 발을 번쩍 들고 최대한 오래 버텨봐요!'); },
+    end(){ this.finish(); },
+    frame(lms){
+      if(!lms){ setState('전신이 보이게 서 주세요'); G.holdStart=null; return; }
+      drawPose(lms,'#E0B25E');
+      const asym=ankleAsym(lms);
+      const now=performance.now();
+      if(asym==null){ setState('두 발과 엉덩이가 잘 보이게 서봐요'); G.holdStart=null; return; }
+      if(asym>0.55){
+        if(!G.holdStart){ G.holdStart=now; beep(600,0.08); }
+        const cur=(now-G.holdStart)/1000;
+        $('cNum').textContent=cur.toFixed(1);
+        if(cur>G.best) G.best=cur;
+        setState('버티는 중… '+cur.toFixed(1)+'초! 🦩');
+      }else{
+        if(G.holdStart) setState('아깝다! 다시 한 발을 들어봐요');
+        else setState('한쪽 발을 번쩍 들어올려요');
+        G.holdStart=null;
+        $('cNum').textContent=G.best.toFixed(1);
+      }
+    },
+    finish(){ showResult({num:G.best.toFixed(1),sub:'초 버텼어요! 🦩',voice:G.best.toFixed(1)+'초나 버텼어요! 균형왕이에요!'}); }
   };
 })();
 
