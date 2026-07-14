@@ -184,6 +184,7 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
         <button class="gcard" data-g="mosquito" style="--bd:#D6F5D6;--sh:#93D693"><div class="gicon">🦟</div><div class="gname">모기 잡기</div><div class="gdesc">짝! 박수로 잡아요</div></button>
         <button class="gcard" data-g="flex" style="--bd:#E5D4FF;--sh:#B79AE8"><div class="gicon">🙇</div><div class="gname">땅 짚기</div><div class="gdesc">손이 땅에 닿게 쭈욱!</div></button>
         <button class="gcard" data-g="balance" style="--bd:#FFE9C2;--sh:#E0B25E"><div class="gicon">🦩</div><div class="gname">한발 균형</div><div class="gdesc">한 발로 오래 서봐요</div></button>
+        <button class="gcard" data-g="rhythm" style="--bd:#FFD9D9;--sh:#F0A8B8"><div class="gicon">🎵</div><div class="gname">리듬 콕콕</div><div class="gdesc">내려오는 과일을 박자에 맞춰 콕!</div></button>
         <button class="gcard wide" data-g="posture" style="--bd:#C7E8FF;--sh:#8FC4E8;grid-column:1/-1"><div class="gicon">🧍</div><div class="gname">자세 분석</div><div class="gdesc">정면·측면을 스캔해서 자세 점수와 운동 처방을 알려줘요</div></button>
       </div>
       <div class="hub-foot">🔒 영상은 저장되지 않고 기기 안에서만 사용돼요<br>
@@ -382,6 +383,7 @@ function randPos(r,avoid){
   return {x:map.W/2,y:map.H*0.32};
 }
 function rrCtx(x,y,w,h,r){ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x,y,w,h,r); else ctx.rect(x,y,w,h); }
+function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
 
 /* ---------- 라우팅 ---------- */
 let current=null, running=false, curKey=null;
@@ -1161,6 +1163,115 @@ GAME.balance=(()=>{
       }
     },
     finish(){ showResult({num:G.best.toFixed(1),sub:'초 버텼어요! 🦩',voice:G.best.toFixed(1)+'초나 버텼어요! 균형왕이에요!'}); }
+  };
+})();
+
+/* ---------- 🎵 리듬 콕콕(4레인 낙하 음악놀이) ---------- */
+GAME.rhythm=(()=>{
+  const G={};
+  const BPM=100, BEAT=60/BPM, LEAD=BEAT*4; // 4박자 앞서 스폰(넉넉한 낙하 시간)
+  const LANES=[
+    {emoji:'🍎',col:'#FF9DB0',freq:523.25},
+    {emoji:'🍊',col:'#E0C86F',freq:587.33},
+    {emoji:'🫐',col:'#8FC4E8',freq:659.25},
+    {emoji:'🍇',col:'#93D693',freq:783.99}
+  ];
+  const PATTERN=[0,1,2,3,1,2,0,3,2,1,3,0]; // 반복 리프(12스텝)
+  const HITWIN=0.26; // 판정 허용(초)
+  function laneX(i){ return map.W*( (i+0.5)/4 ); }
+  function hitY(){ return map.H*0.62; }
+  function topY(){ return map.H*0.14; }
+  function tone(freq){
+    if(!actx) return;
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.type='sine'; o.frequency.value=freq;
+    g.gain.value=0; o.connect(g); g.connect(actx.destination);
+    const t=actx.currentTime;
+    g.gain.linearRampToValueAtTime(0.28,t+0.015);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+    o.start(t); o.stop(t+0.38);
+  }
+  function burst(x,y,col){
+    const out=[]; for(let i=0;i<14;i++){ const a=Math.random()*6.28;
+      out.push({x,y,vx:Math.cos(a)*(110+Math.random()*160),vy:Math.sin(a)*(110+Math.random()*160)-40,t:performance.now(),col}); }
+    return out;
+  }
+  return {
+    key:'rhythm', hud:{counter:true,timer:true,end:true},
+    intro:{title:'리듬 콕콕 🎵',desc:'위에서 내려오는 과일이 <b>판 위에 닿을 때</b> 손으로 콕!<br>박자에 맞춰 누르면 예쁜 음악이 울려요.'},
+    start(){
+      G.t0=performance.now(); G.endAt=G.t0+DUR*1000; G.hits=0; G.combo=0; G.bestCombo=0; G.blocks=[]; G.nextStep=0; G.nextBeatAt=G.t0+BEAT*1000; G.lastTick=0;
+      $('cNum').textContent='0'; $('cLbl').textContent='번'; say('과일이 판에 닿으면 손으로 콕 눌러봐요!');
+    },
+    end(){ this.finish(); },
+    frame(lms){
+      const now=performance.now();
+      const remain=Math.max(0,(G.endAt-now)/1000);
+      $('timerVal').textContent=Math.ceil(remain);
+      if(remain<=0){ this.finish(); return; }
+      // 박자 스케줄링: 다음 스텝 시각이 되면 LEAD만큼 앞서 블록 스폰 예약
+      while(G.nextBeatAt-LEAD*1000<=now){
+        const lane=PATTERN[G.nextStep%PATTERN.length];
+        G.blocks.push({lane,spawnAt:G.nextBeatAt-LEAD*1000,hitAt:G.nextBeatAt,hit:false});
+        G.nextStep++; G.nextBeatAt+=BEAT*1000;
+      }
+      // 은은한 메트로놈 틱(박자 감 잡기용)
+      if(now-G.lastTick>=BEAT*1000-8){ G.lastTick=now; beep(300,0.03,0.05); }
+      let hands=[];
+      if(lms){ drawPose(lms,'#8FC4E8'); hands=hands2(lms); } else setState('몸이 보이게 서 주세요');
+      // 레인 구획 + 하단 판정 패드
+      ctx.save();
+      for(let i=0;i<4;i++){
+        const lx=laneX(i);
+        ctx.strokeStyle='rgba(150,150,170,.12)'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(lx,topY()-10); ctx.lineTo(lx,hitY()+50); ctx.stroke();
+        const k=1+Math.sin(now/200+i)*0.05;
+        ctx.beginPath(); ctx.arc(lx,hitY(),34*k,0,Math.PI*2);
+        ctx.fillStyle=hexA(LANES[i].col,0.16); ctx.fill();
+        ctx.lineWidth=4; ctx.strokeStyle=LANES[i].col; ctx.stroke();
+      }
+      ctx.restore();
+      // 손 글로우
+      if(hands.length) drawHandGlow(hands,'#8FC4E8');
+      // 블록 낙하 + 판정
+      const laneW=map.W/4;
+      G.blocks=G.blocks.filter(b=>{
+        const prog=(now-b.spawnAt)/(b.hitAt-b.spawnAt);
+        const y=topY()+(hitY()-topY())*prog;
+        if(prog>1&&(now-b.hitAt)>HITWIN*1000){ if(!b.hit) G.combo=0; return false; } // 놓침(부담 없이 사라짐)
+        if(!b.hit){
+          const L=LANES[b.lane];
+          ctx.save(); ctx.translate(laneX(b.lane),y);
+          ctx.font=Math.max(30,map.W/11)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText(L.emoji,0,0); ctx.restore();
+          if(hands.length&&Math.abs(now-b.hitAt)<HITWIN*1000){
+            const inLane=hands.some(h=>Math.floor(h.x/laneW)===b.lane);
+            if(inLane){
+              b.hit=true; G.hits++; G.combo++; if(G.combo>G.bestCombo) G.bestCombo=G.combo;
+              const n=$('cNum'); n.textContent=G.hits; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
+              tone(L.freq); buzz(25);
+              G.blocks.push({fx:true,parts:burst(laneX(b.lane),hitY(),L.col),t:now});
+              setState(G.combo>=4?G.combo+'콤보! 🎶':'딱! 좋아요 🎵');
+            }
+          }
+        }
+        return true;
+      });
+      // 이펙트 파티클(별도 리스트로 취급)
+      G.blocks=G.blocks.filter(b=>{
+        if(!b.fx) return true;
+        const age=now-b.t; if(age>600) return false;
+        b.parts.forEach(p=>{
+          const dt2=16/1000;
+          p.x+=p.vx*dt2; p.y+=p.vy*dt2; p.vy+=560*dt2;
+          const al=1-age/600;
+          ctx.save(); ctx.globalAlpha=Math.max(0,al); ctx.fillStyle=p.col;
+          ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2); ctx.fill(); ctx.restore();
+        });
+        return true;
+      });
+    },
+    finish(){ showResult({num:G.hits,sub:'번 콕! 최고 콤보 '+G.bestCombo+'! 🎵',voice:G.hits+'번 콕 눌렀어요! 리듬왕이에요!'}); }
   };
 })();
 
