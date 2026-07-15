@@ -424,6 +424,7 @@ function bestKey(k){ return 'kp_best_'+k; }
 function getBest(k){ try{ const v=localStorage.getItem(bestKey(k)); return v==null?null:parseFloat(v); }catch(e){ return null; } }
 function recordBest(k,val){
   const cfg=BEST_CFG[k]; if(!cfg||val==null||isNaN(val)) return false;
+  if(cfg.dir!=='min'&&val<=0) return false;   // 0점은 최고기록으로 저장하지 않음
   const cur=getBest(k);
   const better=cur==null||(cfg.dir==='min'?val<cur:val>cur);
   if(better){ try{ localStorage.setItem(bestKey(k),String(val)); }catch(e){} }
@@ -503,10 +504,21 @@ async function startActivity(){
   if(g.key!=='posture') await countdown(3);
   if(current!==g) return;
   running=true; lastVideoTime=-1; loop();
+  // 챌린지 모드: 자동 종료가 없는 열린 게임(앉기·날개짓·유연성·균형)은 제한시간을 붙여 자동 진행
+  if(CH&&CH_OPEN.includes(g.key)){
+    let rem=CH_OPEN_DUR;
+    $('timerChip').classList.add('show'); $('timerVal').textContent=rem;
+    clearInterval(CH.autoEnd);
+    CH.autoEnd=setInterval(()=>{
+      rem--; $('timerVal').textContent=Math.max(0,rem);
+      if(rem<=0){ clearInterval(CH.autoEnd); CH.autoEnd=null; if(current===g&&CH&&g.end) g.end(); }
+    },1000);
+  }
 }
 function showResult(o){
   running=false; setHud(false); current=null;
   if(CH){
+    clearInterval(CH.autoEnd); CH.autoEnd=null;
     const card=document.querySelector('.gcard[data-g="'+curKey+'"]');
     CH.results.push({
       icon:card?card.querySelector('.gicon').textContent:'🎮',
@@ -526,7 +538,7 @@ function showResult(o){
 }
 function goHub(){
   running=false; current=null; setHud(false); ctx.clearRect(0,0,map.W,map.H);
-  if(CH){ clearInterval(CH.timer); CH=null; }
+  if(CH){ clearInterval(CH.timer); clearInterval(CH.autoEnd); CH=null; }
   show('hubScr'); renderHubBests();
 }
 $('homeBtn').onclick=goHub;
@@ -543,6 +555,7 @@ renderHubBests();
 /* ---------- 챌린지: 14개 활동 순서대로 완주 ---------- */
 const CH_ORDER=['squat','jacks','mole','sequence','tissue','wipe','hammer','numquiz','engword','mosquito','balance','rhythm','flex','posture'];
 const CH_REST=15;
+const CH_OPEN=['squat','jacks','flex','balance'], CH_OPEN_DUR=22; // 자동종료 없는 열린 게임의 챌린지 제한시간
 let CH=null;
 function startChallenge(){
   CH={idx:0,results:[],timer:null};
@@ -594,7 +607,7 @@ function finishChallenge(){
 }
 $('challengeCard').addEventListener('click',()=>{ initAudio(); startChallenge(); });
 $('chSkipRest').onclick=advanceChallenge;
-$('chAbort').onclick=()=>{ clearInterval(CH&&CH.timer); CH=null; $('chRestScr').classList.remove('show'); goHub(); };
+$('chAbort').onclick=()=>{ if(CH){ clearInterval(CH.timer); clearInterval(CH.autoEnd); } CH=null; $('chRestScr').classList.remove('show'); goHub(); };
 
 /* ============================================================
    게임 정의 (스쿼트코치 검증 로직 이식 + 유아용 UI/난이도)
@@ -1128,7 +1141,7 @@ GAME.numquiz=(()=>{
   return {
     key:'numquiz', hud:{counter:true,end:true},
     intro:{title:'숫자 콕콕 🔢',desc:'그림 개수를 세어보고 <b>맞는 숫자를 손으로 콕!</b><br>10까지의 숫자만 나와요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
+    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; G.done=false; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
@@ -1201,7 +1214,7 @@ GAME.numquiz=(()=>{
         return true;
       });
     },
-    finish(){ const isNew=recordBest('numquiz',G.ok); showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🔢'+(isNew?' 🏆 신기록!':''),voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! 최고예요!'}); }
+    finish(){ if(G.done) return; G.done=true; const isNew=recordBest('numquiz',G.ok); showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🔢'+(isNew?' 🏆 신기록!':''),voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! 최고예요!'}); }
   };
 })();
 
@@ -1227,7 +1240,7 @@ GAME.engword=(()=>{
   return {
     key:'engword', hud:{counter:true,end:true},
     intro:{title:'영어 콕콕 🐶',desc:'그림을 보고 <b>맞는 영어 단어를 손으로 콕!</b><br>소리도 함께 들려줘요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
+    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; G.done=false; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
@@ -1278,7 +1291,7 @@ GAME.engword=(()=>{
         return true;
       });
     },
-    finish(){ const isNew=recordBest('engword',G.ok); showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🐶'+(isNew?' 🏆 신기록!':''),voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! Excellent!'}); }
+    finish(){ if(G.done) return; G.done=true; const isNew=recordBest('engword',G.ok); showResult({num:G.ok+'/'+ROUNDS,sub:'문제 맞혔어요! 🐶'+(isNew?' 🏆 신기록!':''),voice:ROUNDS+'문제 중에 '+G.ok+'개 맞혔어요! Excellent!'}); }
   };
 })();
 
@@ -1497,6 +1510,7 @@ GAME.rhythm=(()=>{
       if(hands.length) drawHandGlow(hands,'#8FC4E8');
       // 블록 낙하 + 판정
       const laneW=map.W/4;
+      const fresh=[]; // filter 콜백 안에서 직접 push하면 버려지므로 임시 수집 후 병합
       G.blocks=G.blocks.filter(b=>{
         const prog=(now-b.spawnAt)/(b.hitAt-b.spawnAt);
         const y=topY()+(hitY()-topY())*prog;
@@ -1513,13 +1527,14 @@ GAME.rhythm=(()=>{
               const n=$('cNum'); n.textContent=G.hits; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
               tone(L.freq); buzz(25);
               if(G.combo>0&&G.combo%8===0) sparkle();
-              G.blocks.push({fx:true,parts:burst(laneX(b.lane),hitY(),L.col),t:now});
+              fresh.push({fx:true,parts:burst(laneX(b.lane),hitY(),L.col),t:now});
               setState(G.combo>=4?G.combo+'콤보! 🎶':'딱! 좋아요 🎵');
             }
           }
         }
         return true;
       });
+      if(fresh.length) G.blocks.push(...fresh);
       // 이펙트 파티클(별도 리스트로 취급)
       G.blocks=G.blocks.filter(b=>{
         if(!b.fx) return true;
@@ -1729,11 +1744,16 @@ GAME.posture=(()=>{
     if(CH){
       const card=document.querySelector('.gcard[data-g="posture"]');
       CH.results.push({icon:card?card.querySelector('.gicon').textContent:'🧍',label:'자세 분석',num:G.score+'점',sub:G.band[0]+'등급'});
+      // 챌린지 중엔 "다시 측정"을 숨긴다(누르면 결과가 CH.results에 중복 push됨)
+      $('rpAgain').style.display='none';
+      $('rpMenu').textContent='🏅 도전 결과 보기';
       $('rpMenu').onclick=()=>{ $('reportScr').classList.remove('show'); finishChallenge(); };
     }else{
+      $('rpAgain').style.display='';
+      $('rpMenu').textContent='🏠 놀이터로';
       $('rpMenu').onclick=()=>{ $('reportScr').classList.remove('show'); goHub(); };
+      $('rpAgain').onclick=()=>{ $('reportScr').classList.remove('show'); openIntro('posture'); };
     }
-    $('rpAgain').onclick=()=>{ $('reportScr').classList.remove('show'); openIntro('posture'); };
     document.querySelectorAll('.rx-go').forEach(b=>b.onclick=()=>{ $('reportScr').classList.remove('show'); openIntro(b.dataset.go); });
     running=false; current=null; setHud(false);
     $('reportScr').classList.add('show'); $('reportScr').scrollTop=0;
