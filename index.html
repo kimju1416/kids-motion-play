@@ -391,6 +391,15 @@ function drawPose(lms,col){
     ctx.beginPath(); ctx.arc(P.x,P.y,Math.max(5,map.W/90),0,Math.PI*2); ctx.fill(); });
 }
 function setState(t){ $('stateTxt').textContent=t||''; }
+// 표시 중인 상단 HUD의 실제 아래끝(px). 기기별 safe-area가 달라 값을 직접 재야 겹치지 않는다.
+function hudBottomPx(){
+  let b=0;
+  ['hudTop','bigCounter','timerChip'].forEach(id=>{
+    const el=$(id); if(!el||!el.classList.contains('show')) return;
+    const r=el.getBoundingClientRect(); if(r.height&&r.bottom>b) b=r.bottom;
+  });
+  return b;
+}
 
 /* ---------- 손 추적(스쿼트코치 hands2 동일: 4점 평균+속도, 세그먼트 히트) ---------- */
 let handTrack={L:null,R:null};
@@ -497,7 +506,9 @@ function loop(){
     let res=null; try{ res=pose.detectForVideo(video,performance.now()); }catch(e){}
     if(res&&res.landmarks&&res.landmarks[0]) lms=res.landmarks[0];
   }
-  if(fresh){ ctx.clearRect(0,0,map.W,map.H); if(current&&current.frame) current.frame(lms); }
+  // 한 게임에서 예외가 나도 rAF 재예약까지 끊겨 앱 전체가 멈추는 일이 없도록 감싼다
+  if(fresh){ ctx.clearRect(0,0,map.W,map.H);
+    if(current&&current.frame){ try{ current.frame(lms); }catch(e){ console.error('[frame]',current.key,e); } } }
   requestAnimationFrame(loop);
 }
 function openIntro(key){
@@ -709,7 +720,8 @@ GAME.squat=(()=>{
 /* ---------- 🦋 훨훨 날아요(날개짓 고도 게임) ---------- */
 GAME.jacks=(()=>{
   const G={};
-  const CLOUDS=[{x:0.18,y:0.10,s:1},{x:0.55,y:0.06,s:1.3},{x:0.82,y:0.13,s:0.85}];
+  // y는 하늘 시작선(HUD 아래)부터의 오프셋 — 화면 맨 위에 두면 메뉴에 가려진다
+  const CLOUDS=[{x:0.18,dy:0.20,s:1},{x:0.55,dy:0.13,s:1.3},{x:0.82,dy:0.23,s:0.85}];
   function drawCloud(cx,cy,s){
     ctx.save(); ctx.fillStyle='rgba(255,255,255,.9)';
     [[0,0,22],[16,-6,17],[-16,-4,16],[30,2,13],[-28,3,12]].forEach(p=>{
@@ -740,12 +752,15 @@ GAME.jacks=(()=>{
     ctx.restore();
   }
   return {
-    key:'jacks', hud:{counter:true,timer:true,end:true},
-    intro:{title:'훨훨 날아요 🦋',desc:'양팔을 <b>날개처럼 빠르게 파닥파닥!</b> 흔들면 하늘로 날아올라요.<br>천천히 하면 스르륵 내려와요.<br><b>100%까지 올라가면 끝!</b> ('+DUR+'초 안에 도전)'},
+    key:'jacks', hud:{counter:true,timer:true,end:true,depth:true},
+    intro:{title:'훨훨 날아요 🦋',desc:'양팔을 <b>날개처럼 파닥파닥!</b> 흔들면 하늘로 날아올라요.<br>아래 막대가 <b>절반을 넘으면</b> 올라가요. 멈추면 스르륵 내려와요.<br><b>100%까지 올라가면 끝!</b> ('+DUR+'초 안에 도전)'},
     start(){
       G.alt=0; G.vAlt=0; G.flapEMA=0; G.prevWristY=null; G.prevT=performance.now(); G.best=0; G.touchedCloud=false; G.wingK=0;
       G.endAt=performance.now()+DUR*1000; G.done=false; G.topAt=0;
-      $('cNum').textContent='0%'; $('cLbl').textContent='높이'; $('timerVal').textContent=DUR; say('팔을 날개처럼 빠르게 파닥거려봐요!');
+      G.skyTop=Math.max(map.H*0.14,hudBottomPx()+14);   // 구름·곰돌이를 메뉴 아래에서만 그리도록
+      $('cNum').textContent='0%'; $('cLbl').textContent='높이'; $('timerVal').textContent=DUR;
+      $('depthBar').style.width='0%';
+      say('팔을 날개처럼 파닥거려봐요!');
     },
     end(){ this.finish(); },
     frame(lms){
@@ -754,9 +769,10 @@ GAME.jacks=(()=>{
       $('timerVal').textContent=Math.ceil(remain);
       if(remain<=0){ this.finish(); return; }
       const dt=Math.min(0.05,Math.max(0.001,(now-G.prevT)/1000)); G.prevT=now;
-      // 배경 하늘 + 구름
+      // 배경 하늘 + 구름 (하늘 시작선 = 메뉴 아래)
+      const sky=G.skyTop, scl=Math.min(map.W,map.H);
       ctx.save();
-      CLOUDS.forEach(c=>drawCloud(map.W*c.x,map.H*c.y,c.s*Math.min(map.W,map.H)/300));
+      CLOUDS.forEach(c=>drawCloud(map.W*c.x,sky+scl*c.dy,c.s*scl/300));
       ctx.restore();
       if(!lms){ setState('전신이 보이게 서 주세요'); return; }
       drawPose(lms,'#FF9DB0');
@@ -765,7 +781,8 @@ GAME.jacks=(()=>{
       const flapSpeed=G.prevWristY==null?0:Math.abs(wristY-G.prevWristY)/dt;
       G.prevWristY=wristY;
       G.flapEMA=G.flapEMA*0.72+flapSpeed*0.28;
-      const LIFT_T=0.9, GRAV=1.15, LIFTK=0.8;
+      // 유아가 팔을 흔드는 속도(초당 0.6~1.2)로도 인식되도록 문턱을 낮춤
+      const LIFT_T=0.45, GRAV=0.95, LIFTK=1.1;
       if(G.flapEMA>LIFT_T) G.vAlt+=(G.flapEMA-LIFT_T)*LIFTK*dt; else G.vAlt-=GRAV*dt;
       G.vAlt=Math.max(-0.9,Math.min(0.9,G.vAlt*0.90));
       G.alt=Math.max(0,Math.min(1,G.alt+G.vAlt*dt));
@@ -773,7 +790,9 @@ GAME.jacks=(()=>{
       G.wingK+=dt*(6+G.flapEMA*10);
       const pctNow=Math.round(G.alt*100);
       $('cNum').textContent=pctNow+'%';
-      const groundY=map.H*0.72, topY=map.H*0.18;
+      // 파닥임 세기 게이지 — 절반(=LIFT_T)을 넘기면 떠오르도록 눈금을 맞춤
+      $('depthBar').style.width=Math.min(100,G.flapEMA/(LIFT_T*2)*100)+'%';
+      const groundY=map.H*0.72, topY=sky+scl*0.30;
       const cy=groundY-G.alt*(groundY-topY), cx=map.W/2;
       drawFlyer(cx,cy,G.wingK);
       // 100% 달성 = 목표 완료 → 축하 연출 뒤 자동으로 끝낸다
@@ -1599,8 +1618,10 @@ GAME.rhythm=(()=>{
     key:'rhythm', hud:{counter:true,timer:true,end:true},
     intro:{title:'리듬 콕콕 🎵',desc:'위에서 내려오는 과일이 <b>판 위에 닿을 때</b> 손으로 콕!<br>박자에 맞춰 누르면 신나는 음악이 울려요.<br>'+ROUND_DUR+'초 동안 몇 번이나 맞힐까요?'},
     start(){
-      G.t0=performance.now(); G.endAt=G.t0+ROUND_DUR*1000; G.hits=0; G.combo=0; G.bestCombo=0; G.blocks=[]; G.nextStep=0; G.nextBeatAt=G.t0+BEAT*1000; G.lastTick=0;
-      $('cNum').textContent='0'; $('cLbl').textContent='번'; say('과일이 판에 닿으면 손으로 콕 눌러봐요!');
+      G.t0=performance.now(); G.endAt=G.t0+ROUND_DUR*1000; G.hits=0; G.combo=0; G.bestCombo=0;
+      G.blocks=[]; G.fx=[]; G.nextStep=0; G.nextBeatAt=G.t0+BEAT*1000; G.lastTick=0; G.done=false;
+      $('cNum').textContent='0'; $('cLbl').textContent='번'; $('timerVal').textContent=ROUND_DUR;
+      say('과일이 판에 닿으면 손으로 콕 눌러봐요!');
     },
     end(){ this.finish(); },
     frame(lms){
@@ -1632,9 +1653,8 @@ GAME.rhythm=(()=>{
       ctx.restore();
       // 손 글로우
       if(hands.length) drawHandGlow(hands,'#8FC4E8');
-      // 블록 낙하 + 판정
+      // 블록 낙하 + 판정 (터짐 이펙트는 G.fx로 분리 — blocks에 섞으면 다음 프레임에 과일로 오인해 터진다)
       const laneW=map.W/4;
-      const fresh=[]; // filter 콜백 안에서 직접 push하면 버려지므로 임시 수집 후 병합
       G.blocks=G.blocks.filter(b=>{
         const prog=(now-b.spawnAt)/(b.hitAt-b.spawnAt);
         const y=topY()+(hitY()-topY())*prog;
@@ -1651,19 +1671,17 @@ GAME.rhythm=(()=>{
               const n=$('cNum'); n.textContent=G.hits; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
               tone(L.freq); buzz(25);
               if(G.combo>0&&G.combo%8===0) sparkle();
-              fresh.push({fx:true,parts:burst(laneX(b.lane),hitY(),L.col),t:now});
+              G.fx.push({parts:burst(laneX(b.lane),hitY(),L.col),t:now});
               setState(G.combo>=4?G.combo+'콤보! 🎶':'딱! 좋아요 🎵');
             }
           }
         }
         return true;
       });
-      if(fresh.length) G.blocks.push(...fresh);
-      // 이펙트 파티클(별도 리스트로 취급)
-      G.blocks=G.blocks.filter(b=>{
-        if(!b.fx) return true;
-        const age=now-b.t; if(age>600) return false;
-        b.parts.forEach(p=>{
+      // 터짐 파티클
+      G.fx=G.fx.filter(f=>{
+        const age=now-f.t; if(age>600) return false;
+        f.parts.forEach(p=>{
           const dt2=16/1000;
           p.x+=p.vx*dt2; p.y+=p.vy*dt2; p.vy+=560*dt2;
           const al=1-age/600;
@@ -1673,7 +1691,9 @@ GAME.rhythm=(()=>{
         return true;
       });
     },
-    finish(){ const isNew=recordBest('rhythm',G.hits); showResult({num:G.hits,sub:'번 콕! 최고 콤보 '+G.bestCombo+'! 🎵'+(isNew?' 🏆 신기록!':''),voice:G.hits+'번 콕 눌렀어요! 리듬왕이에요!'}); }
+    finish(){ if(G.done) return; G.done=true;
+      const isNew=recordBest('rhythm',G.hits);
+      showResult({num:G.hits,sub:'번 콕! 최고 콤보 '+G.bestCombo+'! 🎵'+(isNew?' 🏆 신기록!':''),voice:G.hits+'번 콕 눌렀어요! 리듬왕이에요!'}); }
   };
 })();
 
