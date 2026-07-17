@@ -174,7 +174,7 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
     </div>
   </div>
   <div id="bigCounter"><div id="cNum">0</div><div id="cLbl">개</div></div>
-  <div id="timerChip"><div id="timerVal">25</div></div>
+  <div id="timerChip"><div id="timerVal">45</div></div>
   <div id="depthWrap"><div id="depthBar"></div></div>
   <div id="stateTxt"></div>
   <div id="countdown">3</div>
@@ -183,7 +183,7 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;}
   <div id="hubScr" class="screen show">
     <div class="hub-in">
       <div class="hub-title">🐻 어린이 모션 놀이터</div>
-      <div class="hub-sub">카메라 앞에 서서 몸으로 놀아요!<br>어른과 함께 2~3걸음 뒤로 물러나 주세요 🙆</div>
+      <div class="hub-sub">카메라 앞에 서서 몸으로 놀아요!<br>어른과 함께 3~4걸음 뒤로 물러나 전신이 보이게 해주세요 🙆</div>
       <div class="game-grid">
         <button class="gcard wide" id="challengeCard" style="--bd:#FF9DB0;--sh:#E8798F;grid-column:1/-1"><div class="gicon">🏅</div><div class="gname">오늘의 전체 도전</div><div class="gdesc">14가지 놀이를 순서대로 쭉 이어서 해봐요! (약 15~20분)</div></button>
         <button class="gcard" data-g="squat" style="--bd:#C7E8FF;--sh:#8FC4E8"><div class="gicon">🐻</div><div class="gname">앉았다 일어나기</div><div class="gdesc">쑥 앉았다 쑤욱!</div></button>
@@ -309,13 +309,16 @@ let pose=null, fileset=null, camOn=false, facing='user', lastVideoTime=-1;
 const map={s:1,ox:0,oy:0,W:0,H:0,vw:720,vh:1280,mode:'contain'};
 let viewPref='contain';
 try{ viewPref=localStorage.getItem('kp_view')||'contain'; }catch(e){}
+// 전신이 꼭 보여야 하는 활동(한발 균형·유연성·자세 분석)은 사용자 설정과 무관하게 전체 보기로 고정
+let viewForce=null;
 function updateMap(){
   const W=innerWidth||375, H=innerHeight||812;
   const vw=(camOn&&video.videoWidth)?video.videoWidth:720;
   const vh=(camOn&&video.videoHeight)?video.videoHeight:1280;
   const vA=vw/vh, sA=W/H;
   const mismatch=Math.max(vA/sA,sA/vA);
-  const mode=(viewPref==='contain')?'contain':(mismatch>1.12?'contain':'cover');
+  const pref=viewForce||viewPref;
+  const mode=(pref==='contain')?'contain':(mismatch>1.12?'contain':'cover');
   const s=mode==='contain'?Math.min(W/vw,H/vh):Math.max(W/vw,H/vh);
   map.s=s; map.ox=(W-vw*s)/2; map.oy=(H-vh*s)/2; map.W=W; map.H=H; map.vw=vw; map.vh=vh; map.mode=mode;
   canvas.width=W; canvas.height=H;
@@ -335,6 +338,16 @@ function angle(a,b,c){
   const dot=v1.x*v2.x+v1.y*v2.y, m=Math.hypot(v1.x,v1.y)*Math.hypot(v2.x,v2.y);
   if(!m) return 180;
   return Math.acos(Math.max(-1,Math.min(1,dot/m)))*180/Math.PI;
+}
+// 어깨너비/몸통길이 비율로 정면·측면 판별 (자세 분석·유연성 공용)
+// 측면에서는 반대쪽 어깨가 가려져 visibility가 낮아지므로 가시성으로 거르지 않는다
+function stanceOf(lms){
+  if(!lms) return 'unknown';
+  const shW=Math.abs(lms[11].x-lms[12].x)*map.vw;
+  const torso=Math.abs((lms[11].y+lms[12].y)/2-(lms[23].y+lms[24].y)/2)*map.vh;
+  if(torso<1) return 'unknown';
+  const ratio=shW/torso;
+  if(ratio>0.55) return 'front'; if(ratio<0.32) return 'side'; return 'unknown';
 }
 async function loadModels(){
   if(pose||DEBUG) return;
@@ -356,6 +369,16 @@ async function startCam(){
   camOn=true; updateMap();
 }
 function stopCam(){ const s=video.srcObject; if(s) s.getTracks().forEach(t=>t.stop()); video.srcObject=null; camOn=false; }
+// 기기가 줌 제어를 지원하면 화면을 최대한 넓게(멀리서 잡히게) 맞춘다. 미지원 기기는 조용히 무시.
+async function setWideCam(on){
+  try{
+    const s=video.srcObject; if(!s||!s.getVideoTracks) return;
+    const t=s.getVideoTracks()[0]; if(!t||!t.getCapabilities) return;
+    const c=t.getCapabilities(); if(!c||!c.zoom) return;
+    const z=on?c.zoom.min:Math.min(Math.max(1,c.zoom.min),c.zoom.max);
+    await t.applyConstraints({advanced:[{zoom:z}]});
+  }catch(e){}
+}
 
 function drawPose(lms,col){
   col=col||'#FF9DB0';
@@ -410,6 +433,7 @@ function randPos(r,avoid){
   return {x:map.W/2,y:map.H*0.32};
 }
 function rrCtx(x,y,w,h,r){ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x,y,w,h,r); else ctx.rect(x,y,w,h); }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
 
 /* ---------- 개인 최고기록(localStorage) ---------- */
@@ -444,6 +468,7 @@ function renderHubBests(){
 
 /* ---------- 라우팅 ---------- */
 let current=null, running=false, curKey=null;
+let actToken=0; // 시작 절차(로딩·카운트다운) 도중 취소를 감지하는 토큰
 function show(id){ ['hubScr','introScr','resultScr'].forEach(s=>$(s).classList.toggle('show',s===id)); $('reportScr').classList.remove('show'); $('chRestScr').classList.remove('show'); }
 function hideAll(){ show(null); }
 function setHud(on,opt){
@@ -486,6 +511,7 @@ function openIntro(key){
 }
 async function startActivity(){
   const g=GAME[curKey];
+  const token=++actToken;
   const btn=$('introStart'); btn.disabled=true; btn.textContent='준비 중…';
   initAudio();
   try{
@@ -497,28 +523,20 @@ async function startActivity(){
     $('loadMsg').textContent='카메라를 켤 수 없어요. 카메라 권한을 확인해 주세요.';
     return;
   }
+  if(token!==actToken) return;
   hideAll();
+  // 전신 판정이 필요한 활동은 전체 보기 + 최대 광각으로 고정
+  viewForce=g.view||null; updateMap(); setWideCam(!!g.wide);
   setHud(true,g.hud);
+  // 카운트다운을 먼저 끝낸 뒤 start()를 불러야 제한시간이 3초 깎이지 않는다
+  if(g.key!=='posture'){ await countdown(3); if(token!==actToken) return; }
   current=g; g.start();
-  if(current!==g) return;
-  if(g.key!=='posture') await countdown(3);
-  if(current!==g) return;
   running=true; lastVideoTime=-1; loop();
-  // 챌린지 모드: 자동 종료가 없는 열린 게임(앉기·날개짓·유연성·균형)은 제한시간을 붙여 자동 진행
-  if(CH&&CH_OPEN.includes(g.key)){
-    let rem=CH_OPEN_DUR;
-    $('timerChip').classList.add('show'); $('timerVal').textContent=rem;
-    clearInterval(CH.autoEnd);
-    CH.autoEnd=setInterval(()=>{
-      rem--; $('timerVal').textContent=Math.max(0,rem);
-      if(rem<=0){ clearInterval(CH.autoEnd); CH.autoEnd=null; if(current===g&&CH&&g.end) g.end(); }
-    },1000);
-  }
 }
 function showResult(o){
   running=false; setHud(false); current=null;
+  viewForce=null; updateMap();
   if(CH){
-    clearInterval(CH.autoEnd); CH.autoEnd=null;
     const card=document.querySelector('.gcard[data-g="'+curKey+'"]');
     CH.results.push({
       icon:card?card.querySelector('.gicon').textContent:'🎮',
@@ -537,8 +555,10 @@ function showResult(o){
   say(o.voice||'참 잘했어요!');
 }
 function goHub(){
+  actToken++; // 진행 중인 시작 절차(카운트다운 등)를 무효화
   running=false; current=null; setHud(false); ctx.clearRect(0,0,map.W,map.H);
-  if(CH){ clearInterval(CH.timer); clearInterval(CH.autoEnd); CH=null; }
+  viewForce=null; updateMap(); setWideCam(false);
+  if(CH){ clearInterval(CH.timer); CH=null; }
   show('hubScr'); renderHubBests();
 }
 $('homeBtn').onclick=goHub;
@@ -547,15 +567,14 @@ $('introStart').onclick=startActivity;
 $('resHomeBtn').onclick=goHub;
 $('resAgainBtn').onclick=()=>{ openIntro(curKey); startActivity(); };
 $('endBtn').onclick=()=>{ if(current&&current.end) current.end(); };
-$('flipBtn').onclick=()=>{ facing=(facing==='user')?'environment':'user'; stopCam(); startCam(); };
-$('viewBtn').onclick=()=>{ viewPref=(viewPref==='contain')?'cover':'contain'; try{ localStorage.setItem('kp_view',viewPref); }catch(e){} updateMap(); };
+$('flipBtn').onclick=async()=>{ facing=(facing==='user')?'environment':'user'; stopCam(); await startCam(); if(current&&current.wide) setWideCam(true); };
+$('viewBtn').onclick=()=>{ viewForce=null; viewPref=(viewPref==='contain')?'cover':'contain'; try{ localStorage.setItem('kp_view',viewPref); }catch(e){} updateMap(); };
 document.querySelectorAll('.gcard[data-g]').forEach(b=>b.addEventListener('click',()=>{ initAudio(); openIntro(b.dataset.g); }));
 renderHubBests();
 
 /* ---------- 챌린지: 14개 활동 순서대로 완주 ---------- */
 const CH_ORDER=['squat','jacks','mole','sequence','tissue','wipe','hammer','numquiz','engword','mosquito','balance','rhythm','flex','posture'];
 const CH_REST=15;
-const CH_OPEN=['squat','jacks','flex','balance'], CH_OPEN_DUR=22; // 자동종료 없는 열린 게임의 챌린지 제한시간
 let CH=null;
 function startChallenge(){
   CH={idx:0,results:[],timer:null};
@@ -607,26 +626,31 @@ function finishChallenge(){
 }
 $('challengeCard').addEventListener('click',()=>{ initAudio(); startChallenge(); });
 $('chSkipRest').onclick=advanceChallenge;
-$('chAbort').onclick=()=>{ if(CH){ clearInterval(CH.timer); clearInterval(CH.autoEnd); } CH=null; $('chRestScr').classList.remove('show'); goHub(); };
+$('chAbort').onclick=()=>{ if(CH){ clearInterval(CH.timer); } CH=null; $('chRestScr').classList.remove('show'); goHub(); };
 
 /* ============================================================
    게임 정의 (스쿼트코치 검증 로직 이식 + 유아용 UI/난이도)
    ============================================================ */
 const GAME={};
-const DUR=25; // 초 — 유아 집중시간 고려, 짧게
+const DUR=45; // 초 — 모든 운동의 공통 제한시간
 
 /* ---------- 공통 카운터형(앉았다일어나기 등) ---------- */
 function makeCounter(cfg){
-  const S={reps:0,lastRepAt:0,lostFrames:0};
+  const S={reps:0,lastRepAt:0,lostFrames:0,endAt:0,done:false};
   return {
-    key:cfg.key, hud:{counter:true,end:true,depth:!!cfg.depth},
-    start(){ S.reps=0; S.lastRepAt=0; S.lostFrames=0; cfg.reset(S); $('cNum').textContent='0'; $('cLbl').textContent='번'; },
+    key:cfg.key, hud:{counter:true,timer:true,end:true,depth:!!cfg.depth},
+    start(){ S.reps=0; S.lastRepAt=0; S.lostFrames=0; S.done=false; S.endAt=performance.now()+DUR*1000;
+      cfg.reset(S); $('cNum').textContent='0'; $('cLbl').textContent='번'; $('timerVal').textContent=DUR; },
     end(){
+      if(S.done) return; S.done=true;
       if(S.reps<=0){ showResult({num:0,sub:'다음에 또 도전해봐요! '+cfg.emoji,voice:'다음에 또 도전해봐요!'}); return; }
       const isNew=recordBest(cfg.key,S.reps);
       showResult({num:S.reps,sub:'번 했어요! '+cfg.emoji+(isNew?' 🏆 신기록!':''),voice:S.reps+'번 했어요! 정말 잘했어요!'+(isNew?' 신기록이에요!':'')});
     },
     frame(lms){
+      const remain=Math.max(0,(S.endAt-performance.now())/1000);
+      $('timerVal').textContent=Math.ceil(remain);
+      if(remain<=0){ this.end(); return; }
       if(!lms){ S.lostFrames++; setState('전신이 보이게 서 주세요 🙂'); return; }
       const core=[11,12,23,24]; let sum=0; core.forEach(i=>sum+=visOf(lms[i]));
       if(sum/core.length<0.45){ setState('몸이 잘 안 보여요, 조금 물러나요'); return; }
@@ -678,7 +702,7 @@ GAME.squat=(()=>{
       }else if(knee>UP_A){ if(st.wentDeep) c._rep(); st.phase='up'; st.wentDeep=false; }
     }
   });
-  c.intro={title:'앉았다 일어나기 🐻',desc:'곰돌이처럼 <b>쑥 앉았다가 쑤욱 일어나요!</b><br>몇 번이나 할 수 있을까요? 그만할 땐 "그만할래요"를 눌러요.'};
+  c.intro={title:'앉았다 일어나기 🐻',desc:'곰돌이처럼 <b>쑥 앉았다가 쑤욱 일어나요!</b><br>'+DUR+'초 동안 몇 번이나 할 수 있을까요?<br>먼저 그만하고 싶으면 "그만할래요"를 눌러요.'};
   return c;
 })();
 
@@ -716,15 +740,19 @@ GAME.jacks=(()=>{
     ctx.restore();
   }
   return {
-    key:'jacks', hud:{counter:true,end:true},
-    intro:{title:'훨훨 날아요 🦋',desc:'양팔을 <b>날개처럼 빠르게 파닥파닥!</b> 흔들면 하늘로 날아올라요.<br>천천히 하면 스르륵 내려와요. 구름까지 닿아볼까요?'},
+    key:'jacks', hud:{counter:true,timer:true,end:true},
+    intro:{title:'훨훨 날아요 🦋',desc:'양팔을 <b>날개처럼 빠르게 파닥파닥!</b> 흔들면 하늘로 날아올라요.<br>천천히 하면 스르륵 내려와요.<br><b>100%까지 올라가면 끝!</b> ('+DUR+'초 안에 도전)'},
     start(){
       G.alt=0; G.vAlt=0; G.flapEMA=0; G.prevWristY=null; G.prevT=performance.now(); G.best=0; G.touchedCloud=false; G.wingK=0;
-      $('cNum').textContent='0%'; $('cLbl').textContent='높이'; say('팔을 날개처럼 빠르게 파닥거려봐요!');
+      G.endAt=performance.now()+DUR*1000; G.done=false; G.topAt=0;
+      $('cNum').textContent='0%'; $('cLbl').textContent='높이'; $('timerVal').textContent=DUR; say('팔을 날개처럼 빠르게 파닥거려봐요!');
     },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
+      const remain=Math.max(0,(G.endAt-now)/1000);
+      $('timerVal').textContent=Math.ceil(remain);
+      if(remain<=0){ this.finish(); return; }
       const dt=Math.min(0.05,Math.max(0.001,(now-G.prevT)/1000)); G.prevT=now;
       // 배경 하늘 + 구름
       ctx.save();
@@ -748,13 +776,22 @@ GAME.jacks=(()=>{
       const groundY=map.H*0.72, topY=map.H*0.18;
       const cy=groundY-G.alt*(groundY-topY), cx=map.W/2;
       drawFlyer(cx,cy,G.wingK);
-      if(G.alt>0.92&&!G.touchedCloud){ G.touchedCloud=true; beep(880,0.2); buzz([0,50,40,50]); setState('구름에 닿았어요! 🎉'); }
-      else setState(G.flapEMA>LIFT_T?'훨훨 날아올라요! 🦋':'날개를 더 빠르게 파닥여봐요');
+      // 100% 달성 = 목표 완료 → 축하 연출 뒤 자동으로 끝낸다
+      if(pctNow>=100&&!G.topAt){
+        G.topAt=now; G.touchedCloud=true; cheer(); buzz([0,60,50,60]);
+        setState('100% 달성! 하늘 끝까지 날았어요! 🎉'); say('와! 하늘 끝까지 날았어요!');
+      }
+      else if(G.alt>0.92&&!G.touchedCloud){ G.touchedCloud=true; beep(880,0.2); buzz([0,50,40,50]); setState('구름에 닿았어요! 🎉'); }
+      else if(!G.topAt) setState(G.flapEMA>LIFT_T?'훨훨 날아올라요! 🦋':'날개를 더 빠르게 파닥여봐요');
+      if(G.topAt&&now-G.topAt>1300){ this.finish(); return; }
     },
     finish(){
+      if(G.done) return; G.done=true;
       const b=Math.round(G.best*100);
       const isNew=recordBest('jacks',b);
-      showResult({num:b+'%',sub:'높이까지 날았어요! 🦋'+(G.touchedCloud?' 구름 터치 성공!':'')+(isNew?' 🏆 신기록!':''),voice:b+'퍼센트 높이까지 날았어요! 정말 멋져요!'});
+      const top=b>=100;
+      showResult({num:b+'%',sub:(top?'하늘 끝까지 날았어요! 🎉 100% 달성!':'높이까지 날았어요! 🦋'+(G.touchedCloud?' 구름 터치 성공!':''))+(isNew?' 🏆 신기록!':''),
+        voice:top?'100퍼센트! 하늘 끝까지 날았어요! 최고예요!':b+'퍼센트 높이까지 날았어요! 정말 멋져요!'});
     }
   };
 })();
@@ -769,7 +806,7 @@ GAME.mole=(()=>{
   }
   return {
     key:'mole', hud:{counter:true,timer:true,end:true},
-    intro:{title:'두더지 콩 🐹',desc:'빼꼼 나오는 두더지를 <b>손으로 콩!</b> 쳐봐요.<br>25초 동안 몇 마리나 잡을까요?'},
+    intro:{title:'두더지 콩 🐹',desc:'빼꼼 나오는 두더지를 <b>손으로 콩!</b> 쳐봐요.<br>'+DUR+'초 동안 몇 마리나 잡을까요?'},
     start(){ G.score=0; G.mole=null; G.endAt=performance.now()+DUR*1000;
       $('cNum').textContent='0'; $('cLbl').textContent='마리'; say('두더지가 나오면 손으로 콩 쳐봐요!'); spawn(); },
     end(){ this.finish(); },
@@ -831,7 +868,7 @@ GAME.sequence=(()=>{
   }
   return {
     key:'sequence', hud:{counter:true,timer:true,end:true},
-    intro:{title:'순서대로 콕 🔢',desc:'숫자 원 5개를 <b>1→2→3→4→5 순서대로</b> 손으로 콕!<br>25초 동안 몇 세트나 완성할까요?'},
+    intro:{title:'순서대로 콕 🔢',desc:'숫자 원 5개를 <b>1→2→3→4→5 순서대로</b> 손으로 콕!<br>'+DUR+'초 동안 몇 세트나 완성할까요?'},
     start(){ G.sets=0; G.endAt=performance.now()+DUR*1000; this._newSet();
       $('cNum').textContent='0'; $('cLbl').textContent='세트'; say('숫자 순서대로 손으로 콕콕 눌러봐요!'); },
     end(){ this.finish(); },
@@ -881,7 +918,7 @@ GAME.tissue=(()=>{
   const G={};
   return {
     key:'tissue', hud:{counter:true,timer:true,end:true},
-    intro:{title:'휴지 뽑기 🧻',desc:'휴지 상자 위에서 <b>손을 위로 휙!</b> 올려봐요.<br>25초 동안 몇 장 뽑을 수 있을까요?'},
+    intro:{title:'휴지 뽑기 🧻',desc:'휴지 상자 위에서 <b>손을 위로 휙!</b> 올려봐요.<br>'+DUR+'초 동안 몇 장 뽑을 수 있을까요?'},
     start(){ G.n=0; G.endAt=performance.now()+DUR*1000; G.lastPull=0; G.parts=[]; G.pt=0;
       $('cNum').textContent='0'; $('cLbl').textContent='장'; say('휴지 상자 위에서 손을 위로 쭉 올려봐요!'); },
     end(){ this.finish(); },
@@ -976,7 +1013,7 @@ GAME.wipe=(()=>{
   }
   return {
     key:'wipe', hud:{counter:true,timer:true,end:true},
-    intro:{title:'칠판 지우기 🧽',desc:'앗, 칠판이 낙서로 가득!<br><b>손바닥을 크게 휘저어</b> 낙서를 싹싹 지워요.<br>3판 연속 도전!'},
+    intro:{title:'칠판 지우기 🧽',desc:'앗, 칠판이 낙서로 가득!<br><b>손바닥을 크게 휘저어</b> 낙서를 싹싹 지워요.<br>'+DUR+'초 안에 3판 연속 도전!'},
     _newBoard(){
       G.bc=document.createElement('canvas'); G.bc.width=map.W; G.bc.height=map.H;
       G.bg=G.bc.getContext('2d');
@@ -991,7 +1028,7 @@ GAME.wipe=(()=>{
       $('cLbl').textContent='R'+G.round+'/'+ROUNDS; $('cNum').textContent='0%';
     },
     start(){
-      G.t0=performance.now(); G.done=false; G.round=1; G.betweenUntil=0;
+      G.t0=performance.now(); G.endAt=G.t0+DUR*1000; G.done=false; G.round=1; G.betweenUntil=0;
       this._newBoard(); say('칠판을 손으로 쓱쓱 문질러 지워봐요!');
     },
     end(){ this.finish(true); },
@@ -1007,6 +1044,7 @@ GAME.wipe=(()=>{
     frame(lms){
       const now=performance.now();
       if(G.done) return;
+      if(now>=G.endAt){ this.finish(true); return; }   // 45초 상한
       $('timerVal').textContent=((now-G.t0)/1000).toFixed(1);
       if(G.betweenUntil>now){
         if(lms) drawPose(lms,'#8FCFCF');
@@ -1068,7 +1106,7 @@ GAME.hammer=(()=>{
   }
   return {
     key:'hammer', hud:{counter:true,timer:true,end:true},
-    intro:{title:'콩콩 못박기 🔨',desc:'못 머리 위로 손을 <b>위에서 아래로 콩콩!</b> 내리쳐요.<br>세 번 치면 완성! 몇 개나 박을까요?'},
+    intro:{title:'콩콩 못박기 🔨',desc:'못 머리 위로 손을 <b>위에서 아래로 콩콩!</b> 내리쳐요.<br>세 번 치면 완성! '+DUR+'초 동안 몇 개나 박을까요?'},
     start(){ G.n=0; G.endAt=performance.now()+DUR*1000;
       const a=newNail(null);
       G.nails=[a,newNail([{x:a.x,y:a.y,d:a.r*3.4}])];
@@ -1125,13 +1163,45 @@ GAME.hammer=(()=>{
 /* ---------- 🔢 숫자 콕콕(10 이하) ---------- */
 GAME.numquiz=(()=>{
   const G={};
-  const ROUNDS=6;
+  const ROUNDS=10;
+  const FRUITS=['🍎','🍊','🍌','🍇','🍓','🥕','🐥','🐟','⭐','🍪','🎈','🌻'];
+  // 세기 10 + 덧셈 45 + 뺄셈 28. 유형별 셔플 덱에서 순서대로 뽑으므로 한 판 안에서도,
+  // 여러 판을 이어서 해도 한동안 같은 문제가 다시 나오지 않는다.
+  function poolOf(t){
+    const out=[];
+    if(t==='count'){ for(let n=1;n<=10;n++) out.push({t:'count',n}); }
+    else if(t==='add'){ for(let a=1;a<=9;a++) for(let b=1;a+b<=10;b++) out.push({t:'add',a,b}); }
+    else{ for(let a=2;a<=8;a++) for(let b=1;b<a;b++) out.push({t:'sub',a,b}); }
+    return out;
+  }
+  const DECKS={count:[],add:[],sub:[]}, DI={count:0,add:0,sub:0};
+  function nextOf(t){ if(DI[t]>=DECKS[t].length){ DECKS[t]=shuffle(poolOf(t)); DI[t]=0; } return DECKS[t][DI[t]++]; }
+  // 한 판의 난이도가 들쭉날쭉하지 않도록 유형 수를 고정하고 순서만 섞는다
+  function newMix(){ return shuffle(['count','count','count','add','add','add','add','sub','sub','sub']); }
+  const JOSA=n=>[2,4,5,9].includes(n)?'는':'은';   // 숫자 읽기 받침에 맞춘 조사
   function gen(){
-    const a=1+((Math.random()*4)|0), b=1+((Math.random()*4)|0);
-    const ans=a+b;
-    let wrong=ans+(Math.random()<0.5?1:-1); if(wrong<1) wrong=ans+2; if(wrong>10) wrong=ans-2;
+    const q=nextOf(G.mix[G.mi++]||'add');
+    const pick=()=>FRUITS[(Math.random()*FRUITS.length)|0];
+    let ans, rows, voice;
+    if(q.t==='count'){
+      const e=pick(); ans=q.n;
+      rows=[{k:'f',n:q.n,e},{k:'s',t:'몇 개?'}];
+      voice='몇 개일까요?';
+    }else if(q.t==='add'){
+      let e1=pick(), e2=pick(); while(e2===e1) e2=pick();
+      ans=q.a+q.b;
+      rows=[{k:'f',n:q.a,e:e1},{k:'s',t:'+'},{k:'f',n:q.b,e:e2},{k:'s',t:'= ?'}];
+      voice=q.a+' 더하기 '+q.b+JOSA(q.b)+'?';
+    }else{
+      const e=pick(); ans=q.a-q.b;
+      rows=[{k:'f',n:q.a,e},{k:'s',t:'−'},{k:'f',n:q.b,e},{k:'s',t:'= ?'}];
+      voice=q.a+' 빼기 '+q.b+JOSA(q.b)+'?';
+    }
+    const cands=[ans-2,ans-1,ans+1,ans+2].filter(v=>v>=1&&v<=10&&v!==ans);
+    const wrong=cands[(Math.random()*cands.length)|0];
     const leftOk=Math.random()<0.5;
-    G.q={a,b,ans,ch:[leftOk?ans:wrong,leftOk?wrong:ans],ok:leftOk?0:1,lock:true};
+    G.q={rows,ans,ch:[leftOk?ans:wrong,leftOk?wrong:ans],ok:leftOk?0:1,lock:true};
+    say(voice);
   }
   function burst(x,y,col){
     const out=[]; for(let i=0;i<26;i++){ const a=Math.random()*6.28;
@@ -1140,8 +1210,9 @@ GAME.numquiz=(()=>{
   }
   return {
     key:'numquiz', hud:{counter:true,end:true},
-    intro:{title:'숫자 콕콕 🔢',desc:'그림 개수를 세어보고 <b>맞는 숫자를 손으로 콕!</b><br>10까지의 숫자만 나와요. 6문제 도전!'},
-    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; G.done=false; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; say('숫자를 세어서 콕 눌러봐요!'); },
+    intro:{title:'숫자 콕콕 🔢',desc:'그림을 세어보고 <b>맞는 숫자를 손으로 콕!</b><br>세기·더하기·빼기가 섞여 나와요. 10까지의 숫자만!<br>'+ROUNDS+'문제 도전!'},
+    start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; G.done=false; G.mix=newMix(); G.mi=0;
+      $('cNum').textContent='0'; $('cLbl').textContent='문제'; gen(); },
     end(){ this.finish(); },
     frame(lms){
       const now=performance.now();
@@ -1151,27 +1222,35 @@ GAME.numquiz=(()=>{
       const Lx=map.W*0.24, Rx=map.W*0.76, chY=map.H*0.24;
       const cx=map.W/2;
       // 커서 기반 행 배치: 각 행이 확정된 높이만큼 공간을 차지해 절대 겹치지 않음
+      // (문제 유형마다 행 수가 달라서 rows 정의를 그대로 훑어 높이를 잡는다)
+      const PER=5; // 한 줄에 최대 5개 — 6개 넘으면 아래 줄로 접어 세기 쉽게
       const panelW=Math.min(map.W*0.7,280), fruitSz=Math.min(26,panelW/5.6);
-      const rowFruitH=fruitSz*1.25, rowSymH=Math.round(fruitSz*0.85), rowGapPx=8, padV=14;
-      const panelH=padV*2+rowFruitH*2+rowSymH*2+rowGapPx*3;
+      const lineH=fruitSz*1.25, rowSymH=Math.round(fruitSz*0.85), rowGapPx=8, padV=14;
+      const rows=G.q.rows;
+      const rowHOf=rw=>rw.k==='f'?lineH*Math.ceil(rw.n/PER):rowSymH;
+      const panelH=padV*2+rows.reduce((s,rw)=>s+rowHOf(rw),0)+rowGapPx*(rows.length-1);
       const topY=chY+r+26;
-      let cursorY=topY+padV;
-      function nextRow(h){ const c=cursorY+h/2; cursorY+=h+rowGapPx; return c; }
-      const yA=nextRow(rowFruitH), yPlus=nextRow(rowSymH), yB=nextRow(rowFruitH), yEq=nextRow(rowSymH);
       ctx.save(); ctx.fillStyle='rgba(255,255,255,.94)'; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,0,0,.15)';
       rrCtx(cx-panelW/2,topY,panelW,panelH,22); ctx.fill(); ctx.shadowBlur=0;
       ctx.textAlign='center'; ctx.textBaseline='middle';
-      function fruitRow(n,emoji,y){
-        const gap=fruitSz*1.05, totalW=(n-1)*gap;
+      function fruitBlock(n,emoji,blockTop){
+        const gap=fruitSz*1.05;
         ctx.font=fruitSz+'px sans-serif';
-        for(let i=0;i<n;i++) ctx.fillText(emoji,cx-totalW/2+i*gap,y);
+        for(let li=0;li<Math.ceil(n/PER);li++){
+          const cnt=Math.min(PER,n-li*PER), totalW=(cnt-1)*gap, y=blockTop+lineH*(li+0.5);
+          for(let i=0;i<cnt;i++) ctx.fillText(emoji,cx-totalW/2+i*gap,y);
+        }
       }
-      fruitRow(G.q.a,'🍎',yA);
-      ctx.font='900 '+Math.round(fruitSz*0.7)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('+',cx,yPlus);
-      fruitRow(G.q.b,'🍊',yB);
-      ctx.font='900 '+Math.round(fruitSz*0.85)+'px Pretendard'; ctx.fillStyle='#c96a3a';
-      ctx.fillText('= ?',cx,yEq);
+      let cursorY=topY+padV;
+      rows.forEach(rw=>{
+        const h=rowHOf(rw);
+        if(rw.k==='f') fruitBlock(rw.n,rw.e,cursorY);
+        else{
+          ctx.font='900 '+Math.round(fruitSz*(rw.t.length>2?0.62:0.85))+'px Pretendard'; ctx.fillStyle='#c96a3a';
+          ctx.fillText(rw.t,cx,cursorY+h/2);
+        }
+        cursorY+=h+rowGapPx;
+      });
       ctx.restore();
       [{x:Lx,v:G.q.ch[0]},{x:Rx,v:G.q.ch[1]}].forEach((c,i)=>{
         const isCorrectPick=G.q.done&&i===G.q.ok;
@@ -1221,13 +1300,29 @@ GAME.numquiz=(()=>{
 /* ---------- 🐶 영어 단어 콕콕 ---------- */
 GAME.engword=(()=>{
   const G={};
-  const ROUNDS=6;
-  const WORDS=[{e:'🐶',w:'DOG'},{e:'🐱',w:'CAT'},{e:'🍎',w:'APPLE'},{e:'🚗',w:'CAR'},{e:'☀️',w:'SUN'},
-    {e:'🐟',w:'FISH'},{e:'🌙',w:'MOON'},{e:'🐘',w:'ELEPHANT'},{e:'🍌',w:'BANANA'},{e:'⭐',w:'STAR'}];
+  const ROUNDS=10;
+  const WORDS=[
+    {e:'🐶',w:'DOG'},{e:'🐱',w:'CAT'},{e:'🐰',w:'RABBIT'},{e:'🐻',w:'BEAR'},{e:'🐼',w:'PANDA'},
+    {e:'🦁',w:'LION'},{e:'🐯',w:'TIGER'},{e:'🐵',w:'MONKEY'},{e:'🐷',w:'PIG'},{e:'🐮',w:'COW'},
+    {e:'🐔',w:'CHICKEN'},{e:'🦆',w:'DUCK'},{e:'🐘',w:'ELEPHANT'},{e:'🐟',w:'FISH'},{e:'🐝',w:'BEE'},
+    {e:'🦋',w:'BUTTERFLY'},{e:'🐸',w:'FROG'},{e:'🐢',w:'TURTLE'},{e:'🐧',w:'PENGUIN'},{e:'🐴',w:'HORSE'},
+    {e:'🍎',w:'APPLE'},{e:'🍌',w:'BANANA'},{e:'🍇',w:'GRAPES'},{e:'🍓',w:'STRAWBERRY'},{e:'🍊',w:'ORANGE'},
+    {e:'🍉',w:'WATERMELON'},{e:'🥕',w:'CARROT'},{e:'🍞',w:'BREAD'},{e:'🥛',w:'MILK'},{e:'🧀',w:'CHEESE'},
+    {e:'☀️',w:'SUN'},{e:'🌙',w:'MOON'},{e:'⭐',w:'STAR'},{e:'☁️',w:'CLOUD'},{e:'🌈',w:'RAINBOW'},
+    {e:'❄️',w:'SNOW'},{e:'🌳',w:'TREE'},{e:'🌸',w:'FLOWER'},{e:'🔥',w:'FIRE'},{e:'💧',w:'WATER'},
+    {e:'🚗',w:'CAR'},{e:'🚌',w:'BUS'},{e:'✈️',w:'AIRPLANE'},{e:'🚲',w:'BIKE'},{e:'🚂',w:'TRAIN'},
+    {e:'🚀',w:'ROCKET'},{e:'🏠',w:'HOUSE'},{e:'📚',w:'BOOK'},{e:'⚽',w:'BALL'},{e:'🎈',w:'BALLOON'},
+    {e:'🎁',w:'GIFT'},{e:'👟',w:'SHOES'},{e:'👒',w:'HAT'},{e:'✂️',w:'SCISSORS'},{e:'🔑',w:'KEY'}
+  ];
+  // 셔플 덱에서 순서대로 뽑아 한 판 안에서도, 두세 판 이어서 해도 같은 단어가 다시 나오지 않는다.
+  let DECK=[], DI=0;
+  function nextWord(){ if(DI>=DECK.length){ DECK=shuffle(WORDS.slice()); DI=0; } return DECK[DI++]; }
   function gen(){
-    const idx=(Math.random()*WORDS.length)|0; const target=WORDS[idx];
-    let wIdx; do{ wIdx=(Math.random()*WORDS.length)|0; }while(wIdx===idx);
-    const wrong=WORDS[wIdx];
+    const target=nextWord();
+    // 오답은 첫 글자가 다른 단어로 골라 유아가 헷갈리지 않게 한다
+    let pool=WORDS.filter(x=>x.w!==target.w&&x.w[0]!==target.w[0]);
+    if(!pool.length) pool=WORDS.filter(x=>x.w!==target.w);
+    const wrong=pool[(Math.random()*pool.length)|0];
     const leftOk=Math.random()<0.5;
     G.q={emoji:target.e,ch:[leftOk?target.w:wrong.w,leftOk?wrong.w:target.w],ok:leftOk?0:1,lock:true};
     say('Which one is '+target.w+'?');
@@ -1239,7 +1334,7 @@ GAME.engword=(()=>{
   }
   return {
     key:'engword', hud:{counter:true,end:true},
-    intro:{title:'영어 콕콕 🐶',desc:'그림을 보고 <b>맞는 영어 단어를 손으로 콕!</b><br>소리도 함께 들려줘요. 6문제 도전!'},
+    intro:{title:'영어 콕콕 🐶',desc:'그림을 보고 <b>맞는 영어 단어를 손으로 콕!</b><br>소리도 함께 들려줘요. '+ROUNDS+'문제 도전!'},
     start(){ G.round=0; G.ok=0; G.fx=[]; G.rings=[]; G.done=false; gen(); $('cNum').textContent='0'; $('cLbl').textContent='문제'; },
     end(){ this.finish(); },
     frame(lms){
@@ -1256,7 +1351,11 @@ GAME.engword=(()=>{
         ctx.save(); ctx.fillStyle='#fff'; ctx.shadowBlur=12; ctx.shadowColor='rgba(0,0,0,.18)';
         ctx.beginPath(); ctx.arc(c.x,chY,r*pop,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
         ctx.lineWidth=5; ctx.strokeStyle=isCorrectPick?'#93D693':'#D6F5D6'; ctx.stroke();
-        ctx.font='900 '+Math.max(15,r*0.32*pop)+'px Pretendard'; ctx.fillStyle='#3d6b3d'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        // WATERMELON 같은 긴 단어도 원 밖으로 삐져나오지 않게 폭에 맞춰 줄인다
+        let fs=Math.max(15,r*0.32*pop);
+        ctx.font='900 '+fs+'px Pretendard';
+        while(fs>9&&ctx.measureText(c.v).width>r*1.68){ fs-=1; ctx.font='900 '+fs+'px Pretendard'; }
+        ctx.fillStyle='#3d6b3d'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(c.v,c.x,chY+2); ctx.restore();
         if(isCorrectPick&&now-G.q.doneAt<500){
           ctx.save(); ctx.globalAlpha=1-(now-G.q.doneAt)/500;
@@ -1304,7 +1403,7 @@ GAME.mosquito=(()=>{
   }
   return {
     key:'mosquito', hud:{counter:true,timer:true,end:true},
-    intro:{title:'모기 잡기 🦟',desc:'앵앵~ 모기가 날아다녀요. <b>모기 근처에서 두 손을 짝!</b><br>박수로 잡아요. 25초 동안 몇 마리 잡을까요?'},
+    intro:{title:'모기 잡기 🦟',desc:'앵앵~ 모기가 날아다녀요. <b>모기 근처에서 두 손을 짝!</b><br>박수로 잡아요. '+DUR+'초 동안 몇 마리 잡을까요?'},
     start(){ G.n=0; G.endAt=performance.now()+DUR*1000; G.pt=0; G.prevGap=null; G.lastClap=0; G.respawnAt=0; G.mq=null;
       $('cNum').textContent='0'; $('cLbl').textContent='마리'; say('모기 근처에서 짝 박수를 쳐봐요!'); },
     end(){ this.finish(); },
@@ -1365,24 +1464,33 @@ GAME.flex=(()=>{
     return Math.max(0,Math.min(115,(wristY-hipY)/legLen*100));
   }
   return {
-    key:'flex', hud:{counter:true,end:true},
-    intro:{title:'땅 짚기 유연성 🙇',desc:'허리를 <b>쭈욱 숙여 손을 최대한 아래로</b> 뻗어봐요!<br>얼마나 유연한지 재볼까요?'},
-    start(){ G.best=0; $('cNum').textContent='0%'; $('cLbl').textContent='유연성'; say('허리를 숙여서 손을 최대한 아래로 뻗어봐요!'); },
+    key:'flex', hud:{counter:true,timer:true,end:true}, view:'contain', wide:true,
+    intro:{title:'땅 짚기 유연성 🙇',desc:'카메라에서 <b>3~4걸음 뒤로 물러나</b> <b>옆으로 서요!</b><br>그다음 허리를 <b>쭈욱 숙여 손을 최대한 아래로</b> 뻗어봐요.<br>'+DUR+'초 동안 얼마나 유연한지 재볼까요?'},
+    start(){ G.best=0; G.done=false; G.endAt=performance.now()+DUR*1000;
+      $('cNum').textContent='0%'; $('cLbl').textContent='유연성'; $('timerVal').textContent=DUR;
+      say('옆으로 서서 허리를 숙여 손을 최대한 아래로 뻗어봐요!'); },
     end(){ this.finish(); },
     frame(lms){
+      const now=performance.now();
+      const remain=Math.max(0,(G.endAt-now)/1000);
+      $('timerVal').textContent=Math.ceil(remain);
+      if(remain<=0){ this.finish(); return; }
       if(!lms){ setState('전신이 보이게 서 주세요'); return; }
       drawPose(lms,'#B79AE8');
       const pct=reachPct(lms);
-      if(pct==null){ setState('두 손과 엉덩이가 잘 보이게 서봐요'); return; }
+      if(pct==null){ setState('두 손과 엉덩이가 잘 보이게 뒤로 물러나요'); return; }
       const shown=Math.min(100,Math.round(pct));
       if(pct>G.best){
         G.best=pct;
         const n=$('cNum'); n.textContent=shown+'%'; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
         beep(560+pct*3,0.08,0.18);
       }else $('cNum').textContent=Math.min(100,Math.round(G.best))+'%';
-      setState(pct>70?'와 정말 유연해요! 🙇':pct>35?'좋아요! 조금만 더 뻗어봐요!':'허리를 숙여 손을 아래로 뻗어봐요');
+      // 아직 숙이기 전일 때만 방향 안내(숙이면 몸통이 짧아 보여 정면/측면 판별이 흔들린다)
+      if(pct<25&&stanceOf(lms)==='front') setState('옆으로 서서 상체를 굽혀봐요! 🙇');
+      else setState(pct>70?'와 정말 유연해요! 🙇':pct>35?'좋아요! 조금만 더 뻗어봐요!':'옆으로 서서 상체를 굽혀 손을 아래로 뻗어요');
     },
     finish(){
+      if(G.done) return; G.done=true;
       const b=Math.min(100,Math.round(G.best));
       const isNew=recordBest('flex',b);
       const grade=b>=85?'최고 유연왕! 🌟':b>=60?'아주 유연해요! 🙇':b>=35?'유연성 보통이에요 😊':'조금씩 늘려가요! 💪';
@@ -1400,30 +1508,46 @@ GAME.balance=(()=>{
     return Math.abs(lms[27].y-lms[28].y)/hipW;
   }
   return {
-    key:'balance', hud:{counter:true,end:true},
-    intro:{title:'한발 균형 🦩',desc:'한쪽 발을 <b>번쩍 들고 최대한 오래</b> 버텨봐요!<br>기록이 늘어날수록 짱짱! 그만할 땐 "그만할래요"를 눌러요.'},
-    start(){ G.best=0; G.holdStart=null; $('cNum').textContent='0.0'; $('cLbl').textContent='초'; say('한 발을 번쩍 들고 최대한 오래 버텨봐요!'); },
+    key:'balance', hud:{counter:true,timer:true,end:true}, view:'contain', wide:true,
+    intro:{title:'한발 균형 🦩',desc:'카메라에서 <b>3~4걸음 뒤로 물러나</b> 발끝까지 보이게 서요.<br>한쪽 발을 <b>번쩍 들고 최대한 오래</b> 버텨봐요!<br><b>발이 땅에 닿으면 바로 끝나요.</b> ('+DUR+'초 안에 도전)'},
+    start(){ G.best=0; G.holdStart=null; G.started=false; G.done=false; G.failFrames=0; G.lost=0;
+      G.endAt=performance.now()+DUR*1000;
+      $('cNum').textContent='0.0'; $('cLbl').textContent='초'; $('timerVal').textContent=DUR;
+      say('멀리 물러나서 한 발을 번쩍 들고 최대한 오래 버텨봐요!'); },
     end(){ this.finish(); },
     frame(lms){
-      if(!lms){ setState('전신이 보이게 서 주세요'); G.holdStart=null; return; }
-      drawPose(lms,'#E0B25E');
-      const asym=ankleAsym(lms);
       const now=performance.now();
-      if(asym==null){ setState('두 발과 엉덩이가 잘 보이게 서봐요'); G.holdStart=null; return; }
+      const remain=Math.max(0,(G.endAt-now)/1000);
+      $('timerVal').textContent=Math.ceil(remain);
+      if(remain<=0){ this.finish(); return; }
+      const asym=lms?ankleAsym(lms):null;
+      if(lms) drawPose(lms,'#E0B25E');
+      // 몸이 안 보이면 판정 불가: 버티던 중이었다면 0.5초 유예 후 종료
+      if(asym==null){
+        setState(lms?'두 발과 엉덩이가 잘 보이게 뒤로 물러나요':'전신이 보이게 서 주세요');
+        if(G.started&&++G.lost>15){ this.finish(); return; }
+        return;
+      }
+      G.lost=0;
       if(asym>0.55){
-        if(!G.holdStart){ G.holdStart=now; beep(600,0.08); }
+        if(!G.holdStart){ G.holdStart=now; G.started=true; beep(600,0.08); }
+        G.failFrames=0;
         const cur=(now-G.holdStart)/1000;
         $('cNum').textContent=cur.toFixed(1);
         if(cur>G.best) G.best=cur;
         setState('버티는 중… '+cur.toFixed(1)+'초! 🦩');
       }else{
-        if(G.holdStart) setState('아깝다! 다시 한 발을 들어봐요');
-        else setState('한쪽 발을 번쩍 들어올려요');
-        G.holdStart=null;
-        $('cNum').textContent=G.best.toFixed(1);
+        // 발이 내려오면(=실패) 그 자리에서 바로 종료. 노이즈 오판만 3프레임으로 거른다.
+        if(G.started){
+          if(++G.failFrames>=3){ setState('발이 내려왔어요! 여기까지 🦩'); beep(300,0.16); this.finish(); return; }
+        }else setState('한쪽 발을 번쩍 들어올려요');
       }
     },
-    finish(){ const isNew=recordBest('balance',G.best); showResult({num:G.best.toFixed(1),sub:'초 버텼어요! 🦩'+(isNew?' 🏆 신기록!':''),voice:G.best.toFixed(1)+'초나 버텼어요! 균형왕이에요!'}); }
+    finish(){
+      if(G.done) return; G.done=true;
+      const isNew=recordBest('balance',G.best);
+      showResult({num:G.best.toFixed(1),sub:'초 버텼어요! 🦩'+(isNew?' 🏆 신기록!':''),voice:G.best.toFixed(1)+'초나 버텼어요! 균형왕이에요!'});
+    }
   };
 })();
 
@@ -1431,7 +1555,7 @@ GAME.balance=(()=>{
 GAME.rhythm=(()=>{
   const G={};
   const BPM=100, BEAT=60/BPM, LEAD=BEAT*4; // 4박자 앞서 스폰(넉넉한 낙하 시간)
-  const ROUND_DUR=50; // 음악을 충분히 즐기도록 다른 게임보다 길게
+  const ROUND_DUR=DUR;
   const LANES=[
     {emoji:'🍎',col:'#FF9DB0',freq:523.25},
     {emoji:'🍊',col:'#E0C86F',freq:587.33},
@@ -1473,7 +1597,7 @@ GAME.rhythm=(()=>{
   }
   return {
     key:'rhythm', hud:{counter:true,timer:true,end:true},
-    intro:{title:'리듬 콕콕 🎵',desc:'위에서 내려오는 과일이 <b>판 위에 닿을 때</b> 손으로 콕!<br>박자에 맞춰 누르면 신나는 음악이 울려요.'},
+    intro:{title:'리듬 콕콕 🎵',desc:'위에서 내려오는 과일이 <b>판 위에 닿을 때</b> 손으로 콕!<br>박자에 맞춰 누르면 신나는 음악이 울려요.<br>'+ROUND_DUR+'초 동안 몇 번이나 맞힐까요?'},
     start(){
       G.t0=performance.now(); G.endAt=G.t0+ROUND_DUR*1000; G.hits=0; G.combo=0; G.bestCombo=0; G.blocks=[]; G.nextStep=0; G.nextBeatAt=G.t0+BEAT*1000; G.lastTick=0;
       $('cNum').textContent='0'; $('cLbl').textContent='번'; say('과일이 판에 닿으면 손으로 콕 눌러봐요!');
@@ -1568,13 +1692,6 @@ GAME.posture=(()=>{
     IDX.forEach(i=>{ let x=0,y=0,z=0,v=0; buf.forEach(f=>{ x+=f[i].x; y+=f[i].y; z+=(f[i].z||0); v+=visOf(f[i]); });
       out[i]={x:x/buf.length,y:y/buf.length,z:z/buf.length,visibility:v/buf.length}; });
     return out;
-  }
-  function stanceOf(lms){
-    const shW=Math.abs(lms[11].x-lms[12].x)*map.vw;
-    const torso=Math.abs((lms[11].y+lms[12].y)/2-(lms[23].y+lms[24].y)/2)*map.vh;
-    if(torso<1) return 'unknown';
-    const ratio=shW/torso;
-    if(ratio>0.55) return 'front'; if(ratio<0.32) return 'side'; return 'unknown';
   }
   function grade3(v,warn,bad){ return v<warn?0:(v<bad?1:2); }
   const GTXT=['양호','주의','관리 필요'];
@@ -1755,13 +1872,13 @@ GAME.posture=(()=>{
       $('rpAgain').onclick=()=>{ $('reportScr').classList.remove('show'); openIntro('posture'); };
     }
     document.querySelectorAll('.rx-go').forEach(b=>b.onclick=()=>{ $('reportScr').classList.remove('show'); openIntro(b.dataset.go); });
-    running=false; current=null; setHud(false);
+    running=false; current=null; setHud(false); viewForce=null; updateMap();
     $('reportScr').classList.add('show'); $('reportScr').scrollTop=0;
     cheer(); say(G.score+'점이에요! '+G.band[1]);
   }
   return {
-    key:'posture', hud:{timer:true},
-    intro:{title:'자세 분석 🧍',desc:'<b>① 정면 4초</b> + <b>② 측면 4초</b> 가만히 서 있으면<br>AI가 자세를 분석해서 점수와 운동을 알려줘요.<br>발끝까지 전신이 보이게 서 주세요.'},
+    key:'posture', hud:{timer:true}, view:'contain', wide:true,
+    intro:{title:'자세 분석 🧍',desc:'<b>① 정면 4초</b> + <b>② 측면 4초</b> 가만히 서 있으면<br>AI가 자세를 분석해서 점수와 운동을 알려줘요.<br>카메라에서 <b>3~4걸음 뒤로 물러나</b> 발끝까지 전신이 보이게 서 주세요.'},
     start(){ G.step='front'; G.buf=[]; G.stableAt=null; G.lastMid=null;
       G.frontM=null; G.sideM=null; G.snapF=null; G.snapS=null; G.procUntil=0;
       $('timerVal').textContent='0%'; },
